@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_flight_list"
+        android:icon="@drawable/ic_flight_list"
+        android:title="Zoznam letov" />
+
+    <item
+        android:id="@+id/nav_add_flight"
+        android:icon="@drawable/ic_add_flight"
+        android:title="Pridať let" />
+
+    <item
+        android:id="@+id/nav_certificates"
+        android:icon="@drawable/ic_certificates"
+        android:title="Certifikáty" />
+
+    <item
+        android:id="@+id/nav_reminders"
+        android:icon="@drawable/ic_reminders"
+        android:title="Pripomienky" />
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_profile"
+        android:title="Profile" />
+</menu>
