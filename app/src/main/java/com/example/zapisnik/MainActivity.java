@@ -1,5 +1,6 @@
 package com.example.zapisnik;
 
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
@@ -9,6 +10,8 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
+
+    private NetworkChangeReceiver networkChangeReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,19 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.content_frame, new FlightListFragment())
                     .commit();
         }
+
+        // Zaregistruj NetworkChangeReceiver pre monitorovanie Wi-Fi pripojenia
+        networkChangeReceiver = new NetworkChangeReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        registerReceiver(networkChangeReceiver, filter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Zrušiť registráciu NetworkChangeReceiver pri zničení aktivity
+        unregisterReceiver(networkChangeReceiver);
     }
 
     // Navigácia medzi fragmentami
@@ -54,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.nav_profile:
                             selectedFragment = new ProfileFragment();
                             break;
-
                     }
 
                     getSupportFragmentManager().beginTransaction()

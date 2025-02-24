@@ -5,7 +5,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Certificate.class}, version = 1)
+@Database(entities = {Certificate.class}, version = 1, exportSchema = false)
 public abstract class CertificateDatabase extends RoomDatabase {
     private static CertificateDatabase instance;
 
@@ -15,7 +15,8 @@ public abstract class CertificateDatabase extends RoomDatabase {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                             CertificateDatabase.class, "certificate_database")
-                    .allowMainThreadQueries()  // ❗ Toto je len pre jednoduché aplikácie, ideálne použiť background thread
+                    .allowMainThreadQueries()  // ❗ Avoid using this for production
+                    .fallbackToDestructiveMigration()  // Allow destructive migration, database will be wiped and recreated
                     .build();
         }
         return instance;
