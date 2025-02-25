@@ -1,5 +1,7 @@
 package com.example.zapisnik;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import java.util.concurrent.Executors;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,10 +25,6 @@ public class CertificatesFragment extends Fragment {
     private EditText etCertificateName, etExpiryDate;
     private Button btnAddCertificate;
     private CertificateDatabase database;
-
-    public CertificatesFragment() {
-        // Required empty public constructor
-    }
 
     @Nullable
     @Override
@@ -35,15 +36,9 @@ public class CertificatesFragment extends Fragment {
         etExpiryDate = view.findViewById(R.id.et_expiry_date);
         btnAddCertificate = view.findViewById(R.id.btn_add_certificate);
 
-        // Inicializácia databázy
         database = CertificateDatabase.getInstance(getActivity());
 
-        btnAddCertificate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addCertificate();
-            }
-        });
+        btnAddCertificate.setOnClickListener(v -> addCertificate());
 
         return view;
     }
@@ -57,43 +52,46 @@ public class CertificatesFragment extends Fragment {
             return;
         }
 
-        // Uloženie certifikátu do DB
         Certificate newCertificate = new Certificate(certificateName, expiryDate);
-        database.certificateDao().insertCertificate(newCertificate);
 
-        // Odoslanie certifikátu na server
-        sendCertificateToServer(newCertificate);
+        Executors.newSingleThreadExecutor().execute(() -> {
+            database.certificateDao().insertCertificate(newCertificate);
+        });
 
         Toast.makeText(getActivity(), "Certificate Added!", Toast.LENGTH_SHORT).show();
 
-        // Vyčistenie polí
         etCertificateName.setText("");
         etExpiryDate.setText("");
+
+        if (isWiFiConnected()) {
+            sendCertificateToServer(newCertificate);
+        }
+    }
+
+    private boolean isWiFiConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(getContext().CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
     }
 
     private void sendCertificateToServer(Certificate certificate) {
-        Log.d("Retrofit", "Sending certificate: " + certificate.getName() + ", " + certificate.getExpiryDate());
         RetrofitClient.getApi().addCertificate(certificate).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    // Successfully synchronized certificate
+                    Executors.newSingleThreadExecutor().execute(() -> {
+                        database.certificateDao().markAsSynced(certificate.getId());
+                    });
                     Toast.makeText(getActivity(), "Certificate synchronized", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Handle error response (e.g., bad request)
                     Log.d("Retrofit", "Failed response: " + response.message());
-                    Toast.makeText(getActivity(), "Failed to synchronize certificate. Response: " + response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                // Handle connection failure
                 Log.d("Retrofit", "Error: " + t.getMessage());
-                Toast.makeText(getActivity(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
-
-
 }

@@ -15,8 +15,7 @@ public abstract class CertificateDatabase extends RoomDatabase {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                             CertificateDatabase.class, "certificate_database")
-                    .allowMainThreadQueries()  // ❗ Avoid using this for production
-                    .fallbackToDestructiveMigration()  // Allow destructive migration, database will be wiped and recreated
+                    .fallbackToDestructiveMigration()
                     .build();
         }
         return instance;
