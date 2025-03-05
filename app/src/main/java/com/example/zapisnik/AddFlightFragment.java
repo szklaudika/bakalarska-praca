@@ -1,5 +1,6 @@
 package com.example.zapisnik;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,65 +14,79 @@ import androidx.fragment.app.Fragment;
 
 public class AddFlightFragment extends Fragment {
 
-    private EditText etDepartureLocation, etArrivalLocation, etFlightDate, etFlightTime, etFlightDuration, etFlightType;
+    private EditText etDate, etDeparturePlace, etDepartureTime, etArrivalPlace, etArrivalTime, etAircraftModel, etRegistration,
+            etSinglePilotTime, etMultiPilotTime, etTotalFlightTime, etPilotName, etLandings, etNightTime,
+            etIfrTime, etPicTime, etCopilotTime, etDualTime, etInstructorTime, etFstdDate, etFstdType,
+            etFstdTotalTime, etRemarks;
     private Button btnAddFlight;
 
     public AddFlightFragment() {
         // Required empty public constructor
     }
 
+    @SuppressLint("MissingInflatedId")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_flight, container, false);
 
-        etDepartureLocation = view.findViewById(R.id.et_departure_location);
-        etArrivalLocation = view.findViewById(R.id.et_arrival_location);
-        etFlightDate = view.findViewById(R.id.et_flight_date);
-        etFlightTime = view.findViewById(R.id.et_flight_time);
-        etFlightDuration = view.findViewById(R.id.et_flight_duration);
-        etFlightType = view.findViewById(R.id.et_flight_type);
+        etDate = view.findViewById(R.id.et_flight_date);
+        etDeparturePlace = view.findViewById(R.id.et_departure_place);
+        etDepartureTime = view.findViewById(R.id.et_departure_time);
+        etArrivalPlace = view.findViewById(R.id.et_arrival_place);
+        etArrivalTime = view.findViewById(R.id.et_arrival_time);
+        etAircraftModel = view.findViewById(R.id.et_aircraft_model);
+        etRegistration = view.findViewById(R.id.et_registration);
+        etSinglePilotTime = view.findViewById(R.id.et_single_pilot_time);
+        etMultiPilotTime = view.findViewById(R.id.et_multi_pilot_time);
+        etTotalFlightTime = view.findViewById(R.id.et_total_flight_time);
+        etPilotName = view.findViewById(R.id.et_pilot_name);
+        etLandings = view.findViewById(R.id.et_landings);
+        etNightTime = view.findViewById(R.id.et_night_time);
+        etIfrTime = view.findViewById(R.id.et_ifr_time);
+        etPicTime = view.findViewById(R.id.et_pic_time);
+        etCopilotTime = view.findViewById(R.id.et_copilot_time);
+        etDualTime = view.findViewById(R.id.et_dual_time);
+        etInstructorTime = view.findViewById(R.id.et_instructor_time);
+        etFstdDate = view.findViewById(R.id.et_fstd_date);
+        etFstdType = view.findViewById(R.id.et_fstd_type);
+        etFstdTotalTime = view.findViewById(R.id.et_fstd_total_time);
+        etRemarks = view.findViewById(R.id.et_remarks);
         btnAddFlight = view.findViewById(R.id.btn_add_flight);
 
-        btnAddFlight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addFlight();
-            }
-        });
+        btnAddFlight.setOnClickListener(v -> addFlight());
 
         return view;
     }
 
     private void addFlight() {
-        String departureLocation = etDepartureLocation.getText().toString().trim();
-        String arrivalLocation = etArrivalLocation.getText().toString().trim();
-        String flightDate = etFlightDate.getText().toString().trim();
-        String flightTime = etFlightTime.getText().toString().trim();
-        String flightDuration = etFlightDuration.getText().toString().trim();
-        String flightType = etFlightType.getText().toString().trim();
+        Flight flight = new Flight(
+                etDate.getText().toString().trim(),
+                etDeparturePlace.getText().toString().trim(),
+                etDepartureTime.getText().toString().trim(),
+                etArrivalPlace.getText().toString().trim(),
+                etArrivalTime.getText().toString().trim(),
+                etAircraftModel.getText().toString().trim(),
+                etRegistration.getText().toString().trim(),
+                Integer.parseInt(etSinglePilotTime.getText().toString().trim()),
+                Integer.parseInt(etMultiPilotTime.getText().toString().trim()),
+                Integer.parseInt(etTotalFlightTime.getText().toString().trim()),
+                etPilotName.getText().toString().trim(),
+                Integer.parseInt(etLandings.getText().toString().trim()),
+                Integer.parseInt(etNightTime.getText().toString().trim()),
+                Integer.parseInt(etIfrTime.getText().toString().trim()),
+                Integer.parseInt(etPicTime.getText().toString().trim()),
+                Integer.parseInt(etCopilotTime.getText().toString().trim()),
+                Integer.parseInt(etDualTime.getText().toString().trim()),
+                Integer.parseInt(etInstructorTime.getText().toString().trim()),
+                etFstdDate.getText().toString().trim(),
+                etFstdType.getText().toString().trim(),
+                Integer.parseInt(etFstdTotalTime.getText().toString().trim()),
+                etRemarks.getText().toString().trim()
+        );
 
-        // Validation
-        if (departureLocation.isEmpty() || arrivalLocation.isEmpty() || flightDate.isEmpty() ||
-                flightTime.isEmpty() || flightDuration.isEmpty() || flightType.isEmpty()) {
-            Toast.makeText(getActivity(), "Please fill all fields", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Uloženie do databázy
-        Flight flight = new Flight(departureLocation, arrivalLocation, flightDate, flightTime, flightDuration, flightType);
         FlightDatabase.getInstance(getActivity()).flightDao().insertFlight(flight);
-
         Toast.makeText(getActivity(), "Flight added!", Toast.LENGTH_SHORT).show();
-
-        // Vyčistenie polí
-        etDepartureLocation.setText("");
-        etArrivalLocation.setText("");
-        etFlightDate.setText("");
-        etFlightTime.setText("");
-        etFlightDuration.setText("");
-        etFlightType.setText("");
     }
-
 }

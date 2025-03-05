@@ -5,7 +5,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Flight.class}, version = 1, exportSchema = false)
+@Database(entities = {Flight.class}, version = 2, exportSchema = false)
 public abstract class FlightDatabase extends RoomDatabase {
 
     private static FlightDatabase instance;
@@ -17,7 +17,7 @@ public abstract class FlightDatabase extends RoomDatabase {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                             FlightDatabase.class, "flight_database")
                     .fallbackToDestructiveMigration()
-                    .allowMainThreadQueries()  // TODO: Odporúča sa používať Background Threads
+                    .allowMainThreadQueries()
                     .build();
         }
         return instance;

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- res/layout/activity_main.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -19,7 +18,7 @@
         android:titleTextColor="@android:color/white"
         tools:ignore="MissingClass" />
 
-    <!-- Content Frame for Fragment Switching -->
+    <!-- Content Frame for Fragments -->
     <FrameLayout
         android:id="@+id/content_frame"
         android:layout_below="@id/toolbar"
@@ -38,4 +37,5 @@
         app:itemIconTint="@color/bottom_nav_item_color"
         app:menu="@menu/bottom_nav_menu"
         tools:ignore="MissingClass" />
+
 </RelativeLayout>

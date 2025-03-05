@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">zapisnik</string>
+    <string name="date">Date:</string>
+    <string name="from">From:</string>
+    <string name="departure_time">Departure Time:</string>
+    <string name="to">To:</string>
 </resources>

@@ -12,6 +12,6 @@ public interface FlightDao {
     @Insert
     void insertFlight(Flight flight);
 
-    @Query("SELECT * FROM flights ORDER BY flightDate DESC")
+    @Query("SELECT * FROM flights ORDER BY date DESC")
     List<Flight> getAllFlights();
 }

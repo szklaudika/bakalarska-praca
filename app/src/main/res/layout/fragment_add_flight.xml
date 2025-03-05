@@ -1,49 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/et_departure_location"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Departure Location" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <EditText
-        android:id="@+id/et_arrival_location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Arrival Location" />
+        <EditText
+            android:id="@+id/et_flight_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Flight Date (yyyy-mm-dd)"
+            android:minHeight="48dp" />
 
-    <EditText
-        android:id="@+id/et_flight_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Flight Date (yyyy-mm-dd)" />
+        <EditText
+            android:id="@+id/et_departure_place"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Departure Place"
+            android:minHeight="48dp" />
 
-    <EditText
-        android:id="@+id/et_flight_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Flight Time (hh:mm)" />
+        <EditText
+            android:id="@+id/et_departure_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Departure Time (hh:mm)"
+            android:minHeight="48dp" />
 
-    <EditText
-        android:id="@+id/et_flight_duration"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Flight Duration (hours)" />
+        <EditText
+            android:id="@+id/et_arrival_place"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Arrival Place"
+            android:minHeight="48dp" />
 
-    <EditText
-        android:id="@+id/et_flight_type"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Day or Night" />
+        <EditText
+            android:id="@+id/et_arrival_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Arrival Time (hh:mm)"
+            android:minHeight="48dp" />
 
-    <Button
-        android:id="@+id/btn_add_flight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Flight" />
-</LinearLayout>
+        <EditText
+            android:id="@+id/et_aircraft_model"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Aircraft Model"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/et_registration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Aircraft Registration"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/et_single_pilot_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Singe Pilot Time"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/et_multi_pilot_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Multi Pilot Time"
+            android:minHeight="48dp" />
+
+
+        <EditText
+            android:id="@+id/et_total_flight_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Total Flight Time (minutes)"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/et_pilot_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Pilot Name"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/et_landings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Number of Landings"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/et_night_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Night Flight Time (minutes)"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/et_ifr_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="IFR Time (minutes)"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/et_pic_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="PIC Time (minutes)"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/et_copilot_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Co-Pilot Time (minutes)" />
+
+        <EditText
+            android:id="@+id/et_dual_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Dual Time (minutes)" />
+
+        <EditText
+            android:id="@+id/et_instructor_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Instructor Time (minutes)" />
+
+        <EditText
+            android:id="@+id/et_fstd_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="FSTD Date (yyyy-mm-dd)" />
+
+        <EditText
+            android:id="@+id/et_fstd_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="FSTD Type" />
+
+        <EditText
+            android:id="@+id/et_fstd_total_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="FSTD Total Time (minutes)" />
+
+        <EditText
+            android:id="@+id/et_remarks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Remarks" />
+
+        <Button
+            android:id="@+id/btn_add_flight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Flight"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
+</ScrollView>
