@@ -47,4 +47,8 @@ public class RetrofitClient {
     public static CertificateApi getApi() {
         return getRetrofitInstance().create(CertificateApi.class);
     }
+    public static FlightApi getFlightApi() {
+        return getRetrofitInstance().create(FlightApi.class);
+    }
+
 }

@@ -27,23 +27,26 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     }
 
     private void synchronizeData(Context context) {
-        CertificateDatabase db = CertificateDatabase.getInstance(context);
+        FlightDatabase db = FlightDatabase.getInstance(context); // Use your FlightDatabase
 
         Executors.newSingleThreadExecutor().execute(() -> {
-            List<Certificate> unsyncedCertificates = db.certificateDao().getUnsyncedCertificates();
+            List<Flight> unsyncedFlights = db.flightDao().getUnsyncedFlights();
 
-            for (Certificate cert : unsyncedCertificates) {
-                sendCertificateToServer(cert, db);
+            for (Flight flight : unsyncedFlights) {
+                sendFlightToServer(flight, db);
             }
         });
     }
 
-    private void sendCertificateToServer(Certificate certificate, CertificateDatabase db) {
-        RetrofitClient.getApi().addCertificate(certificate).enqueue(new Callback<Void>() {
+    private void sendFlightToServer(Flight flight, FlightDatabase db) {
+        FlightApi api = RetrofitClient.getFlightApi(); // Get the correct API instance
+
+        api.addFlight(flight).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Executors.newSingleThreadExecutor().execute(() -> db.certificateDao().markAsSynced(certificate.getId()));
+                    // If the flight is successfully synced, mark it as synced in the database
+                    Executors.newSingleThreadExecutor().execute(() -> db.flightDao().markAsSynced(flight.getId()));
                 }
             }
 
@@ -54,3 +57,4 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
         });
     }
 }
+

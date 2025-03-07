@@ -10,12 +10,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class FlightListFragment extends Fragment {
 
     private static final String TAG = "FlightListFragment";
+    private ListView listView;
+    private ArrayAdapter<String> adapter;
+    private List<Flight> flights = new ArrayList<>();
 
     public FlightListFragment() {
         // Empty constructor for fragment
@@ -26,21 +39,10 @@ public class FlightListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_flight_list, container, false);
 
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"})
-        ListView listView = view.findViewById(R.id.list_view_flights);
-        List<Flight> flights = FlightDatabase.getInstance(getActivity()).flightDao().getAllFlights();
+        listView = view.findViewById(R.id.list_view_flights);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_list_item_1,
-                flights.stream().map(f -> f.getDate() + " | " + f.getDeparturePlace() + " -> " + f.getArrivalPlace() + " | " + f.getTotalFlightTime() + " min").collect(Collectors.toList()));
-
-        listView.setAdapter(adapter);
-
-        // Log the list of flights
-        Log.d(TAG, "Loaded " + flights.size() + " flights from the database.");
-        for (Flight flight : flights) {
-            Log.d(TAG, "Flight: " + flight.getDate() + " | " + flight.getDeparturePlace() + " -> " + flight.getArrivalPlace() + " | " + flight.getTotalFlightTime() + " min");
-        }
+        // Fetch flight data from server
+        fetchFlightsFromServer();
 
         // Set click listener on list item
         listView.setOnItemClickListener((parent, view1, position, id) -> {
@@ -87,5 +89,72 @@ public class FlightListFragment extends Fragment {
         });
 
         return view;
+    }
+
+    // Fetch flight data from the server using Volley
+    private void fetchFlightsFromServer() {
+        String url = "http://10.0.2.2/zapisnik_db/get_flights.php"; // Replace with your actual endpoint URL
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        flights.clear(); // Clear the previous data
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject flightJson = response.getJSONObject(i);
+                                Flight flight = new Flight(
+                                        flightJson.getString("date"),
+                                        flightJson.getString("departure_place"), // Corrected to match the JSON key
+                                        flightJson.getString("departure_time"), // Corrected to match the JSON key
+                                        flightJson.getString("arrival_place"), // Corrected to match the JSON key
+                                        flightJson.getString("arrival_time"), // Corrected to match the JSON key
+                                        flightJson.getString("aircraft_model"), // Corrected to match the JSON key
+                                        flightJson.getString("registration"), // Corrected to match the JSON key
+                                        flightJson.getInt("single_pilot_time"),
+                                        flightJson.getInt("multi_pilot_time"),
+                                        flightJson.getInt("total_flight_time"),
+                                        flightJson.getString("pilot_name"), // Corrected to match the JSON key
+                                        flightJson.getInt("landings"),
+                                        flightJson.getInt("night_time"),
+                                        flightJson.getInt("ifr_time"),
+                                        flightJson.getInt("pic_time"),
+                                        flightJson.getInt("copilot_time"),
+                                        flightJson.getInt("dual_time"),
+                                        flightJson.getInt("instructor_time"),
+                                        flightJson.getString("fstd_date"),
+                                        flightJson.getString("fstd_type"),
+                                        flightJson.getInt("fstd_total_time"),
+                                        flightJson.getString("remarks") // Corrected to match the JSON key
+                                );
+                                flights.add(flight);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        // After getting the data, update the ListView
+                        updateListView();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, "Error fetching flights: " + error.getMessage());
+                    }
+                });
+
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    // Update ListView with fetched data
+    private void updateListView() {
+        adapter = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_list_item_1,
+                flights.stream().map(f -> f.getDate() + " | " + f.getDeparturePlace() + " -> " + f.getArrivalPlace() + " | " + f.getTotalFlightTime() + " min").collect(Collectors.toList()));
+
+        listView.setAdapter(adapter);
     }
 }

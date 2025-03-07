@@ -1,6 +1,5 @@
 package com.example.zapisnik;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class AddFlightFragment extends Fragment {
 
     private EditText etDate, etDeparturePlace, etDepartureTime, etArrivalPlace, etArrivalTime, etAircraftModel, etRegistration,
@@ -20,11 +23,8 @@ public class AddFlightFragment extends Fragment {
             etFstdTotalTime, etRemarks;
     private Button btnAddFlight;
 
-    public AddFlightFragment() {
-        // Required empty public constructor
-    }
+    public AddFlightFragment() {}
 
-    @SuppressLint("MissingInflatedId")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -86,7 +86,26 @@ public class AddFlightFragment extends Fragment {
                 etRemarks.getText().toString().trim()
         );
 
-        FlightDatabase.getInstance(getActivity()).flightDao().insertFlight(flight);
-        Toast.makeText(getActivity(), "Flight added!", Toast.LENGTH_SHORT).show();
+        sendFlightToServer(flight);
+    }
+
+    private void sendFlightToServer(Flight flight) {
+        FlightApi flightApi = RetrofitClient.getFlightApi();
+
+        flightApi.addFlight(flight).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(getActivity(), "Flight added to server!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Server Error: " + response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(getActivity(), "Failed to add flight to server: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
