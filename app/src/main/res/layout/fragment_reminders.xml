@@ -1,0 +1,25 @@
+<!-- res/layout/fragment_reminders.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- A TextView that could display some status or instructions -->
+    <TextView
+        android:id="@+id/tv_reminder_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your upcoming certification reminders will appear here."
+        android:textSize="18sp"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- Button to manually check for expiring certificates -->
+    <Button
+        android:id="@+id/btn_check_certificates"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check Expiring Certifications"
+        android:onClick="onCheckCertificatesClick" />
+
+</LinearLayout>

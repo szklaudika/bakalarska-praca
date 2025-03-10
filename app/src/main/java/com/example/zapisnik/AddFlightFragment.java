@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import java.util.List;
 import java.util.concurrent.Executors;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -67,40 +68,85 @@ public class AddFlightFragment extends Fragment {
         // Add flight on button click
         btnAddFlight.setOnClickListener(v -> addFlight());
 
+        // Add TextWatcher to etDate to format the input dynamically
+        etDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // Automatically format the input as the user types
+                String formattedText = formatDate(charSequence.toString());
+                if (!formattedText.equals(charSequence.toString())) {
+                    etDate.setText(formattedText);
+                    etDate.setSelection(formattedText.length());  // Keep the cursor at the end
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        });
+
+        // Add TextWatcher to etFstdDate to format the input dynamically (same logic as etDate)
+        etFstdDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // Automatically format the input as the user types
+                String formattedText = formatDate(charSequence.toString());
+                if (!formattedText.equals(charSequence.toString())) {
+                    etFstdDate.setText(formattedText);
+                    etFstdDate.setSelection(formattedText.length());  // Keep the cursor at the end
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        });
+
         return view;
     }
 
     private void addFlight() {
-        Flight flight = new Flight(
-                etDate.getText().toString().trim(),
-                etDeparturePlace.getText().toString().trim(),
-                etDepartureTime.getText().toString().trim(),
-                etArrivalPlace.getText().toString().trim(),
-                etArrivalTime.getText().toString().trim(),
-                etAircraftModel.getText().toString().trim(),
-                etRegistration.getText().toString().trim(),
-                Integer.parseInt(etSinglePilotTime.getText().toString().trim()),
-                Integer.parseInt(etMultiPilotTime.getText().toString().trim()),
-                Integer.parseInt(etTotalFlightTime.getText().toString().trim()),
-                etPilotName.getText().toString().trim(),
-                Integer.parseInt(etLandings.getText().toString().trim()),
-                Integer.parseInt(etNightTime.getText().toString().trim()),
-                Integer.parseInt(etIfrTime.getText().toString().trim()),
-                Integer.parseInt(etPicTime.getText().toString().trim()),
-                Integer.parseInt(etCopilotTime.getText().toString().trim()),
-                Integer.parseInt(etDualTime.getText().toString().trim()),
-                Integer.parseInt(etInstructorTime.getText().toString().trim()),
-                etFstdDate.getText().toString().trim(),
-                etFstdType.getText().toString().trim(),
-                Integer.parseInt(etFstdTotalTime.getText().toString().trim()),
-                etRemarks.getText().toString().trim()
-        );
+        // Format the dates before proceeding
+        String formattedDate = formatDate(etDate.getText().toString().trim());
+        String formattedFstdDate = formatDate(etFstdDate.getText().toString().trim());
 
-        // Check if network is available
-        if (isNetworkAvailable()) {
-            sendFlightToServer(flight);
-        } else {
-            saveFlightLocally(flight);
+        // If the formatted dates are valid (not empty), proceed with adding the flight
+        if (!formattedDate.isEmpty() && !formattedFstdDate.isEmpty()) {
+            Flight flight = new Flight(
+                    formattedDate,  // Use the formatted date here
+                    etDeparturePlace.getText().toString().trim(),
+                    etDepartureTime.getText().toString().trim(),
+                    etArrivalPlace.getText().toString().trim(),
+                    etArrivalTime.getText().toString().trim(),
+                    etAircraftModel.getText().toString().trim(),
+                    etRegistration.getText().toString().trim(),
+                    Integer.parseInt(etSinglePilotTime.getText().toString().trim()),
+                    Integer.parseInt(etMultiPilotTime.getText().toString().trim()),
+                    Integer.parseInt(etTotalFlightTime.getText().toString().trim()),
+                    etPilotName.getText().toString().trim(),
+                    Integer.parseInt(etLandings.getText().toString().trim()),
+                    Integer.parseInt(etNightTime.getText().toString().trim()),
+                    Integer.parseInt(etIfrTime.getText().toString().trim()),
+                    Integer.parseInt(etPicTime.getText().toString().trim()),
+                    Integer.parseInt(etCopilotTime.getText().toString().trim()),
+                    Integer.parseInt(etDualTime.getText().toString().trim()),
+                    Integer.parseInt(etInstructorTime.getText().toString().trim()),
+                    formattedFstdDate,  // Use the formatted fstd date here
+                    etFstdType.getText().toString().trim(),
+                    Integer.parseInt(etFstdTotalTime.getText().toString().trim()),
+                    etRemarks.getText().toString().trim()
+            );
+
+            // Check if network is available
+            if (isNetworkAvailable()) {
+                sendFlightToServer(flight);
+            } else {
+                saveFlightLocally(flight);
+            }
         }
     }
 
@@ -135,5 +181,54 @@ public class AddFlightFragment extends Fragment {
                 Toast.makeText(getActivity(), "Failed to add flight to server: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    // Method to format the date dynamically with dashes
+    private String formatDate(String input) {
+        // Remove any non-numeric characters
+        input = input.replaceAll("[^0-9]", "");
+
+        StringBuilder formattedDate = new StringBuilder();
+
+        // Format the date as YYYY-MM-DD dynamically
+        if (input.length() >= 1) formattedDate.append(input.substring(0, Math.min(4, input.length()))); // Year
+        if (input.length() >= 5) formattedDate.append("-").append(input.substring(4, Math.min(6, input.length()))); // Month
+        if (input.length() >= 7) formattedDate.append("-").append(input.substring(6, Math.min(8, input.length()))); // Day
+
+        // Validate the month
+        String month = formattedDate.length() >= 7 ? formattedDate.substring(5, 7) : "";
+        if (!month.isEmpty() && Integer.parseInt(month) > 12) {
+            formattedDate.replace(5, 7, "12");  // Set month to 12 if it's greater than 12
+        }
+
+        // Validate the day
+        String day = formattedDate.length() >= 10 ? formattedDate.substring(8, 10) : "";
+        if (!day.isEmpty()) {
+            int intDay = Integer.parseInt(day);
+            if (intDay > 31) {
+                formattedDate.replace(8, 10, "31");  // Set day to 31 if it's greater than 31
+            } else {
+                int monthInt = Integer.parseInt(month);
+                if (monthInt == 4 || monthInt == 6 || monthInt == 9 || monthInt == 11) {
+                    // Set day to 30 if the month has 30 days
+                    if (intDay > 30) {
+                        formattedDate.replace(8, 10, "30");
+                    }
+                } else if (monthInt == 2) {
+                    // Check for leap year February
+                    int maxDay = (isLeapYear(Integer.parseInt(formattedDate.substring(0, 4)))) ? 29 : 28;
+                    if (intDay > maxDay) {
+                        formattedDate.replace(8, 10, String.valueOf(maxDay));
+                    }
+                }
+            }
+        }
+
+        return formattedDate.toString();
+    }
+
+    // Helper method to check if a year is a leap year
+    private boolean isLeapYear(int year) {
+        return (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
     }
 }

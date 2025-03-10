@@ -1,16 +1,16 @@
 <?php
 $servername = "localhost";
 $username = "root"; // XAMPP default username
-$password = ""; // Default je prázdne
+$password = ""; // Default is empty
 $dbname = "zapisnik_db";
 
-// Pripojenie na databázu
+// Connecting to the database
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Získanie JSON dát z Androidu
+// Get JSON data from Android
 $data = json_decode(file_get_contents("php://input"), true);
 
 if (!empty($data)) {
@@ -19,13 +19,19 @@ if (!empty($data)) {
     $expiry_date = $conn->real_escape_string($data['expiryDate']); // Changed key to 'expiryDate'
 
     $sql = "INSERT INTO certificates (name, expiry_date) VALUES ('$name', '$expiry_date')";
-    $conn->query($sql);
 
-    echo json_encode(["status" => "success"]);
+    if ($conn->query($sql) === TRUE) {
+        // Log success
+        error_log("Certificate added successfully with ID: " . $conn->insert_id);
+        echo json_encode(["status" => "success", "id" => $conn->insert_id]);
+    } else {
+        // Log failure
+        error_log("Failed to add certificate: " . $conn->error);
+        echo json_encode(["status" => "error", "message" => "Failed to add certificate"]);
+    }
 } else {
     echo json_encode(["status" => "error", "message" => "No data received"]);
 }
 
 $conn->close();
-
 ?>
