@@ -42,24 +42,24 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     }
 
 
-        private void sendCertificateToServer(Certificate certificate, CertificateDatabase db) {
-            RetrofitClient.getApi().addCertificate(certificate).enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    if (response.isSuccessful()) {
+    private void sendCertificateToServer(Certificate certificate, CertificateDatabase db) {
+        RetrofitClient.getApi().addCertificate(certificate).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
 
-                        Executors.newSingleThreadExecutor().execute(() -> db.certificateDao().markAsSynced(certificate.getId()));
-                    }
+                    Executors.newSingleThreadExecutor().execute(() -> db.certificateDao().markAsSynced(certificate.getId()));
                 }
+            }
 
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
 
 
-                    Log.d("Retrofit", "Error: " + t.getMessage());
-                }
-            });
-        }
+                Log.d("Retrofit", "Error: " + t.getMessage());
+            }
+        });
+    }
     private void synchronizeFlights(Context context) {
         FlightDatabase flightDb = FlightDatabase.getInstance(context);
 

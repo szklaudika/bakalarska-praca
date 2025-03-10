@@ -5,7 +5,6 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Path;  // Required to support dynamic path parameters
 import retrofit2.http.Query;
 
 public interface CertificateApi {
@@ -18,7 +17,18 @@ public interface CertificateApi {
     @GET("get_certificates.php")
     Call<List<Certificate>> getAllCertificates();
 
-    // Endpoint to get a certificate by ID (using the correct GET request with dynamic parameter)
+    // Endpoint to get a certificate by ID
     @GET("get_certificates_by_id.php")
     Call<Certificate> getCertificateById(@Query("id") int id);
+
+    // Endpoint to check if certificate exists (by name and expiry date)
+    @GET("check_certificate.php")
+    Call<Certificate> getCertificateByNameAndExpiry(
+            @Query("name") String name,
+            @Query("expiry_date") String expiryDate
+    );
+
+    // Endpoint to delete a certificate from the server
+    @POST("delete_certificate.php")
+    Call<Void> deleteCertificate(@Query("id") int id);
 }

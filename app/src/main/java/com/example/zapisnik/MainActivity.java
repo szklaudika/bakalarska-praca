@@ -8,6 +8,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +43,31 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         registerReceiver(networkChangeReceiver, filter);
+
+        // Spusti okamžitú kontrolu pripomienok hneď po štarte aplikácie
+        scheduleImmediateReminderWork();
+
+        // Naplánuj periodickú prácu pre pripomienky certifikátov
+        scheduleReminderWork();
+    }
+
+    // Spustí one-time prácu ihneď, aby sa notifikácie zobrazili hneď po štarte
+    private void scheduleImmediateReminderWork() {
+        OneTimeWorkRequest immediateWorkRequest = new OneTimeWorkRequest.Builder(CertificationReminderWorker.class)
+                .setInitialDelay(0, TimeUnit.SECONDS)
+                .build();
+        WorkManager.getInstance(this).enqueue(immediateWorkRequest);
+    }
+
+    private void scheduleReminderWork() {
+        PeriodicWorkRequest reminderWorkRequest = new PeriodicWorkRequest.Builder(
+                CertificationReminderWorker.class, 1, TimeUnit.DAYS)
+                .build();
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                "certReminder",
+                ExistingPeriodicWorkPolicy.KEEP,
+                reminderWorkRequest);
     }
 
     @Override
@@ -53,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     Fragment selectedFragment = null;
-
                     switch (item.getItemId()) {
                         case R.id.nav_flight_list:
                             selectedFragment = new FlightListFragment();
@@ -70,13 +99,10 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.nav_profile:
                             selectedFragment = new ProfileFragment();
                             break;
-
                     }
-
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.content_frame, selectedFragment)
                             .commit();
-
                     return true;
                 }
             };

@@ -99,27 +99,30 @@ public class CertificatesFragment extends Fragment {
     }
 
     private void sendCertificateToServer(Certificate certificate) {
+
         RetrofitClient.getApi().addCertificate(certificate).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
+
                     Executors.newSingleThreadExecutor().execute(() -> {
                         database.certificateDao().markAsSynced(certificate.getId());
                     });
                     Toast.makeText(getActivity(), "Certificate synchronized", Toast.LENGTH_SHORT).show();
                 } else {
+
                     Log.d("Retrofit", "Failed response: " + response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+
                 Log.d("Retrofit", "Error: " + t.getMessage());
+
             }
         });
     }
-
-    // Method to format the date dynamically with dashes
     private String formatDateInput(String input) {
         // Remove any non-numeric characters
         input = input.replaceAll("[^0-9]", "");
