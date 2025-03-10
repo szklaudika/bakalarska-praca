@@ -13,9 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
+import java.util.List;
 import java.util.concurrent.Executors;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -99,10 +98,8 @@ public class AddFlightFragment extends Fragment {
 
         // Check if network is available
         if (isNetworkAvailable()) {
-            // If network is available, send flight to the server
             sendFlightToServer(flight);
         } else {
-            // If no network, save flight to local database for syncing later
             saveFlightLocally(flight);
         }
     }
@@ -114,10 +111,8 @@ public class AddFlightFragment extends Fragment {
     }
 
     private void saveFlightLocally(Flight flight) {
-        // Insert the flight into the local database (Room)
         Executors.newSingleThreadExecutor().execute(() -> {
             flightDatabase.flightDao().insert(flight);
-            // Show a message to the user indicating that the flight is saved locally
             getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Flight saved locally!", Toast.LENGTH_SHORT).show());
         });
     }
@@ -142,4 +137,3 @@ public class AddFlightFragment extends Fragment {
         });
     }
 }
-

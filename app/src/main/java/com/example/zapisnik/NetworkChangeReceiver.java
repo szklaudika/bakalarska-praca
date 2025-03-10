@@ -60,4 +60,30 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                 }
             });
         }
+    private void synchronizeFlights(Context context) {
+        FlightDatabase flightDb = FlightDatabase.getInstance(context);
+
+        Executors.newSingleThreadExecutor().execute(() -> {
+            List<Flight> unsyncedFlights = flightDb.flightDao().getUnsyncedFlights();
+            for (Flight flight : unsyncedFlights) {
+                sendFlightToServer(flight, flightDb);
+            }
+        });
+    }
+
+    private void sendFlightToServer(Flight flight, FlightDatabase db) {
+        RetrofitClient.getFlightApi().addFlight(flight).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Executors.newSingleThreadExecutor().execute(() -> db.flightDao().markAsSynced(flight.getId()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("Retrofit", "Error: " + t.getMessage());
+            }
+        });
+    }
 }

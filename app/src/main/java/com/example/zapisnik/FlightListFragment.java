@@ -1,68 +1,67 @@
 package com.example.zapisnik;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import org.json.JSONArray;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FlightListFragment extends Fragment {
 
     private static final String TAG = "FlightListFragment";
     private ListView listView;
-    private ArrayAdapter<String> adapter;
-    private List<Flight> flights = new ArrayList<>();
+    private final List<Flight> flights = new ArrayList<>();
 
     public FlightListFragment() {
-        // Empty constructor for fragment
+        // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_flight_list, container, false);
-
         listView = view.findViewById(R.id.list_view_flights);
 
-        // Load flights from the local database
+        // Load local flights
         loadFlightsFromDatabase();
 
-        // Fetch flight data from the server
+        // Fetch flights from the server
         fetchFlightsFromServer();
 
-        // Set click listener on list item
         listView.setOnItemClickListener((parent, view1, position, id) -> {
             Flight selectedFlight = flights.get(position);
-
-            // Log the selected flight details
-            Log.d(TAG, "Selected Flight: " + selectedFlight.getDate() + " | " + selectedFlight.getDeparturePlace() + " -> " + selectedFlight.getArrivalPlace());
-
-            // Create a new fragment to show flight details
             FlightDetailFragment detailFragment = new FlightDetailFragment();
 
-            // Pass all the data to the new fragment
+            // Pass flight details
             Bundle args = new Bundle();
             args.putString("date", selectedFlight.getDate());
             args.putString("departure", selectedFlight.getDeparturePlace());
-            args.putString("arrival", selectedFlight.getArrivalPlace());
             args.putString("departureTime", selectedFlight.getDepartureTime());
+            args.putString("arrival", selectedFlight.getArrivalPlace());
             args.putString("arrivalTime", selectedFlight.getArrivalTime());
             args.putString("aircraftModel", selectedFlight.getAircraftModel());
             args.putString("registration", selectedFlight.getRegistration());
@@ -84,95 +83,145 @@ public class FlightListFragment extends Fragment {
 
             detailFragment.setArguments(args);
 
-            // Replace the fragment in the main layout
+            // Replace fragment
             FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
             transaction.replace(R.id.content_frame, detailFragment);
             transaction.addToBackStack(null);
             transaction.commit();
         });
 
+
         return view;
     }
 
-    // Load flights from the local database
     private void loadFlightsFromDatabase() {
         List<Flight> flightsFromDb = FlightDatabase.getInstance(getActivity()).flightDao().getAllFlights();
         flights.addAll(flightsFromDb);
-
-        // Log the list of flights from the database
-        Log.d(TAG, "Loaded " + flights.size() + " flights from the database.");
-        for (Flight flight : flightsFromDb) {
-            Log.d(TAG, "Flight: " + flight.getDate() + " | " + flight.getDeparturePlace() + " -> " + flight.getArrivalPlace() + " | " + flight.getTotalFlightTime() + " min");
-        }
-
-        // Update ListView with the local data
         updateListView();
     }
 
-    // Fetch flight data from the server using Volley
     private void fetchFlightsFromServer() {
-        String url = "http://10.0.2.2/zapisnik_db/get_flights.php"; // Replace with your actual endpoint URL
-
+        String url = "http://10.0.2.2/zapisnik_db/get_flights.php";
+        assert getActivity() != null;
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        flights.clear(); // Clear the previous data
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                JSONObject flightJson = response.getJSONObject(i);
-                                Flight flight = new Flight(
-                                        flightJson.getString("date"),
-                                        flightJson.getString("departure_place"),
-                                        flightJson.getString("departure_time"),
-                                        flightJson.getString("arrival_place"),
-                                        flightJson.getString("arrival_time"),
-                                        flightJson.getString("aircraft_model"),
-                                        flightJson.getString("registration"),
-                                        flightJson.getInt("single_pilot_time"),
-                                        flightJson.getInt("multi_pilot_time"),
-                                        flightJson.getInt("total_flight_time"),
-                                        flightJson.getString("pilot_name"),
-                                        flightJson.getInt("landings"),
-                                        flightJson.getInt("night_time"),
-                                        flightJson.getInt("ifr_time"),
-                                        flightJson.getInt("pic_time"),
-                                        flightJson.getInt("copilot_time"),
-                                        flightJson.getInt("dual_time"),
-                                        flightJson.getInt("instructor_time"),
-                                        flightJson.getString("fstd_date"),
-                                        flightJson.getString("fstd_type"),
-                                        flightJson.getInt("fstd_total_time"),
-                                        flightJson.getString("remarks")
-                                );
-                                flights.add(flight);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
+                response -> {
+                    Log.d(TAG, "Response from server: " + response.toString());  // Log the raw server response
 
-                        // After getting the data, update the ListView
-                        updateListView();
+                    flights.clear();
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
+                            JSONObject flightJson = response.getJSONObject(i);
+
+                            // Log the individual flight data for debugging
+                            Log.d(TAG, "Flight data: " + flightJson.toString());
+
+                            // Use the correct field names as per the server response (lowercase)
+                            String departurePlace = flightJson.optString("departure_place", "Unknown Departure Place");
+                            String departureTime = flightJson.optString("departure_time", "Unknown Departure Time");
+
+                            // Log missing fields
+                            if (departurePlace.equals("Unknown Departure Place")) {
+                                Log.e(TAG, "departurePlace is missing or empty for this flight");
+                            }
+                            if (departureTime.equals("Unknown Departure Time")) {
+                                Log.e(TAG, "departureTime is missing or empty for this flight");
+                            }
+
+                            Flight flight = new Flight(
+                                    flightJson.getString("date"),
+                                    departurePlace,
+                                    departureTime,
+                                    flightJson.optString("arrival_place", "Unknown Arrival Place"),
+                                    flightJson.optString("arrival_time", "Unknown Arrival Time"),
+                                    flightJson.optString("aircraft_model", "Unknown Aircraft Model"),
+                                    flightJson.optString("registration", "Unknown Registration"),
+                                    flightJson.optInt("single_pilot_time", 0),
+                                    flightJson.optInt("multi_pilot_time", 0),
+                                    flightJson.optInt("total_flight_time", 0),
+                                    flightJson.optString("pilot_name", "Unknown Pilot"),
+                                    flightJson.optInt("landings", 0),
+                                    flightJson.optInt("night_time", 0),
+                                    flightJson.optInt("ifr_time", 0),
+                                    flightJson.optInt("pic_time", 0),
+                                    flightJson.optInt("copilot_time", 0),
+                                    flightJson.optInt("dual_time", 0),
+                                    flightJson.optInt("instructor_time", 0),
+                                    flightJson.optString("fstd_date", "Unknown Date"),
+                                    flightJson.optString("fstd_type", "Unknown Type"),
+                                    flightJson.optInt("fstd_total_time", 0),
+                                    flightJson.optString("remarks", "No Remarks")
+                            );
+                            flights.add(flight);
+
+                        } catch (JSONException e) {
+                            Log.e(TAG, "JSON Parsing error: " + e.getMessage());
+                        }
                     }
+                    updateListView();
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, "Error fetching flights: " + error.getMessage());
-                    }
-                });
+                error -> Log.e(TAG, "Error fetching flights: " + error.getMessage())
+        );
 
         requestQueue.add(jsonArrayRequest);
     }
 
-    // Update ListView with fetched data
-    private void updateListView() {
-        adapter = new ArrayAdapter<>(getActivity(),
+        private void updateListView() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_1,
-                flights.stream().map(f -> f.getDate() + " | " + f.getDeparturePlace() + " -> " + f.getArrivalPlace() + " | " + f.getTotalFlightTime() + " min").collect(Collectors.toList()));
+                flights.stream()
+                        .map(f -> f.getDate() + " | " + f.getDeparturePlace() + " -> " + f.getArrivalPlace() +
+                                " | " + f.getAircraftModel() + " | " + f.getPilotName() + " | " +
+                                f.getTotalFlightTime() + " min")
+                        .collect(Collectors.toList()));
 
         listView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isNetworkAvailable()) {
+            syncOfflineFlights();
+        }
+    }
+
+    private boolean isNetworkAvailable() {
+        assert getActivity() != null;
+        android.net.ConnectivityManager cm = (android.net.ConnectivityManager) getActivity().getSystemService(android.content.Context.CONNECTIVITY_SERVICE);
+        android.net.NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnected();
+    }
+
+    private void syncOfflineFlights() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            List<Flight> unsyncedFlights = FlightDatabase.getInstance(getActivity()).flightDao().getUnsyncedFlights();
+            for (Flight flight : unsyncedFlights) {
+                sendFlightToServer(flight);
+            }
+        });
+    }
+
+    private void sendFlightToServer(Flight flight) {
+        FlightApi flightApi = RetrofitClient.getFlightApi();
+
+        flightApi.addFlight(flight).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Executors.newSingleThreadExecutor().execute(() ->
+                            FlightDatabase.getInstance(getActivity()).flightDao().markAsSynced(flight.getId()));
+
+                    assert getActivity() != null;
+                    getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Offline flights synced!", Toast.LENGTH_SHORT).show());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                Log.e(TAG, "Sync failed: " + t.getMessage());
+            }
+        });
     }
 }

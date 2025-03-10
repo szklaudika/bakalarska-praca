@@ -84,32 +84,32 @@ public class FlightDetailFragment extends Fragment {
 
         return view;
     }
-
-    // Set the flight details into the TextViews
     private void setFlightDetails(Bundle args) {
-        String date = args.getString("date");
-        String departure = args.getString("departure");
-        String departureTime = args.getString("departureTime");
-        String arrival = args.getString("arrival");
-        String arrivalTime = args.getString("arrivalTime");
-        String aircraftModel = args.getString("aircraftModel");
-        String registration = args.getString("registration");
-        int singlePilotTime = args.getInt("singlePilotTime");
-        int multiPilotTime = args.getInt("multiPilotTime");
-        int totalFlightTime = args.getInt("totalFlightTime");
-        String pilotName = args.getString("pilotName");
-        int landings = args.getInt("landings");
-        int nightTime = args.getInt("nightTime");
-        int ifrTime = args.getInt("ifrTime");
-        int picTime = args.getInt("picTime");
-        int copilotTime = args.getInt("copilotTime");
-        int dualTime = args.getInt("dualTime");
-        int instructorTime = args.getInt("instructorTime");
-        String fstdDate = args.getString("fstdDate");
-        String fstdType = args.getString("fstdType");
-        int fstdTotalTime = args.getInt("fstdTotalTime");
-        String remarks = args.getString("remarks");
+        // Use a default value for fields that can be null
+        String date = args.getString("date", "Unknown Date");
+        String departure = args.getString("departure", "Unknown Departure Place");
+        String departureTime = args.getString("departureTime", "Unknown Departure Time");
+        String arrival = args.getString("arrival", "Unknown Arrival Place");
+        String arrivalTime = args.getString("arrivalTime", "Unknown Arrival Time");
+        String aircraftModel = args.getString("aircraftModel", "Unknown Aircraft Model");
+        String registration = args.getString("registration", "Unknown Registration");
+        int singlePilotTime = args.getInt("singlePilotTime", 0);
+        int multiPilotTime = args.getInt("multiPilotTime", 0);
+        int totalFlightTime = args.getInt("totalFlightTime", 0);
+        String pilotName = args.getString("pilotName", "Unknown Pilot");
+        int landings = args.getInt("landings", 0);
+        int nightTime = args.getInt("nightTime", 0);
+        int ifrTime = args.getInt("ifrTime", 0);
+        int picTime = args.getInt("picTime", 0);
+        int copilotTime = args.getInt("copilotTime", 0);
+        int dualTime = args.getInt("dualTime", 0);
+        int instructorTime = args.getInt("instructorTime", 0);
+        String fstdDate = args.getString("fstdDate", "Unknown Date");
+        String fstdType = args.getString("fstdType", "Unknown Type");
+        int fstdTotalTime = args.getInt("fstdTotalTime", 0);
+        String remarks = args.getString("remarks", "No Remarks");
 
+        // Set the values into the TextViews
         tvDate.setText("Date: " + date);
         tvDeparture.setText("From: " + departure);
         tvDepartureTime.setText("Departure Time: " + departureTime);
@@ -133,6 +133,8 @@ public class FlightDetailFragment extends Fragment {
         tvFstdTotalTime.setText("FSTD Total Time: " + fstdTotalTime + " min");
         tvRemarks.setText("Remarks: " + remarks);
     }
+
+
 
     // Load flights from the local database (SQLite or Room)
     public void loadFlightsFromDatabase() {
