@@ -22,39 +22,42 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.getType() == ConnectivityManager.TYPE_WIFI && networkInfo.isConnected()) {
+
             synchronizeData(context);
         }
     }
 
     private void synchronizeData(Context context) {
-        FlightDatabase db = FlightDatabase.getInstance(context); // Use your FlightDatabase
+
+        CertificateDatabase db = CertificateDatabase.getInstance(context);
+
 
         Executors.newSingleThreadExecutor().execute(() -> {
-            List<Flight> unsyncedFlights = db.flightDao().getUnsyncedFlights();
+            List<Certificate> unsyncedCertificates = db.certificateDao().getUnsyncedCertificates();
 
-            for (Flight flight : unsyncedFlights) {
-                sendFlightToServer(flight, db);
+            for (Certificate cert : unsyncedCertificates) {
+                sendCertificateToServer(cert, db);
             }
         });
     }
 
-    private void sendFlightToServer(Flight flight, FlightDatabase db) {
-        FlightApi api = RetrofitClient.getFlightApi(); // Get the correct API instance
 
-        api.addFlight(flight).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    // If the flight is successfully synced, mark it as synced in the database
-                    Executors.newSingleThreadExecutor().execute(() -> db.flightDao().markAsSynced(flight.getId()));
+        private void sendCertificateToServer(Certificate certificate, CertificateDatabase db) {
+            RetrofitClient.getApi().addCertificate(certificate).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+
+                        Executors.newSingleThreadExecutor().execute(() -> db.certificateDao().markAsSynced(certificate.getId()));
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.d("Retrofit", "Error: " + t.getMessage());
-            }
-        });
-    }
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+
+
+                    Log.d("Retrofit", "Error: " + t.getMessage());
+                }
+            });
+        }
 }
-

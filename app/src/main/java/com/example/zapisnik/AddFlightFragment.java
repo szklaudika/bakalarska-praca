@@ -1,5 +1,8 @@
 package com.example.zapisnik;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,6 +27,7 @@ public class AddFlightFragment extends Fragment {
             etIfrTime, etPicTime, etCopilotTime, etDualTime, etInstructorTime, etFstdDate, etFstdType,
             etFstdTotalTime, etRemarks;
     private Button btnAddFlight;
+    private FlightDatabase flightDatabase;
 
     public AddFlightFragment() {}
 
@@ -31,6 +37,7 @@ public class AddFlightFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_flight, container, false);
 
+        // Initialize UI elements
         etDate = view.findViewById(R.id.et_flight_date);
         etDeparturePlace = view.findViewById(R.id.et_departure_place);
         etDepartureTime = view.findViewById(R.id.et_departure_time);
@@ -55,6 +62,10 @@ public class AddFlightFragment extends Fragment {
         etRemarks = view.findViewById(R.id.et_remarks);
         btnAddFlight = view.findViewById(R.id.btn_add_flight);
 
+        // Initialize local database instance
+        flightDatabase = FlightDatabase.getInstance(getActivity());
+
+        // Add flight on button click
         btnAddFlight.setOnClickListener(v -> addFlight());
 
         return view;
@@ -86,7 +97,29 @@ public class AddFlightFragment extends Fragment {
                 etRemarks.getText().toString().trim()
         );
 
-        sendFlightToServer(flight);
+        // Check if network is available
+        if (isNetworkAvailable()) {
+            // If network is available, send flight to the server
+            sendFlightToServer(flight);
+        } else {
+            // If no network, save flight to local database for syncing later
+            saveFlightLocally(flight);
+        }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.getType() == ConnectivityManager.TYPE_WIFI && networkInfo.isConnected();
+    }
+
+    private void saveFlightLocally(Flight flight) {
+        // Insert the flight into the local database (Room)
+        Executors.newSingleThreadExecutor().execute(() -> {
+            flightDatabase.flightDao().insert(flight);
+            // Show a message to the user indicating that the flight is saved locally
+            getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Flight saved locally!", Toast.LENGTH_SHORT).show());
+        });
     }
 
     private void sendFlightToServer(Flight flight) {
@@ -109,3 +142,4 @@ public class AddFlightFragment extends Fragment {
         });
     }
 }
+

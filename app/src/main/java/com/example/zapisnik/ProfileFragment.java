@@ -1,5 +1,9 @@
 package com.example.zapisnik;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +39,7 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         listViewCertificates = view.findViewById(R.id.list_view_certificates);
+
         database = CertificateDatabase.getInstance(getActivity());
 
         adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, certificateList);
@@ -45,6 +50,29 @@ public class ProfileFragment extends Fragment {
         loadCertificatesFromServer();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Check if the device is connected to the internet when the app is resumed.
+        if (isNetworkAvailable()) {
+            // Sync any local unsynced certificates with the server
+            syncLocalCertificatesToServer();
+        }
+    }
+
+    // Check network availability (Wi-Fi or Mobile Data)
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            Network network = connectivityManager.getActiveNetwork();
+            NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
+            if (capabilities != null) {
+                return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR);
+            }
+        }
+        return false;
     }
 
     // Opravené: Načítanie dát na inom vlákne
@@ -92,4 +120,46 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
+
+    // Send all local certificates to the server if internet is available
+    public void syncLocalCertificatesToServer() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            List<Certificate> unsyncedCertificates = database.certificateDao().getUnsyncedCertificates();
+
+            if (!unsyncedCertificates.isEmpty()) {
+                CertificateApi api = RetrofitClient.getApi();
+
+                for (Certificate cert : unsyncedCertificates) {
+                    api.addCertificate(cert).enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()) {
+                                // Mark as synced in local database
+                                Executors.newSingleThreadExecutor().execute(() -> {
+                                    database.certificateDao().markAsSynced(cert.getId());
+
+                                    // Show toast on the main thread
+                                    getActivity().runOnUiThread(() ->
+                                            Toast.makeText(getActivity(), "Certificate synced: " + cert.getName(), Toast.LENGTH_SHORT).show()
+                                    );
+                                });
+                            } else {
+                                getActivity().runOnUiThread(() ->
+                                        Toast.makeText(getActivity(), "Error syncing certificate: " + cert.getName(), Toast.LENGTH_SHORT).show()
+                                );
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            getActivity().runOnUiThread(() ->
+                                    Toast.makeText(getActivity(), "Failed to sync certificate: " + cert.getName() + ", " + t.getMessage(), Toast.LENGTH_SHORT).show()
+                            );
+                        }
+                    });
+                }
+            }
+        });
+    }
 }
+

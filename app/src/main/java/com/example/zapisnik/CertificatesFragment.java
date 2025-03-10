@@ -26,6 +26,8 @@ public class CertificatesFragment extends Fragment {
     private Button btnAddCertificate;
     private CertificateDatabase database;
 
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -36,7 +38,9 @@ public class CertificatesFragment extends Fragment {
         etExpiryDate = view.findViewById(R.id.et_expiry_date);
         btnAddCertificate = view.findViewById(R.id.btn_add_certificate);
 
+
         database = CertificateDatabase.getInstance(getActivity());
+
 
         btnAddCertificate.setOnClickListener(v -> addCertificate());
 
@@ -52,6 +56,7 @@ public class CertificatesFragment extends Fragment {
             return;
         }
 
+
         Certificate newCertificate = new Certificate(certificateName, expiryDate);
 
         Executors.newSingleThreadExecutor().execute(() -> {
@@ -59,6 +64,7 @@ public class CertificatesFragment extends Fragment {
         });
 
         Toast.makeText(getActivity(), "Certificate Added!", Toast.LENGTH_SHORT).show();
+
 
         etCertificateName.setText("");
         etExpiryDate.setText("");
@@ -75,22 +81,27 @@ public class CertificatesFragment extends Fragment {
     }
 
     private void sendCertificateToServer(Certificate certificate) {
+
         RetrofitClient.getApi().addCertificate(certificate).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
+
                     Executors.newSingleThreadExecutor().execute(() -> {
                         database.certificateDao().markAsSynced(certificate.getId());
                     });
                     Toast.makeText(getActivity(), "Certificate synchronized", Toast.LENGTH_SHORT).show();
                 } else {
+
                     Log.d("Retrofit", "Failed response: " + response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+
                 Log.d("Retrofit", "Error: " + t.getMessage());
+
             }
         });
     }

@@ -14,10 +14,12 @@ public class RetrofitClient {
 
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {
+
             synchronized (RetrofitClient.class) {
                 if (retrofit == null) {
                     HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
                     loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
 
                     OkHttpClient okHttpClient = new OkHttpClient.Builder()
                             .addInterceptor(loggingInterceptor)
@@ -50,5 +52,4 @@ public class RetrofitClient {
     public static FlightApi getFlightApi() {
         return getRetrofitInstance().create(FlightApi.class);
     }
-
 }

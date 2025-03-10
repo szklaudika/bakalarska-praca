@@ -41,7 +41,10 @@ public class FlightListFragment extends Fragment {
 
         listView = view.findViewById(R.id.list_view_flights);
 
-        // Fetch flight data from server
+        // Load flights from the local database
+        loadFlightsFromDatabase();
+
+        // Fetch flight data from the server
         fetchFlightsFromServer();
 
         // Set click listener on list item
@@ -91,6 +94,21 @@ public class FlightListFragment extends Fragment {
         return view;
     }
 
+    // Load flights from the local database
+    private void loadFlightsFromDatabase() {
+        List<Flight> flightsFromDb = FlightDatabase.getInstance(getActivity()).flightDao().getAllFlights();
+        flights.addAll(flightsFromDb);
+
+        // Log the list of flights from the database
+        Log.d(TAG, "Loaded " + flights.size() + " flights from the database.");
+        for (Flight flight : flightsFromDb) {
+            Log.d(TAG, "Flight: " + flight.getDate() + " | " + flight.getDeparturePlace() + " -> " + flight.getArrivalPlace() + " | " + flight.getTotalFlightTime() + " min");
+        }
+
+        // Update ListView with the local data
+        updateListView();
+    }
+
     // Fetch flight data from the server using Volley
     private void fetchFlightsFromServer() {
         String url = "http://10.0.2.2/zapisnik_db/get_flights.php"; // Replace with your actual endpoint URL
@@ -107,16 +125,16 @@ public class FlightListFragment extends Fragment {
                                 JSONObject flightJson = response.getJSONObject(i);
                                 Flight flight = new Flight(
                                         flightJson.getString("date"),
-                                        flightJson.getString("departure_place"), // Corrected to match the JSON key
-                                        flightJson.getString("departure_time"), // Corrected to match the JSON key
-                                        flightJson.getString("arrival_place"), // Corrected to match the JSON key
-                                        flightJson.getString("arrival_time"), // Corrected to match the JSON key
-                                        flightJson.getString("aircraft_model"), // Corrected to match the JSON key
-                                        flightJson.getString("registration"), // Corrected to match the JSON key
+                                        flightJson.getString("departure_place"),
+                                        flightJson.getString("departure_time"),
+                                        flightJson.getString("arrival_place"),
+                                        flightJson.getString("arrival_time"),
+                                        flightJson.getString("aircraft_model"),
+                                        flightJson.getString("registration"),
                                         flightJson.getInt("single_pilot_time"),
                                         flightJson.getInt("multi_pilot_time"),
                                         flightJson.getInt("total_flight_time"),
-                                        flightJson.getString("pilot_name"), // Corrected to match the JSON key
+                                        flightJson.getString("pilot_name"),
                                         flightJson.getInt("landings"),
                                         flightJson.getInt("night_time"),
                                         flightJson.getInt("ifr_time"),
@@ -127,7 +145,7 @@ public class FlightListFragment extends Fragment {
                                         flightJson.getString("fstd_date"),
                                         flightJson.getString("fstd_type"),
                                         flightJson.getInt("fstd_total_time"),
-                                        flightJson.getString("remarks") // Corrected to match the JSON key
+                                        flightJson.getString("remarks")
                                 );
                                 flights.add(flight);
                             } catch (JSONException e) {
