@@ -23,18 +23,17 @@ import retrofit2.Response;
 public class FlightDetailFragment extends Fragment {
 
     private static final String TAG = "FlightDetailFragment";
-    private static final String BASE_URL = "http://10.0.2.2/zapisnik_db/"; // Replace with your actual server URL
 
     private FlightDatabase database;
 
-    // Declare TextViews for the flight details
+    // Declare TextViews for flight details (including new fields)
     private TextView tvDate, tvDeparture, tvDepartureTime, tvArrival, tvArrivalTime, tvAircraftModel,
             tvRegistration, tvSinglePilotTime, tvMultiPilotTime, tvTotalFlightTime, tvPilotName,
-            tvLandings, tvNightTime, tvIfrTime, tvPicTime, tvCopilotTime, tvDualTime, tvInstructorTime,
-            tvFstdDate, tvFstdType, tvFstdTotalTime, tvRemarks;
+            tvSinglePilot, tvLandingsDay, tvLandingsNight, tvNightTime, tvIfrTime, tvPicTime,
+            tvCopilotTime, tvDualTime, tvInstructorTime, tvFstdDate, tvFstdType, tvFstdTotalTime, tvRemarks;
 
     public FlightDetailFragment() {
-        // Empty constructor for fragment
+        // Required empty public constructor
     }
 
     @SuppressLint("MissingInflatedId")
@@ -44,7 +43,7 @@ public class FlightDetailFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_flight_detail, container, false);
 
-        // Initialize the TextViews for the flight details
+        // Initialize TextViews
         tvDate = view.findViewById(R.id.tv_flight_date);
         tvDeparture = view.findViewById(R.id.tv_flight_departure);
         tvDepartureTime = view.findViewById(R.id.tv_flight_departure_time);
@@ -56,7 +55,9 @@ public class FlightDetailFragment extends Fragment {
         tvMultiPilotTime = view.findViewById(R.id.tv_flight_multi_pilot_time);
         tvTotalFlightTime = view.findViewById(R.id.tv_flight_total_flight_time);
         tvPilotName = view.findViewById(R.id.tv_flight_pilot_name);
-        tvLandings = view.findViewById(R.id.tv_flight_landings);
+        tvSinglePilot = view.findViewById(R.id.tv_flight_single_pilot);
+        tvLandingsDay = view.findViewById(R.id.tv_flight_landings_day);
+        tvLandingsNight = view.findViewById(R.id.tv_flight_landings_night);
         tvNightTime = view.findViewById(R.id.tv_flight_night_time);
         tvIfrTime = view.findViewById(R.id.tv_flight_ifr_time);
         tvPicTime = view.findViewById(R.id.tv_flight_pic_time);
@@ -68,93 +69,118 @@ public class FlightDetailFragment extends Fragment {
         tvFstdTotalTime = view.findViewById(R.id.tv_flight_fstd_total_time);
         tvRemarks = view.findViewById(R.id.tv_flight_remarks);
 
-        // Initialize the local database
+        // Initialize the local database instance
         database = FlightDatabase.getInstance(getActivity());
 
-        // Load flight details from the database or server
+        // For logging purposes, load flights from database and server.
         loadFlightsFromDatabase();
         loadFlightsFromServer();
 
-        // Retrieve the arguments from the FlightListFragment (if any)
+        // Retrieve passed data via Bundle and set flight details.
         Bundle args = getArguments();
         if (args != null) {
-            // Set all the received data into the TextViews
             setFlightDetails(args);
         }
 
         return view;
     }
-    private void setFlightDetails(Bundle args) {
-        // Use a default value for fields that can be null
-        String date = args.getString("date", "Unknown Date");
-        String departure = args.getString("departure", "Unknown Departure Place");
-        String departureTime = args.getString("departureTime", "Unknown Departure Time");
-        String arrival = args.getString("arrival", "Unknown Arrival Place");
-        String arrivalTime = args.getString("arrivalTime", "Unknown Arrival Time");
-        String aircraftModel = args.getString("aircraftModel", "Unknown Aircraft Model");
-        String registration = args.getString("registration", "Unknown Registration");
-        int singlePilotTime = args.getInt("singlePilotTime", 0);
-        int multiPilotTime = args.getInt("multiPilotTime", 0);
-        int totalFlightTime = args.getInt("totalFlightTime", 0);
-        String pilotName = args.getString("pilotName", "Unknown Pilot");
-        int landings = args.getInt("landings", 0);
-        int nightTime = args.getInt("nightTime", 0);
-        int ifrTime = args.getInt("ifrTime", 0);
-        int picTime = args.getInt("picTime", 0);
-        int copilotTime = args.getInt("copilotTime", 0);
-        int dualTime = args.getInt("dualTime", 0);
-        int instructorTime = args.getInt("instructorTime", 0);
-        String fstdDate = args.getString("fstdDate", "Unknown Date");
-        String fstdType = args.getString("fstdType", "Unknown Type");
-        int fstdTotalTime = args.getInt("fstdTotalTime", 0);
-        String remarks = args.getString("remarks", "No Remarks");
 
-        // Set the values into the TextViews
-        tvDate.setText("Date: " + date);
-        tvDeparture.setText("From: " + departure);
-        tvDepartureTime.setText("Departure Time: " + departureTime);
-        tvArrival.setText("To: " + arrival);
-        tvArrivalTime.setText("Arrival Time: " + arrivalTime);
-        tvAircraftModel.setText("Aircraft Model: " + aircraftModel);
-        tvRegistration.setText("Registration: " + registration);
-        tvSinglePilotTime.setText("Single Pilot Time: " + singlePilotTime + " min");
-        tvMultiPilotTime.setText("Multi Pilot Time: " + multiPilotTime + " min");
-        tvTotalFlightTime.setText("Total Flight Time: " + totalFlightTime + " min");
-        tvPilotName.setText("Pilot Name: " + pilotName);
-        tvLandings.setText("Landings: " + landings);
-        tvNightTime.setText("Night Time: " + nightTime + " min");
-        tvIfrTime.setText("IFR Time: " + ifrTime + " min");
-        tvPicTime.setText("PIC Time: " + picTime + " min");
-        tvCopilotTime.setText("Copilot Time: " + copilotTime + " min");
-        tvDualTime.setText("Dual Time: " + dualTime + " min");
-        tvInstructorTime.setText("Instructor Time: " + instructorTime + " min");
-        tvFstdDate.setText("FSTD Date: " + fstdDate);
-        tvFstdType.setText("FSTD Type: " + fstdType);
-        tvFstdTotalTime.setText("FSTD Total Time: " + fstdTotalTime + " min");
-        tvRemarks.setText("Remarks: " + remarks);
+    /**
+     * Helper method that converts minutes into a formatted string "Xh Ym".
+     */
+    private String formatTime(int totalMinutes) {
+        int hours = totalMinutes / 60;
+        int minutes = totalMinutes % 60;
+        return hours + "h " + minutes + "m";
     }
 
+    /**
+     * Helper method for String fields: returns the string value or "-" if null or empty.
+     */
+    private String getStringOrDash(Bundle args, String key) {
+        String value = args.getString(key);
+        return (value == null || value.trim().isEmpty()) ? "-" : value;
+    }
 
+    /**
+     * Helper method for int fields: returns a formatted value (if requested) or the raw value,
+     * or "-" if the key does not exist.
+     */
+    private String getIntOrDash(Bundle args, String key, boolean format) {
+        if (args.containsKey(key)) {
+            int value = args.getInt(key);
+            return format ? formatTime(value) : String.valueOf(value);
+        } else {
+            return "-";
+        }
+    }
 
-    // Load flights from the local database (SQLite or Room)
+    /**
+     * Helper method for boolean fields: returns the given true/false string or "-" if not provided.
+     */
+    private String getBooleanOrDash(Bundle args, String key, String trueText, String falseText) {
+        if (args.containsKey(key)) {
+            boolean value = args.getBoolean(key);
+            return value ? trueText : falseText;
+        } else {
+            return "-";
+        }
+    }
+
+    /**
+     * Retrieve values from the Bundle and set them into the appropriate TextViews.
+     * If a field is null or missing, a dash ("-") is displayed.
+     */
+    private void setFlightDetails(Bundle args) {
+        tvDate.setText(" " + getStringOrDash(args, "date"));
+        tvDeparture.setText(" " + getStringOrDash(args, "departure"));
+        tvDepartureTime.setText(" " + getStringOrDash(args, "departureTime"));
+        tvArrival.setText(" " + getStringOrDash(args, "arrival"));
+        tvArrivalTime.setText(" " + getStringOrDash(args, "arrivalTime"));
+        tvAircraftModel.setText(" " + getStringOrDash(args, "aircraftModel"));
+        tvRegistration.setText(" " + getStringOrDash(args, "registration"));
+        // For numeric time values, use formatting if needed.
+        tvSinglePilotTime.setText(" " + getIntOrDash(args, "singlePilotTime", false)); // Required field
+        tvMultiPilotTime.setText(" " + getIntOrDash(args, "multiPilotTime", true));
+        tvTotalFlightTime.setText(" " + getIntOrDash(args, "totalFlightTime", true));
+        tvPilotName.setText(" " + getStringOrDash(args, "pilotName"));
+        tvSinglePilot.setText(" " + getBooleanOrDash(args, "singlePilot", "ME", "SE"));
+        tvLandingsDay.setText(" " + getIntOrDash(args, "landingsDay", false));
+        tvLandingsNight.setText(" " + getIntOrDash(args, "landingsNight", false));
+        tvNightTime.setText(" " + getIntOrDash(args, "nightTime", true));
+        tvIfrTime.setText(" " + getIntOrDash(args, "ifrTime", true));
+        tvPicTime.setText(" " + getIntOrDash(args, "picTime", true));
+        tvCopilotTime.setText(" " + getIntOrDash(args, "copilotTime", true));
+        tvDualTime.setText(" " + getIntOrDash(args, "dualTime", true));
+        tvInstructorTime.setText(" " + getIntOrDash(args, "instructorTime", true));
+        tvFstdDate.setText(" " + getStringOrDash(args, "fstdDate"));
+        tvFstdType.setText(" " + getStringOrDash(args, "fstdType"));
+        tvFstdTotalTime.setText(" " + getIntOrDash(args, "fstdTotalTime", true));
+        tvRemarks.setText(" " + getStringOrDash(args, "remarks"));
+    }
+
+    /**
+     * Load flights from the local database (for logging purposes).
+     */
     public void loadFlightsFromDatabase() {
         Executors.newSingleThreadExecutor().execute(() -> {
             List<Flight> flights = database.flightDao().getAllFlights();
-            // No need to update the list as we removed the ListView
+            Log.d(TAG, "Loaded flights from DB: " + flights.size());
         });
     }
 
-    // Load flights from the server using Retrofit
+    /**
+     * Load flights from the server using Retrofit (for logging purposes).
+     */
     private void loadFlightsFromServer() {
         FlightApi api = RetrofitClient.getFlightApi();
         Call<List<Flight>> call = api.getAllFlights();
-
         call.enqueue(new Callback<List<Flight>>() {
             @Override
             public void onResponse(Call<List<Flight>> call, Response<List<Flight>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Flight> serverFlights = response.body();
-                    // Handle server flights here, but no ListView update needed
+                    Log.d(TAG, "Loaded flights from server: " + serverFlights.size());
                 }
             }
 

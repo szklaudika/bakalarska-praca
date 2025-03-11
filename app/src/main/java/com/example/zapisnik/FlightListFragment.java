@@ -56,7 +56,7 @@ public class FlightListFragment extends Fragment {
             Flight selectedFlight = flights.get(position);
             FlightDetailFragment detailFragment = new FlightDetailFragment();
 
-            // Pass flight details
+            // Pass flight details via Bundle
             Bundle args = new Bundle();
             args.putString("date", selectedFlight.getDate());
             args.putString("departure", selectedFlight.getDeparturePlace());
@@ -69,7 +69,9 @@ public class FlightListFragment extends Fragment {
             args.putInt("multiPilotTime", selectedFlight.getMultiPilotTime());
             args.putInt("totalFlightTime", selectedFlight.getTotalFlightTime());
             args.putString("pilotName", selectedFlight.getPilotName());
-            args.putInt("landings", selectedFlight.getLandings());
+            args.putBoolean("singlePilot", selectedFlight.isSinglePilot());
+            args.putInt("landingsDay", selectedFlight.getLandingsDay());
+            args.putInt("landingsNight", selectedFlight.getLandingsNight());
             args.putInt("nightTime", selectedFlight.getNightTime());
             args.putInt("ifrTime", selectedFlight.getIfrTime());
             args.putInt("picTime", selectedFlight.getPicTime());
@@ -90,12 +92,12 @@ public class FlightListFragment extends Fragment {
             transaction.commit();
         });
 
-
         return view;
     }
 
     private void loadFlightsFromDatabase() {
         List<Flight> flightsFromDb = FlightDatabase.getInstance(getActivity()).flightDao().getAllFlights();
+        flights.clear();
         flights.addAll(flightsFromDb);
         updateListView();
     }
@@ -107,51 +109,64 @@ public class FlightListFragment extends Fragment {
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
-                    Log.d(TAG, "Response from server: " + response.toString());  // Log the raw server response
-
+                    Log.d(TAG, "Response from server: " + response.toString());
                     flights.clear();
                     for (int i = 0; i < response.length(); i++) {
                         try {
                             JSONObject flightJson = response.getJSONObject(i);
-
-                            // Log the individual flight data for debugging
                             Log.d(TAG, "Flight data: " + flightJson.toString());
 
-                            // Use the correct field names as per the server response (lowercase)
+                            // Parse JSON fields using the updated keys
+                            String date = flightJson.optString("date", "Unknown Date");
                             String departurePlace = flightJson.optString("departure_place", "Unknown Departure Place");
                             String departureTime = flightJson.optString("departure_time", "Unknown Departure Time");
-
-                            // Log missing fields
-                            if (departurePlace.equals("Unknown Departure Place")) {
-                                Log.e(TAG, "departurePlace is missing or empty for this flight");
-                            }
-                            if (departureTime.equals("Unknown Departure Time")) {
-                                Log.e(TAG, "departureTime is missing or empty for this flight");
-                            }
+                            String arrivalPlace = flightJson.optString("arrival_place", "Unknown Arrival Place");
+                            String arrivalTime = flightJson.optString("arrival_time", "Unknown Arrival Time");
+                            String aircraftModel = flightJson.optString("aircraft_model", "Unknown Aircraft Model");
+                            String registration = flightJson.optString("registration", "Unknown Registration");
+                            int singlePilotTime = flightJson.optInt("single_pilot_time", 0);
+                            int multiPilotTime = flightJson.optInt("multi_pilot_time", 0);
+                            int totalFlightTime = flightJson.optInt("total_flight_time", 0);
+                            String pilotName = flightJson.optString("pilot_name", "Unknown Pilot");
+                            boolean singlePilot = flightJson.optBoolean("single_pilot", false);
+                            int landingsDay = flightJson.optInt("landings_day", 0);
+                            int landingsNight = flightJson.optInt("landings_night", 0);
+                            int nightTime = flightJson.optInt("night_time", 0);
+                            int ifrTime = flightJson.optInt("ifr_time", 0);
+                            int picTime = flightJson.optInt("pic_time", 0);
+                            int copilotTime = flightJson.optInt("copilot_time", 0);
+                            int dualTime = flightJson.optInt("dual_time", 0);
+                            int instructorTime = flightJson.optInt("instructor_time", 0);
+                            String fstdDate = flightJson.optString("fstd_date", "Unknown Date");
+                            String fstdType = flightJson.optString("fstd_type", "Unknown Type");
+                            int fstdTotalTime = flightJson.optInt("fstd_total_time", 0);
+                            String remarks = flightJson.optString("remarks", "No Remarks");
 
                             Flight flight = new Flight(
-                                    flightJson.getString("date"),
+                                    date,
                                     departurePlace,
                                     departureTime,
-                                    flightJson.optString("arrival_place", "Unknown Arrival Place"),
-                                    flightJson.optString("arrival_time", "Unknown Arrival Time"),
-                                    flightJson.optString("aircraft_model", "Unknown Aircraft Model"),
-                                    flightJson.optString("registration", "Unknown Registration"),
-                                    flightJson.optInt("single_pilot_time", 0),
-                                    flightJson.optInt("multi_pilot_time", 0),
-                                    flightJson.optInt("total_flight_time", 0),
-                                    flightJson.optString("pilot_name", "Unknown Pilot"),
-                                    flightJson.optInt("landings", 0),
-                                    flightJson.optInt("night_time", 0),
-                                    flightJson.optInt("ifr_time", 0),
-                                    flightJson.optInt("pic_time", 0),
-                                    flightJson.optInt("copilot_time", 0),
-                                    flightJson.optInt("dual_time", 0),
-                                    flightJson.optInt("instructor_time", 0),
-                                    flightJson.optString("fstd_date", "Unknown Date"),
-                                    flightJson.optString("fstd_type", "Unknown Type"),
-                                    flightJson.optInt("fstd_total_time", 0),
-                                    flightJson.optString("remarks", "No Remarks")
+                                    arrivalPlace,
+                                    arrivalTime,
+                                    aircraftModel,
+                                    registration,
+                                    singlePilotTime,
+                                    multiPilotTime,
+                                    totalFlightTime,
+                                    pilotName,
+                                    singlePilot,
+                                    landingsDay,
+                                    landingsNight,
+                                    nightTime,
+                                    ifrTime,
+                                    picTime,
+                                    copilotTime,
+                                    dualTime,
+                                    instructorTime,
+                                    fstdDate,
+                                    fstdType,
+                                    fstdTotalTime,
+                                    remarks
                             );
                             flights.add(flight);
 
@@ -167,7 +182,7 @@ public class FlightListFragment extends Fragment {
         requestQueue.add(jsonArrayRequest);
     }
 
-        private void updateListView() {
+    private void updateListView() {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_1,
                 flights.stream()
@@ -175,7 +190,6 @@ public class FlightListFragment extends Fragment {
                                 " | " + f.getAircraftModel() + " | " + f.getPilotName() + " | " +
                                 f.getTotalFlightTime() + " min")
                         .collect(Collectors.toList()));
-
         listView.setAdapter(adapter);
     }
 
@@ -189,7 +203,8 @@ public class FlightListFragment extends Fragment {
 
     private boolean isNetworkAvailable() {
         assert getActivity() != null;
-        android.net.ConnectivityManager cm = (android.net.ConnectivityManager) getActivity().getSystemService(android.content.Context.CONNECTIVITY_SERVICE);
+        android.net.ConnectivityManager cm = (android.net.ConnectivityManager)
+                getActivity().getSystemService(android.content.Context.CONNECTIVITY_SERVICE);
         android.net.NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnected();
     }
@@ -205,19 +220,17 @@ public class FlightListFragment extends Fragment {
 
     private void sendFlightToServer(Flight flight) {
         FlightApi flightApi = RetrofitClient.getFlightApi();
-
         flightApi.addFlight(flight).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()) {
                     Executors.newSingleThreadExecutor().execute(() ->
                             FlightDatabase.getInstance(getActivity()).flightDao().markAsSynced(flight.getId()));
-
                     assert getActivity() != null;
-                    getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Offline flights synced!", Toast.LENGTH_SHORT).show());
+                    getActivity().runOnUiThread(() ->
+                            Toast.makeText(getActivity(), "Offline flights synced!", Toast.LENGTH_SHORT).show());
                 }
             }
-
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                 Log.e(TAG, "Sync failed: " + t.getMessage());
