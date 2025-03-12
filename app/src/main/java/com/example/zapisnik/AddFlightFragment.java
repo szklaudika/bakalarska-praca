@@ -28,6 +28,7 @@ public class AddFlightFragment extends Fragment {
             etAircraftModel, etRegistration, etSinglePilotTime, etMultiPilotTime, etTotalFlightTime,
             etPilotName, etLandingsDay, etLandingsNight, etNightTime, etIfrTime, etPicTime, etCopilotTime,
             etDualTime, etInstructorTime, etFstdDate, etFstdType, etFstdTotalTime, etRemarks;
+
     // RadioGroup for selecting if the flight is single pilot
     private RadioGroup rgSinglePilot;
 
@@ -51,7 +52,6 @@ public class AddFlightFragment extends Fragment {
         etAircraftModel = view.findViewById(R.id.et_aircraft_model);
         etRegistration = view.findViewById(R.id.et_registration);
         etSinglePilotTime = view.findViewById(R.id.et_single_pilot_time);
-        // RadioGroup for single pilot selection (Yes/No)
         rgSinglePilot = view.findViewById(R.id.rg_single_pilot);
         etMultiPilotTime = view.findViewById(R.id.et_multi_pilot_time);
         etTotalFlightTime = view.findViewById(R.id.et_total_flight_time);
@@ -73,7 +73,7 @@ public class AddFlightFragment extends Fragment {
         // Initialize local database instance
         flightDatabase = FlightDatabase.getInstance(getActivity());
 
-        // Set up button listener to add flight
+        // Add flight on button click
         btnAddFlight.setOnClickListener(v -> addFlight());
 
         // Dynamically format date input for etDate
@@ -82,34 +82,78 @@ public class AddFlightFragment extends Fragment {
             public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) { }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                String formattedText = formatDate(charSequence.toString());
-                if (!formattedText.equals(charSequence.toString())) {
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String formattedText = formatDate(editable.toString());
+                if (!formattedText.equals(editable.toString())) {
                     etDate.setText(formattedText);
                     etDate.setSelection(formattedText.length());
                 }
             }
+        });
 
+        // Add TextWatcher to format departure time as "HH:MM"
+        etDepartureTime.addTextChangedListener(new TextWatcher() {
+            boolean isUpdating = false;
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
             @Override
-            public void afterTextChanged(Editable editable) { }
+            public void afterTextChanged(Editable s) {
+                if(isUpdating) return;
+                isUpdating = true;
+                String text = s.toString();
+                // Remove any existing colon to recalculate
+                text = text.replace(":", "");
+                if(text.length() >= 2){
+                    text = text.substring(0, 2) + ":" + text.substring(2);
+                }
+                if(text.length() > 5){
+                    text = text.substring(0,5);
+                }
+                etDepartureTime.setText(text);
+                etDepartureTime.setSelection(text.length());
+                isUpdating = false;
+            }
+        });
+
+        // Add TextWatcher to format arrival time as "HH:MM"
+        etArrivalTime.addTextChangedListener(new TextWatcher() {
+            boolean isUpdating = false;
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(isUpdating) return;
+                isUpdating = true;
+                String text = s.toString();
+                // Remove any existing colon to recalculate
+                text = text.replace(":", "");
+                if(text.length() >= 2){
+                    text = text.substring(0, 2) + ":" + text.substring(2);
+                }
+                if(text.length() > 5){
+                    text = text.substring(0,5);
+                }
+                etArrivalTime.setText(text);
+                etArrivalTime.setSelection(text.length());
+                isUpdating = false;
+            }
         });
 
         // Dynamically format date input for etFstdDate (optional field)
         etFstdDate.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) { }
+            @Override public void onTextChanged(CharSequence charSequence, int start, int before, int count) { }
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) { }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                String formattedText = formatDate(charSequence.toString());
-                if (!formattedText.equals(charSequence.toString())) {
+            public void afterTextChanged(Editable editable) {
+                String formattedText = formatDate(editable.toString());
+                if (!formattedText.equals(editable.toString())) {
                     etFstdDate.setText(formattedText);
                     etFstdDate.setSelection(formattedText.length());
                 }
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
         });
 
         return view;
@@ -174,9 +218,9 @@ public class AddFlightFragment extends Fragment {
             // Retrieve remaining required text fields
             String pilotName = etPilotName.getText().toString().trim();
             String departurePlace = etDeparturePlace.getText().toString().trim();
-            String departureTime = etDepartureTime.getText().toString().trim();
+            String departureTimeStr = etDepartureTime.getText().toString().trim();
             String arrivalPlace = etArrivalPlace.getText().toString().trim();
-            String arrivalTime = etArrivalTime.getText().toString().trim();
+            String arrivalTimeStr = etArrivalTime.getText().toString().trim();
             String aircraftModel = etAircraftModel.getText().toString().trim();
             String registration = etRegistration.getText().toString().trim();
             String remarks = etRemarks.getText().toString().trim();
@@ -189,13 +233,13 @@ public class AddFlightFragment extends Fragment {
                 isSinglePilot = option.equalsIgnoreCase("yes");
             }
 
-            // Create Flight object using the updated constructor (assumes Flight accepts Integer for nullable fields)
+            // Create Flight object
             Flight flight = new Flight(
                     formattedDate,
                     departurePlace,
-                    departureTime,
+                    departureTimeStr,
                     arrivalPlace,
-                    arrivalTime,
+                    arrivalTimeStr,
                     aircraftModel,
                     registration,
                     singlePilotMinutes,
@@ -217,27 +261,22 @@ public class AddFlightFragment extends Fragment {
                     remarks
             );
 
-            // Send flight to server or save locally based on network availability
-            if (isNetworkAvailable()) {
-                sendFlightToServer(flight);
-            } else {
-                saveFlightLocally(flight);
-            }
+            // 1) Save flight locally
+            saveFlightLocally(flight);
+
+            // 2) Always try sending flight to the server
+            sendFlightToServer(flight);
+
         } catch (NumberFormatException e) {
             Toast.makeText(getActivity(), "Please enter valid numeric values", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.getType() == ConnectivityManager.TYPE_WIFI && networkInfo.isConnected();
-    }
-
     private void saveFlightLocally(Flight flight) {
         Executors.newSingleThreadExecutor().execute(() -> {
             flightDatabase.flightDao().insert(flight);
-            getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Flight saved locally!", Toast.LENGTH_SHORT).show());
+            getActivity().runOnUiThread(() ->
+                    Toast.makeText(getActivity(), "Flight saved locally!", Toast.LENGTH_SHORT).show());
         });
     }
 
@@ -260,7 +299,7 @@ public class AddFlightFragment extends Fragment {
         });
     }
 
-    // Method to format date strings dynamically into "YYYY-MM-DD" format
+    // Method to format date strings into "YYYY-MM-DD" format
     private String formatDate(String input) {
         // Remove any non-numeric characters
         input = input.replaceAll("[^0-9]", "");

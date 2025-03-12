@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -58,20 +60,44 @@
             android:hint="Aircraft Registration"
             android:minHeight="48dp" />
 
+        <!-- Single Pilot Time (in minutes) -->
         <EditText
             android:id="@+id/et_single_pilot_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Singe Pilot Time"
+            android:hint="Single Pilot Time"
             android:minHeight="48dp" />
+
+        <!-- RadioGroup for Single Pilot Type: SE / ME -->
+        <RadioGroup
+            android:id="@+id/rg_single_pilot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+
+            <RadioButton
+                android:id="@+id/rb_se"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SE"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <RadioButton
+                android:id="@+id/rb_me"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ME"
+                tools:ignore="TouchTargetSizeCheck" />
+        </RadioGroup>
 
         <EditText
             android:id="@+id/et_multi_pilot_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Multi Pilot Time"
+            android:hint="Multi Pilot Time (minutes)"
             android:minHeight="48dp" />
-
 
         <EditText
             android:id="@+id/et_total_flight_time"
@@ -87,12 +113,21 @@
             android:hint="Pilot Name"
             android:minHeight="48dp" />
 
+        <!-- Landings -->
         <EditText
-            android:id="@+id/et_landings"
+            android:id="@+id/et_landings_day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Number of Landings"
+            android:hint="Number of Landings at Day"
             android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/et_landings_night"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Number of Landings at Night"
+            android:minHeight="48dp" />
+
 
         <EditText
             android:id="@+id/et_night_time"
@@ -163,5 +198,6 @@
             android:layout_height="wrap_content"
             android:text="Add Flight"
             android:layout_gravity="center_horizontal" />
+
     </LinearLayout>
 </ScrollView>

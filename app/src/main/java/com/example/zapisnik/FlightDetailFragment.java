@@ -86,7 +86,7 @@ public class FlightDetailFragment extends Fragment {
     }
 
     /**
-     * Helper method that converts minutes into a formatted string "Xh Ym".
+     * Converts minutes into a formatted string "Xh Ym".
      */
     private String formatTime(int totalMinutes) {
         int hours = totalMinutes / 60;
@@ -95,41 +95,47 @@ public class FlightDetailFragment extends Fragment {
     }
 
     /**
-     * Helper method for String fields: returns the string value or "-" if null or empty.
+     * Returns the string value or "-" if null or empty.
      */
     private String getStringOrDash(Bundle args, String key) {
         String value = args.getString(key);
-        return (value == null || value.trim().isEmpty()) ? "-" : value;
+        // Check if the value is actually null, empty, or the literal string "null"
+        if (value == null || value.trim().isEmpty() || value.equalsIgnoreCase("null")) {
+            return "-";
+        }
+        return value;
     }
 
+
     /**
-     * Helper method for int fields: returns a formatted value (if requested) or the raw value,
-     * or "-" if the key does not exist.
+     * Returns a numeric value as formatted time (if requested) or raw value.
+     * Also, if the numeric field equals 0 (and formatting is requested), returns "-".
      */
     private String getIntOrDash(Bundle args, String key, boolean format) {
         if (args.containsKey(key)) {
             int value = args.getInt(key);
+            if (format && value == 0) {
+                return "-";
+            }
             return format ? formatTime(value) : String.valueOf(value);
-        } else {
-            return "-";
         }
+        return "-";
     }
 
     /**
-     * Helper method for boolean fields: returns the given true/false string or "-" if not provided.
+     * Returns the boolean value as provided true/false string or "-" if not provided.
      */
     private String getBooleanOrDash(Bundle args, String key, String trueText, String falseText) {
         if (args.containsKey(key)) {
             boolean value = args.getBoolean(key);
             return value ? trueText : falseText;
-        } else {
-            return "-";
         }
+        return "-";
     }
 
     /**
-     * Retrieve values from the Bundle and set them into the appropriate TextViews.
-     * If a field is null or missing, a dash ("-") is displayed.
+     * Retrieves values from the Bundle and sets them into the appropriate TextViews.
+     * If a field is null, missing, or (for time fields) equals 0, a dash ("-") is displayed.
      */
     private void setFlightDetails(Bundle args) {
         tvDate.setText(" " + getStringOrDash(args, "date"));
@@ -139,7 +145,6 @@ public class FlightDetailFragment extends Fragment {
         tvArrivalTime.setText(" " + getStringOrDash(args, "arrivalTime"));
         tvAircraftModel.setText(" " + getStringOrDash(args, "aircraftModel"));
         tvRegistration.setText(" " + getStringOrDash(args, "registration"));
-        // For numeric time values, use formatting if needed.
         tvSinglePilotTime.setText(" " + getIntOrDash(args, "singlePilotTime", false)); // Required field
         tvMultiPilotTime.setText(" " + getIntOrDash(args, "multiPilotTime", true));
         tvTotalFlightTime.setText(" " + getIntOrDash(args, "totalFlightTime", true));
