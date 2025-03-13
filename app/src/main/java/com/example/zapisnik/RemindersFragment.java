@@ -76,7 +76,7 @@ public class RemindersFragment extends Fragment {
             List<Certificate> expiringCerts = getExpiringCertificates();
             expiringCertificatesList.clear();
             for (Certificate cert : expiringCerts) {
-                String certificateInfo = cert.getName() + " - Expires: " + cert.getExpiryDate();
+                String certificateInfo = cert.getCertificateType() + " - Expires: " + cert.getExpiryDate();
                 expiringCertificatesList.add(certificateInfo);
                 showNotification(cert);
             }
@@ -109,7 +109,7 @@ public class RemindersFragment extends Fragment {
                     expiringCerts.add(cert);
                 }
             } catch (ParseException e) {
-                Log.e("RemindersFragment", "Error parsing expiry date for certificate: " + cert.getName(), e);
+                Log.e("RemindersFragment", "Error parsing expiry date for certificate: " + cert.getCertificateType(), e);
             }
         }
         return expiringCerts;
@@ -134,7 +134,7 @@ public class RemindersFragment extends Fragment {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification) // Uistite sa, že máte túto ikonu v res/drawable
                 .setContentTitle("Certification Expiring Soon")
-                .setContentText(certificate.getName() + " expires on " + certificate.getExpiryDate())
+                .setContentText(certificate.getCertificateType() + " expires on " + certificate.getExpiryDate())
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
 

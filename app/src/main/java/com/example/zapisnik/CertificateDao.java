@@ -12,7 +12,7 @@ import java.util.List;
 @Dao
 public interface CertificateDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE) // Fix: Replace existing records instead of failing
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCertificate(Certificate certificate);
 
     @Update
@@ -33,12 +33,12 @@ public interface CertificateDao {
     @Query("UPDATE certificates SET is_synced = 1 WHERE id = :id")
     void markAsSynced(int id);
 
-    @Query("SELECT * FROM certificates WHERE name = :certificateName LIMIT 1")
+    @Query("SELECT * FROM certificates WHERE certificate_type = :certificateName LIMIT 1")
     Certificate getCertificateByName(String certificateName);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE) // Fix: Bulk insert with conflict handling
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCertificates(List<Certificate> certificates);
 
-    @Query("SELECT * FROM certificates WHERE id = :id LIMIT 1") // Fix: Define the missing query
+    @Query("SELECT * FROM certificates WHERE id = :id LIMIT 1")
     Certificate getCertificateById(int id);
 }

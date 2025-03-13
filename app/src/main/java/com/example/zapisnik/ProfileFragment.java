@@ -44,29 +44,21 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         listViewCertificates = view.findViewById(R.id.list_view_certificates);
-
         database = CertificateDatabase.getInstance(getActivity());
 
         adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, certificateList);
         listViewCertificates.setAdapter(adapter);
 
-
-        // Load certificates only from the local database on start
+        // Na začiatku načítame certifikáty z lokálnej databázy
         loadCertificatesFromDatabase();
 
-
-        // Set up item click listener for deleting certificates
+        // Nastavenie listenera pre vymazávanie certifikátu po kliknutí
         listViewCertificates.setOnItemClickListener((parent, view1, position, id) -> {
             String selectedCertificate = certificateList.get(position);
-
-            // Confirm deletion before proceeding
             new android.app.AlertDialog.Builder(getActivity())
                     .setTitle("Delete Certificate")
                     .setMessage("Are you sure you want to delete " + selectedCertificate + "?")
-                    .setPositiveButton("Yes", (dialog, which) -> {
-                        // Delete the certificate
-                        deleteCertificate(selectedCertificate);
-                    })
+                    .setPositiveButton("Yes", (dialog, which) -> deleteCertificate(selectedCertificate))
                     .setNegativeButton("No", null)
                     .show();
         });
@@ -75,23 +67,21 @@ public class ProfileFragment extends Fragment {
     }
 
     private void deleteCertificate(String certificateString) {
-        // Extrahujeme iba názov certifikátu (pred " - Expires: ")
+        // Extrahujeme názov certifikátu (pred " - Expires: ")
         String[] parts = certificateString.split(" - Expires:");
         String certificateName = parts[0].trim();
 
         Executors.newSingleThreadExecutor().execute(() -> {
-            // Vyhľadáme certifikát podľa skutočného názvu
+            // Vyhľadáme certifikát podľa certificateType
             Certificate certificateToDelete = database.certificateDao().getCertificateByName(certificateName);
 
             if (certificateToDelete != null) {
                 CertificateApi api = RetrofitClient.getApi();
-
                 // Najprv vymažeme certifikát zo servera
                 api.deleteCertificate(certificateToDelete.getId()).enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()) {
-                            // Po úspešnom vymazaní zo servera vymažeme aj lokálne
                             Executors.newSingleThreadExecutor().execute(() -> {
                                 database.certificateDao().deleteCertificate(certificateToDelete);
                                 getActivity().runOnUiThread(() -> {
@@ -101,66 +91,53 @@ public class ProfileFragment extends Fragment {
                                 });
                             });
                         } else {
-                            getActivity().runOnUiThread(() -> {
-                                Toast.makeText(getActivity(), "Server deletion failed for certificate: " + certificateName, Toast.LENGTH_SHORT).show();
-                            });
+                            getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Server deletion failed for certificate: " + certificateName, Toast.LENGTH_SHORT).show());
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
-                        getActivity().runOnUiThread(() -> {
-                            Toast.makeText(getActivity(), "Error deleting certificate from server: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                        });
+                        getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Error deleting certificate from server: " + t.getMessage(), Toast.LENGTH_SHORT).show());
                     }
                 });
             } else {
-                getActivity().runOnUiThread(() -> {
-                    Toast.makeText(getActivity(), "Certificate not found: " + certificateName, Toast.LENGTH_SHORT).show();
-                });
+                getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Certificate not found: " + certificateName, Toast.LENGTH_SHORT).show());
             }
         });
     }
 
-
-
     @Override
     public void onResume() {
         super.onResume();
-        // Check if the device is connected to the internet when the app is resumed.
         if (isNetworkAvailable()) {
-            // Sync any local unsynced certificates with the server
             syncLocalCertificatesToServer();
-
-            // Optionally, you can fetch data from the server if you want to update the list
-            loadCertificatesFromServer();  // Uncomment this line if you want to sync after internet is available
+            loadCertificatesFromServer();  // Ak chcete po pripojení synchronizovať aj zo servera
         }
     }
 
-    // Check network availability (Wi-Fi or Mobile Data)
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager != null) {
             Network network = connectivityManager.getActiveNetwork();
             NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
             if (capabilities != null) {
-                return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR);
+                return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                        capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR);
             }
         }
         return false;
     }
 
-
-    // Load certificates from the database in a separate thread
+    // Načítanie certifikátov z lokálnej databázy
     public void loadCertificatesFromDatabase() {
         Executors.newSingleThreadExecutor().execute(() -> {
             List<Certificate> certificates = database.certificateDao().getAllCertificates();
             List<String> tempList = new ArrayList<>();
 
             for (Certificate cert : certificates) {
-
-                Log.d("DEBUG", "Loaded from DB: " + cert.getName() + ", Expiry Date: " + cert.getExpiryDate());
-                tempList.add(cert.getName() + " - Expires: " + (cert.getExpiryDate() != null ? cert.getExpiryDate() : "NULL"));
+                // Použijeme certificateType namiesto name
+                Log.d("DEBUG", "Loaded from DB: " + cert.getCertificateType() + ", Expiry Date: " + cert.getExpiryDate());
+                tempList.add(cert.getCertificateType() + " - Expires: " + (cert.getExpiryDate() != null ? cert.getExpiryDate() : "NULL"));
             }
 
             getActivity().runOnUiThread(() -> {
@@ -171,7 +148,6 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-
     private void loadCertificatesFromServer() {
         CertificateApi api = RetrofitClient.getApi();
         Call<List<Certificate>> call = api.getAllCertificates();
@@ -181,26 +157,16 @@ public class ProfileFragment extends Fragment {
             public void onResponse(Call<List<Certificate>> call, Response<List<Certificate>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Certificate> serverCertificates = response.body();
-
                     Executors.newSingleThreadExecutor().execute(() -> {
                         for (Certificate cert : serverCertificates) {
                             Certificate existingCert = database.certificateDao().getCertificateById(cert.getId());
-
                             if (existingCert == null) {
-                                // Insert only if the certificate does not exist
                                 database.certificateDao().insertCertificate(cert);
                             } else {
-                                // Update if the certificate already exists
                                 database.certificateDao().updateCertificate(cert);
                             }
                         }
-
-
-
-                        getActivity().runOnUiThread(() -> {
-                            // Refresh UI after inserting data
-                            loadCertificatesFromDatabase();
-                        });
+                        getActivity().runOnUiThread(() -> loadCertificatesFromDatabase());
                     });
                 } else {
                     Log.e("DEBUG", "Server returned failure: " + response.message());
@@ -209,43 +175,32 @@ public class ProfileFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Certificate>> call, Throwable t) {
-
                 Log.e("DEBUG", "Failed to fetch from server: " + t.getMessage());
             }
         });
     }
 
-
-
-
-
-    // Send all local certificates to the server if internet is available
+    // Synchronizácia lokálnych certifikátov so serverom
     public void syncLocalCertificatesToServer() {
         Executors.newSingleThreadExecutor().execute(() -> {
             List<Certificate> unsyncedCertificates = database.certificateDao().getUnsyncedCertificates();
-
             if (!unsyncedCertificates.isEmpty()) {
                 CertificateApi api = RetrofitClient.getApi();
-
                 for (Certificate cert : unsyncedCertificates) {
-                    // Overenie, či certifikát existuje na serveri pomocou ID
                     api.getCertificateById(cert.getId()).enqueue(new Callback<Certificate>() {
                         @Override
                         public void onResponse(Call<Certificate> call, Response<Certificate> response) {
                             if (response.isSuccessful()) {
                                 Certificate serverCert = response.body();
-                                // Ak serverCert je null alebo obsahuje error, tak certifikát neexistuje a treba ho pridať
                                 if (serverCert == null || (serverCert.getError() != null && serverCert.getError().equals("Certificate not found"))) {
                                     addCertificateToServer(cert, api);
                                 } else {
                                     Log.d("Sync", "Certificate exists on server: " + serverCert.toString());
                                 }
                             } else {
-                                // Ak odpoveď nie je úspešná, skúsiť odoslať certifikát
                                 addCertificateToServer(cert, api);
                             }
                         }
-
                         @Override
                         public void onFailure(Call<Certificate> call, Throwable t) {
                             Log.e("Sync", "Error checking if certificate exists on server", t);
@@ -256,7 +211,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    // Pomocná metóda na odoslanie certifikátu na server
+    // Odoslanie certifikátu na server
     private void addCertificateToServer(Certificate cert, CertificateApi api) {
         api.addCertificate(cert).enqueue(new Callback<Void>() {
             @Override
@@ -264,35 +219,28 @@ public class ProfileFragment extends Fragment {
                 if (response.isSuccessful()) {
                     Executors.newSingleThreadExecutor().execute(() -> {
                         database.certificateDao().markAsSynced(cert.getId());
-                        getActivity().runOnUiThread(() -> {
-                            Toast.makeText(getActivity(), "Certificate synced: " + cert.getName(), Toast.LENGTH_SHORT).show();
-                        });
+                        getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Certificate synced: " + cert.getCertificateType(), Toast.LENGTH_SHORT).show());
                     });
                 } else {
-                    Log.e("Sync", "Error syncing certificate: " + cert.getName());
+                    Log.e("Sync", "Error syncing certificate: " + cert.getCertificateType());
                 }
             }
-
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e("Sync", "Error syncing certificate: " + cert.getName(), t);
+                Log.e("Sync", "Error syncing certificate: " + cert.getCertificateType(), t);
             }
         });
     }
 
-
-
-    // Parse the expiry date string and return a Date object
+    // Metóda na parsovanie dátumu expirácie
     public Date parseExpiryDate(String expiryDate) {
-        // Correct format to match the format in the database: yyyy-MM-dd
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-
         try {
             Log.d("parseExpiryDate", "Parsing date: " + expiryDate);
             return dateFormat.parse(expiryDate);
         } catch (ParseException e) {
             Log.e("parseExpiryDate", "Error parsing expiry date: " + expiryDate, e);
-            return null; // Return null if parsing fails
+            return null;
         }
     }
 }

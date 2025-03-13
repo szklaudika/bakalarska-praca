@@ -66,7 +66,7 @@ public class CertificationReminderWorker extends Worker {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification)  // Použi svoju notifikačnú ikonu
                 .setContentTitle("Certification Expiring Soon")
-                .setContentText(certificate.getName() + " expires on " + certificate.getExpiryDate())
+                .setContentText(certificate.getCertificateType() + " expires on " + certificate.getExpiryDate())
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
 

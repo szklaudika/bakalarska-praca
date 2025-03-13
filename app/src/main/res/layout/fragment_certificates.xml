@@ -1,38 +1,1044 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    tools:context=".CertificatesFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Certificate"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:paddingBottom="8dp"/>
-
-    <EditText
-        android:id="@+id/et_certificate_name"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Certificate Name"
-        android:minHeight="48dp" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <EditText
-        android:id="@+id/et_expiry_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Expiry Date (YYYY-MM-DD)"
-        android:minHeight="48dp" />
+        <!-- Label a Spinner pre platformu -->
 
-    <Button
-        android:id="@+id/btn_add_certificate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add Certificate"
-        android:layout_marginTop="16dp"/>  <!-- Fixed attribute -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
 
-</LinearLayout>
+            <Button
+                android:id="@+id/btn_platform_velka_era"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Velká éra"
+                android:contentDescription="Select Velká éra" />
+
+            <Button
+                android:id="@+id/btn_platform_ultralighty"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Ultralighty"
+                android:contentDescription="Select Ultralighty" />
+
+            <Button
+                android:id="@+id/btn_platform_vetrone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Větroně"
+                android:contentDescription="Select Větroně" />
+
+            <Button
+                android:id="@+id/btn_platform_vrtulniky"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Vrtulníky"
+                android:contentDescription="Select Vrtulníky" />
+        </LinearLayout>
+
+        <!-- Separator -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#CCCCCC"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Section"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <Button
+                android:id="@+id/btn_section_lk"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Letecké kvalifikácie"
+                android:contentDescription="Select Letecké kvalifikácie" />
+
+            <Button
+                android:id="@+id/btn_section_medical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Medical"
+                android:contentDescription="Select Medical" />
+
+            <Button
+                android:id="@+id/btn_section_radio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Rádio"
+                android:contentDescription="Select Rádio" />
+
+            <Button
+                android:id="@+id/btn_section_english"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Angličtina"
+                android:contentDescription="Select Angličtina" />
+
+            <Button
+                android:id="@+id/btn_section_insurance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Poistka"
+                android:contentDescription="Select Poistka" />
+        </LinearLayout>
+
+
+        <!-- EditText pre Acquired Date -->
+        <EditText
+            android:id="@+id/et_acquired_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Acquired Date (yyyy-MM-dd)"
+            android:minHeight="48dp"/>
+
+        <!-- EditText pre Expiry Date -->
+        <EditText
+            android:id="@+id/et_expiry_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Expiry Date (yyyy-MM-dd)"
+            android:minHeight="48dp"/>
+
+        <!-- EditText pre Days Remaining -->
+        <EditText
+            android:id="@+id/et_days_remaining"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Days Remaining"
+            android:inputType="number"
+            android:minHeight="48dp"/>
+
+        <!-- EditText pre Note -->
+        <EditText
+            android:id="@+id/et_note"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Note"
+            android:minHeight="48dp"/>
+
+        <!-- Layout pre Letecké kvalifikácie - Velká éra -->
+        <LinearLayout
+            android:id="@+id/layout_lk_velka_era"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Letecké kvalifikácie - Velká éra"
+                android:textStyle="bold"
+                 />
+
+
+            <CheckBox
+                android:id="@+id/chk_ppl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PPL"
+                android:buttonTint="@color/checkbox_tint" />
+
+            <CheckBox
+                android:id="@+id/chk_cpl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CPL"
+                android:buttonTint="@color/checkbox_tint" />
+
+            <CheckBox
+                android:id="@+id/chk_atpl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ATPL"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_sep_land"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SEP land"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_sep_sea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SEP sea"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_mep_land"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MEP land"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_mep_sea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MEP sea"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_ir_sep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IR SEP"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_ir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IR"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_mep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MEP"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_night"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NIGHT"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_fi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FI"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_iri"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IRI"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_tow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TOW"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_tst"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TST"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_par"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PAR"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_acr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ACR"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_mcc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MCC"
+                android:buttonTint="@color/checkbox_tint"/>
+
+        </LinearLayout>
+
+        <!-- Layout pre Medical - Velká éra -->
+        <LinearLayout
+            android:id="@+id/layout_medical_velka_era"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medical - Velká éra"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_med_class1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medical Certificate Class 1"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_med_class2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medical Certificate Class 2"
+                android:buttonTint="@color/checkbox_tint"/>
+        </LinearLayout>
+
+        <!-- Layout pre Radio - Velká éra -->
+        <LinearLayout
+            android:id="@+id/layout_radio_velka_era"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rádio - Velká éra"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_vseobecny_preukaz"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Všeobecný preukaz radiofonisty"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_obmedzeny_preukaz"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Obmedzený preukaz radionofisty"
+                android:buttonTint="@color/checkbox_tint"/>
+        </LinearLayout>
+
+        <!-- Layout pre Angličtina - Velká éra -->
+        <LinearLayout
+            android:id="@+id/layout_anglictina_velka_era"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Angličtina - Velká éra"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_english_level4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ICAO English LEVEL 4"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_english_level5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ICAO English LEVEL 5"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_english_level6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ICAO English LEVEL 6"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_english_ifr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IFR angličtina"
+                android:buttonTint="@color/checkbox_tint"/>
+        </LinearLayout>
+
+        <!-- Layout pre Poistka - Velká éra -->
+        <LinearLayout
+            android:id="@+id/layout_poistka_velka_era"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poistka - Velká éra"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_poistenie_zodpovednost_cr_sk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poistenie zodpovednosti ČR + SK"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_zodpovednosti_svet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poistenie zodpovednosti SVET"
+                android:buttonTint="@color/checkbox_tint"/>
+        </LinearLayout>
+
+        <!-- Layout pre Letecké kvalifikácie - Ultralighty -->
+        <LinearLayout
+            android:id="@+id/layout_lk_ultralighty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Letecké kvalifikácie - Ultralighty"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_ull"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ULL(a)"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_vfr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Riadené lety VFR"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_instruktor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Inštruktor"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_vlekar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vlekár"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_skusobny_pilot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Skúšobný pilot"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_vysadzovac"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vysadzovač"
+                android:buttonTint="@color/checkbox_tint"/>
+        </LinearLayout>
+
+        <!-- Layout pre Medical - Ultralighty -->
+        <LinearLayout
+            android:id="@+id/layout_medical_ultralighty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medical - Ultralighty"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_osvedcenie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Osvedčenie zdravotnej spôsobilosti 2. triedy"
+                android:buttonTint="@color/checkbox_tint"/>
+        </LinearLayout>
+
+        <!-- Layout pre Radio - Ultralighty -->
+        <LinearLayout
+            android:id="@+id/layout_radio_ultralighty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rádio - Ultralighty"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_vseobecny_preukaz_ultralighty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Všeobecný preukaz radiofonisty"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_obmedzeny_preukaz_ultralighty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Obmedzený preukaz radionofisty"
+                android:buttonTint="@color/checkbox_tint"/>
+        </LinearLayout>
+
+        <!-- Layout pre Angličtina - Ultralighty -->
+        <LinearLayout
+            android:id="@+id/layout_anglictina_ultralighty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Angličtina - Ultralighty"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_english_level4_ultralighty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ICAO English LEVEL 4"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_english_level5_ultralighty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ICAO English LEVEL 5"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_english_level6_ultralighty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ICAO English LEVEL 6"
+                android:buttonTint="@color/checkbox_tint"/>
+
+        </LinearLayout>
+
+        <!-- Layout pre Poistka - Ultralighty -->
+        <LinearLayout
+            android:id="@+id/layout_poistka_ultralighty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poistka - Ultralighty"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_poistenie_zodpovednost_cr_sk_ultralighty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poistenie zodpovednosti ČR + SK"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_zodpovednosti_svet_ultralighty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poistenie zodpovednosti SVET"
+                android:buttonTint="@color/checkbox_tint"/>
+        </LinearLayout>
+
+        <!-- Layout pre Letecké kvalifikácie - Vetrone -->
+        <LinearLayout
+            android:id="@+id/layout_lk_vetrone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Letecké kvalifikácie - Vetrone"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_gld_vetrone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GLD"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_tmg_vetrone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TMG"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_fi_vetrone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FI"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_tst_vetrone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TST"
+                android:buttonTint="@color/checkbox_tint"/>
+        </LinearLayout>
+
+        <!-- Layout pre Medical - Vetrone -->
+        <LinearLayout
+            android:id="@+id/layout_medical_vetrone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medical - Vetrone"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_med_class1_vetrone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medical Certificate Class 1"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_med_class2_vetrone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medical Certificate Class 2"
+                android:buttonTint="@color/checkbox_tint"/>
+        </LinearLayout>
+
+        <!-- Layout pre Radio - Vetrone -->
+        <LinearLayout
+            android:id="@+id/layout_radio_vetrone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rádio - Vetrone"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_vseobecny_preukaz_vetrone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Všeobecný preukaz radiofonisty"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_obmedzeny_preukaz_vetrone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Obmedzený preukaz radionofisty"
+                android:buttonTint="@color/checkbox_tint"/>
+        </LinearLayout>
+
+        <!-- Layout pre Angličtina - Vetrone -->
+        <LinearLayout
+            android:id="@+id/layout_anglictina_vetrone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Angličtina - Vetrone"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_english_level4_vetrone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ICAO English LEVEL 4"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_english_level5_vetrone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ICAO English LEVEL 5"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_english_level6_vetrone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ICAO English LEVEL 6"
+                android:buttonTint="@color/checkbox_tint"/>
+
+        </LinearLayout>
+
+        <!-- Layout pre Poistka - Vetrone -->
+        <LinearLayout
+            android:id="@+id/layout_poistka_vetrone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poistka - Vetrone"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_poistenie_zodpovednost_cr_sk_vetrone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poistenie zodpovednosti ČR + SK"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_zodpovednosti_svet_vetrone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poistenie zodpovednosti SVET"
+                android:buttonTint="@color/checkbox_tint"/>
+        </LinearLayout>
+
+        <!-- Layout pre Letecké kvalifikácie - Vrtulníky -->
+        <LinearLayout
+            android:id="@+id/layout_lk_vrtulniky"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Letecké kvalifikácie - Vrtuľníky"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_ppl_vrtulniky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PPL"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_cpl_vrtulniky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CPL"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_atpl_vrtulniky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ATPL"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_ir_vrtulniky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IR"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_night_vrtulniky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NIGHT"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_fi_vrtulniky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FI"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_iri_vrtulniky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IRI"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_tst_vrtulniky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TST"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_par_vrtulniky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PAR"
+                android:buttonTint="@color/checkbox_tint"/>
+
+        </LinearLayout>
+
+        <!-- Layout pre Medical - Vrtuľníky -->
+        <LinearLayout
+            android:id="@+id/layout_medical_vrtulniky"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medical - Vrtuľníky"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_med_class1_vrtulniky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medical Certificate Class 1"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_med_class2_vrtulniky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medical Certificate Class 2"
+                android:buttonTint="@color/checkbox_tint"/>
+        </LinearLayout>
+
+        <!-- Layout pre Radio - Vrtuľníky -->
+        <LinearLayout
+            android:id="@+id/layout_radio_vrtulniky"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rádio - Vrtuľníky"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_vseobecny_preukaz_vrtulniky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Všeobecný preukaz radiofonisty"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_obmedzeny_preukaz_vrtulniky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Obmedzený preukaz radionofisty"
+                android:buttonTint="@color/checkbox_tint"/>
+        </LinearLayout>
+
+        <!-- Layout pre Angličtina - Vrtuľníky -->
+        <LinearLayout
+            android:id="@+id/layout_anglictina_vrtulniky"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Angličtina - Vrtuľníky"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_english_level4_vrtulniky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ICAO English LEVEL 4"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_english_level5_vrtulniky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ICAO English LEVEL 5"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_english_level6_vrtulniky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ICAO English LEVEL 6"
+                android:buttonTint="@color/checkbox_tint"/>
+
+        </LinearLayout>
+
+        <!-- Layout pre Poistka - Vrtuľníky -->
+        <LinearLayout
+            android:id="@+id/layout_poistka_vrtulniky"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poistka - Vrtuľníky"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_poistenie_zodpovednost_cr_sk_vrtulniky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poistenie zodpovednosti ČR + SK"
+                android:buttonTint="@color/checkbox_tint"/>
+
+            <CheckBox
+                android:id="@+id/chk_zodpovednosti_svet_vrtulniky"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poistenie zodpovednosti SVET"
+                android:buttonTint="@color/checkbox_tint"/>
+        </LinearLayout>
+
+        <!-- Tu pridajte ďalšie layouty pre ďalšie kombinácie podľa potreby -->
+
+        <!-- Tlačidlo pre pridanie certifikátu -->
+        <Button
+            android:id="@+id/btn_add_certificate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pridať kvalifikáciu"
+            android:layout_marginTop="16dp"/>
+    </LinearLayout>
+
+
+</ScrollView>
