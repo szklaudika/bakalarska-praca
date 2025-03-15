@@ -17,18 +17,14 @@ public class Certificate {
     @ColumnInfo(name = "platform")
     private String platform;
 
+    @SerializedName("certificate_type")
     @ColumnInfo(name = "certificate_type")
     private String certificateType;
-
-    @ColumnInfo(name = "acquired_date")
-    private String acquiredDate;
 
     @SerializedName("expiry_date")
     @ColumnInfo(name = "expiry_date")
     private String expiryDate;
 
-    @ColumnInfo(name = "days_remaining")
-    private int daysRemaining;
 
     @ColumnInfo(name = "note")
     private String note;
@@ -40,14 +36,13 @@ public class Certificate {
     private String error;
 
     // Nový konštruktor so všetkými potrebnými poľami
-    public Certificate(String section, String platform, String certificateType,
-                       String acquiredDate, String expiryDate, int daysRemaining, String note) {
+    public Certificate(String section, String platform, String certificateType, String expiryDate, String note) {
         this.section = section;
         this.platform = platform;
         this.certificateType = certificateType;
-        this.acquiredDate = acquiredDate;
+
         this.expiryDate = expiryDate;
-        this.daysRemaining = daysRemaining;
+
         this.note = note;
         this.isSynced = false;
         this.error = null;
@@ -78,24 +73,14 @@ public class Certificate {
     public void setCertificateType(String certificateType) {
         this.certificateType = certificateType;
     }
-    public String getAcquiredDate() {
-        return acquiredDate;
-    }
-    public void setAcquiredDate(String acquiredDate) {
-        this.acquiredDate = acquiredDate;
-    }
+
     public String getExpiryDate() {
         return expiryDate;
     }
     public void setExpiryDate(String expiryDate) {
         this.expiryDate = expiryDate;
     }
-    public int getDaysRemaining() {
-        return daysRemaining;
-    }
-    public void setDaysRemaining(int daysRemaining) {
-        this.daysRemaining = daysRemaining;
-    }
+
     public String getNote() {
         return note;
     }

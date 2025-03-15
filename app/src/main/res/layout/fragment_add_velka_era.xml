@@ -1,0 +1,801 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddVelkaEraFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Section: Letecké kvalifikácie - Velká éra -->
+        <LinearLayout
+            android:id="@+id/layout_lk_velka_era"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#1a1a1a"
+            android:padding="8dp"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Letecké kvalifikácie - Velká éra"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF" />
+
+            <!-- PPL -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_ppl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PPL"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_ppl"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- CPL -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+
+                <CheckBox
+                    android:id="@+id/chk_cpl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/checkbox_tint"
+                    android:text="CPL"
+                    android:textColor="#FFFFFF"
+                    tools:ignore="TouchTargetSizeCheck" />
+                <EditText
+                    android:id="@+id/et_expiry_cpl"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- ATPL -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_atpl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ATPL"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_atpl"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- SEP land -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+
+                <CheckBox
+                    android:id="@+id/chk_sep_land"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/checkbox_tint"
+                    android:text="SEP land"
+                    android:textColor="#FFFFFF"
+                    tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
+                <EditText
+                    android:id="@+id/et_expiry_sep_land"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- SEP sea -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_sep_sea"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SEP sea"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_sep_sea"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- MEP land -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_mep_land"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MEP land"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_mep_land"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- MEP sea -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_mep_sea"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MEP sea"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_mep_sea"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- IR SEP -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_ir_sep"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IR SEP"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_ir_sep"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- IR -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_ir"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IR"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_ir"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- MEP -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_mep"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MEP"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_mep"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- NIGHT -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_night"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NIGHT"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_night"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- FI -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_fi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FI"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_fi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- IRI -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_iri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IRI"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_iri"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- TOW -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_tow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TOW"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_tow"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- TST -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_tst"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TST"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_tst"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- PAR -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_par"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PAR"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_par"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- ACR -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_acr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ACR"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_acr"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- MCC -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_mcc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MCC"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_mcc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Medical - Velká éra -->
+        <LinearLayout
+            android:id="@+id/layout_medical_velka_era"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#1a1a1a"
+            android:padding="8dp"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medical - Velká éra"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF" />
+
+            <!-- Medical Certificate Class 1 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_med_class1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Medical Certificate Class 1"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_med_class1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- Medical Certificate Class 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_med_class2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Medical Certificate Class 2"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_med_class2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Rádio - Velká éra -->
+        <LinearLayout
+            android:id="@+id/layout_radio_velka_era"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#1a1a1a"
+            android:padding="8dp"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rádio - Velká éra"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF" />
+
+            <!-- Všeobecný preukaz radiofonisty -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_vseobecny_preukaz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Všeobecný preukaz radiofonisty"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_vseobecny_preukaz"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- Obmedzený preukaz radionofisty -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_obmedzeny_preukaz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Obmedzený preukaz radionofisty"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_obmedzeny_preukaz"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Angličtina - Velká éra -->
+        <LinearLayout
+            android:id="@+id/layout_anglictina_velka_era"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#1a1a1a"
+            android:padding="8dp"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Angličtina - Velká éra"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF" />
+
+            <!-- ICAO English LEVEL 4 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_english_level4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ICAO English LEVEL 4"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_english_level4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- ICAO English LEVEL 5 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_english_level5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ICAO English LEVEL 5"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_english_level5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- ICAO English LEVEL 6 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_english_level6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ICAO English LEVEL 6"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_english_level6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- IFR angličtina -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_english_ifr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IFR angličtina"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_english_ifr"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Poistka - Velká éra -->
+        <LinearLayout
+            android:id="@+id/layout_poistka_velka_era"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#1a1a1a"
+            android:padding="8dp"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poistka - Velká éra"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF" />
+
+            <!-- Poistenie zodpovednosti ČR + SK -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_poistenie_zodpovednost_cr_sk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Poistenie zodpovednosti ČR + SK"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_poistka_cr_sk"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- Poistenie zodpovednosti SVET -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_zodpovednosti_svet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Poistenie zodpovednosti SVET"
+                    android:textColor="#FFFFFF"
+                    android:buttonTint="@color/checkbox_tint" />
+                <EditText
+                    android:id="@+id/et_expiry_poistka_svet"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Common note field -->
+        <EditText
+            android:id="@+id/et_note"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Note"
+            android:minHeight="48dp" />
+
+        <!-- Add Certificate Button -->
+        <Button
+            android:id="@+id/btn_add_certificate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pridať kvalifikáciu"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+
+</ScrollView>

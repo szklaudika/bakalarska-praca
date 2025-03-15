@@ -1,5 +1,5 @@
 <?php
-// Database connection
+// Database connection parameters
 $servername = "localhost";  // Change if needed
 $username = "root";         // Your database username
 $password = "";             // Your database password
@@ -13,30 +13,33 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Get data from POST request
+// Retrieve JSON input from POST request
 $data = json_decode(file_get_contents("php://input"), true);
-$name = $data['name'];
-$expiry_date = $data['expiry_date'];
 
-// Prepare the SQL query
-$stmt = $conn->prepare("INSERT INTO certificates (name, expiry_date) VALUES (?, ?)");
+// Extract values from the JSON object
+$section = isset($data['section']) ? $data['section'] : '';
+$platform = isset($data['platform']) ? $data['platform'] : '';
+$certificate_type = isset($data['certificate_type']) ? $data['certificate_type'] : '';
+$expiry_date = isset($data['expiry_date']) ? $data['expiry_date'] : '';
+$note = isset($data['note']) ? $data['note'] : '';
+
+// Prepare the SQL query for insertion
+$stmt = $conn->prepare("INSERT INTO certificates (section, platform, certificate_type, expiry_date, note) VALUES (?, ?, ?, ?, ?)");
 if ($stmt === false) {
     die('Error preparing the SQL query: ' . $conn->error);
 }
 
-// Bind parameters (use "ss" for two string parameters)
-$stmt->bind_param("ss", $name, $expiry_date);
+// Bind parameters: "sssss" means five strings.
+$stmt->bind_param("sssss", $section, $platform, $certificate_type, $expiry_date, $note);
 
 // Execute the query
 if ($stmt->execute()) {
-    // Success response
     echo json_encode(["status" => "success", "message" => "Certificate added successfully"]);
 } else {
-    // Error response
     echo json_encode(["status" => "error", "message" => "Error: " . $stmt->error]);
 }
 
-// Close the statement and the connection
+// Close the statement and connection
 $stmt->close();
 $conn->close();
 ?>
