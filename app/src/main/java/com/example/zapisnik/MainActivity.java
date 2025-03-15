@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = new RemindersFragment();
                             break;
                         case R.id.nav_profile:
-                            // Napríklad tu by mala byť inštancia ProfileFragment
                             selectedFragment = new ProfileFragment();
                             break;
 

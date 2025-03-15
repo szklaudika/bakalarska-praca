@@ -1,7 +1,6 @@
 package com.example.zapisnik;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,8 +40,13 @@ public class CertificatesFragment extends Fragment {
 
         // You can implement similar listeners for the other buttons when their fragments are created.
         btnPlatformUltralighty.setOnClickListener(v -> {
-            Toast.makeText(getActivity(), "Ultralighty not implemented yet", Toast.LENGTH_SHORT).show();
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.content_frame, new AddUltralightyFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
+
         btnPlatformVetrone.setOnClickListener(v -> {
             Toast.makeText(getActivity(), "Vetrone not implemented yet", Toast.LENGTH_SHORT).show();
         });
