@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +15,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +31,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RemindersFragment extends Fragment {
 
@@ -54,7 +62,7 @@ public class RemindersFragment extends Fragment {
         // Naplánuj periodickú prácu pre pripomienky certifikátov
         schedulePeriodicWork();
 
-        // Ihneď skontrolujeme a zobrazíme certifikáty, ktoré sa blížia k expirácii
+        // Ihneď skontrolujeme a zobrazíme certifikáty, ktoré sa blížia k expirácii vrátane zostávajúcich dní
         checkAndDisplayExpiringCertificates();
 
         return view;
@@ -69,16 +77,27 @@ public class RemindersFragment extends Fragment {
 
     /**
      * Metóda, ktorá v samostatnom vlákne získa zo všetkých certifikátov tie, ktoré expirujú do 7 dní,
-     * odošle notifikácie a aktualizuje zoznam v UI.
+     * vypočíta zostávajúce dni, odošle notifikácie a aktualizuje zoznam v UI.
      */
     private void checkAndDisplayExpiringCertificates() {
         Executors.newSingleThreadExecutor().execute(() -> {
             List<Certificate> expiringCerts = getExpiringCertificates();
             expiringCertificatesList.clear();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date today = new Date();
+
             for (Certificate cert : expiringCerts) {
-                String certificateInfo = cert.getCertificateType() + " - Expires: " + cert.getExpiryDate();
-                expiringCertificatesList.add(certificateInfo);
-                showNotification(cert);
+                try {
+                    Date expiryDate = sdf.parse(cert.getExpiryDate());
+                    long diffInMillis = expiryDate.getTime() - today.getTime();
+                    long diffInDays = diffInMillis / (24 * 60 * 60 * 1000);
+                    String certificateInfo = cert.getCertificateType() + " - Expires: " + cert.getExpiryDate()
+                            + " (" + diffInDays + " days remaining)";
+                    expiringCertificatesList.add(certificateInfo);
+                    showNotification(cert, diffInDays);
+                } catch (ParseException e) {
+                    Log.e("RemindersFragment", "Error parsing expiry date for certificate: " + cert.getCertificateType(), e);
+                }
             }
             getActivity().runOnUiThread(() -> {
                 if (expiringCerts.isEmpty()) {
@@ -116,9 +135,9 @@ public class RemindersFragment extends Fragment {
     }
 
     /**
-     * Zobrazí notifikáciu pre daný certifikát.
+     * Zobrazí notifikáciu pre daný certifikát, vrátane zostávajúceho počtu dní.
      */
-    private void showNotification(Certificate certificate) {
+    private void showNotification(Certificate certificate, long remainingDays) {
         NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
         String CHANNEL_ID = "certification_reminder_channel";
 
@@ -134,7 +153,8 @@ public class RemindersFragment extends Fragment {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification) // Uistite sa, že máte túto ikonu v res/drawable
                 .setContentTitle("Certification Expiring Soon")
-                .setContentText(certificate.getCertificateType() + " expires on " + certificate.getExpiryDate())
+                .setContentText(certificate.getCertificateType() + " expires on " + certificate.getExpiryDate()
+                        + " (" + remainingDays + " days remaining)")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
 

@@ -55,9 +55,15 @@ public class CertificatesFragment extends Fragment {
                     .commit();
         });
         btnPlatformVrtulniky.setOnClickListener(v -> {
-            Toast.makeText(getActivity(), "Vrtuľníky not implemented yet", Toast.LENGTH_SHORT).show();
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.content_frame, new AddVrtulníkyFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
 
         return view;
     }
+
+
 }

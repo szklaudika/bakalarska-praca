@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Layout pre Letecké kvalifikácie - Vrtuľníky -->
+        <LinearLayout
+            android:id="@+id/layout_lk_vrtulniky"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Letecké kvalifikácie - Vrtuľníky"
+                android:textStyle="bold" />
+
+            <!-- PPL -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_ppl_vrtulniky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PPL"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_ppl_vrtulniky"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- CPL -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_cpl_vrtulniky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CPL"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_cpl_vrtulniky"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- ATPL -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_atpl_vrtulniky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ATPL"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_atpl_vrtulniky"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- IR -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_ir_vrtulniky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IR"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_ir_vrtulniky"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- NIGHT -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_night_vrtulniky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NIGHT"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_night_vrtulniky"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- FI -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_fi_vrtulniky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FI"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_fi_vrtulniky"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- IRI -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_iri_vrtulniky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IRI"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_iri_vrtulniky"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- TST -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_tst_vrtulniky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TST"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_tst_vrtulniky"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- PAR -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_par_vrtulniky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PAR"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_par_vrtulniky"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Layout pre Medical - Vrtuľníky -->
+        <LinearLayout
+            android:id="@+id/layout_medical_vrtulniky"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medical - Vrtuľníky"
+                android:textStyle="bold" />
+
+            <!-- Medical Certificate Class 1 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_med_class1_vrtulniky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Medical Certificate Class 1"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_med_class1_vrtulniky"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- Medical Certificate Class 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_med_class2_vrtulniky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Medical Certificate Class 2"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_med_class2_vrtulniky"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Layout pre Rádio - Vrtuľníky -->
+        <LinearLayout
+            android:id="@+id/layout_radio_vrtulniky"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rádio - Vrtuľníky"
+                android:textStyle="bold" />
+
+            <!-- Všeobecný preukaz radiofonisty -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_vseobecny_preukaz_vrtulniky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Všeobecný preukaz radiofonisty"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_vseobecny_preukaz_vrtulniky"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- Obmedzený preukaz radiofonisty -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_obmedzeny_preukaz_vrtulniky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Obmedzený preukaz radionofisty"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_obmedzeny_preukaz_vrtulniky"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Layout pre Angličtina - Vrtuľníky -->
+        <LinearLayout
+            android:id="@+id/layout_anglictina_vrtulniky"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Angličtina - Vrtuľníky"
+                android:textStyle="bold" />
+
+            <!-- ICAO English LEVEL 4 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_english_level4_vrtulniky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ICAO English LEVEL 4"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_english_level4_vrtulniky"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- ICAO English LEVEL 5 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_english_level5_vrtulniky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ICAO English LEVEL 5"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_english_level5_vrtulniky"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- ICAO English LEVEL 6 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_english_level6_vrtulniky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ICAO English LEVEL 6"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_english_level6_vrtulniky"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Layout pre Poistka - Vrtuľníky -->
+        <LinearLayout
+            android:id="@+id/layout_poistka_vrtulniky"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poistka - Vrtuľníky"
+                android:textStyle="bold" />
+
+            <!-- Poistenie zodpovednosti ČR + SK -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_poistenie_zodpovednost_cr_sk_vrtulniky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Poistenie zodpovednosti ČR + SK"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_poistenie_zodpovednost_cr_sk_vrtulniky"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <!-- Poistenie zodpovednosti SVET -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_zodpovednosti_svet_vrtulniky"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Poistenie zodpovednosti SVET"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_zodpovednosti_svet_vrtulniky"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Common note field -->
+        <EditText
+            android:id="@+id/et_note_vetrone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Note"
+            android:minHeight="48dp" />
+
+        <!-- Add Certificate Button -->
+        <Button
+            android:id="@+id/btn_add_certificate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pridať kvalifikáciu"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+</ScrollView>

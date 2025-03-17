@@ -5,23 +5,29 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import java.text.ParseException;
+
+import java.text.ParseException; // Používame java.text.ParseException
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.Executors;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,8 +36,8 @@ public class ProfileFragment extends Fragment {
 
     private CertificateDatabase database;
     private ListView listViewCertificates;
-    private ArrayAdapter<String> adapter;
-    private List<String> certificateList = new ArrayList<>();
+    private SectionedCertificateAdapter adapter;
+    private List<ListItem> items = new ArrayList<>();
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -42,42 +48,99 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
         listViewCertificates = view.findViewById(R.id.list_view_certificates);
         database = CertificateDatabase.getInstance(getActivity());
-
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, certificateList);
-        listViewCertificates.setAdapter(adapter);
 
         // Na začiatku načítame certifikáty z lokálnej databázy
         loadCertificatesFromDatabase();
 
-        // Nastavenie listenera pre vymazávanie certifikátu po kliknutí
+        // Listener pre vymazávanie certifikátu po kliknutí (použijeme len položky, nie hlavičky)
         listViewCertificates.setOnItemClickListener((parent, view1, position, id) -> {
-            String selectedCertificate = certificateList.get(position);
-            new android.app.AlertDialog.Builder(getActivity())
-                    .setTitle("Delete Certificate")
-                    .setMessage("Are you sure you want to delete " + selectedCertificate + "?")
-                    .setPositiveButton("Yes", (dialog, which) -> deleteCertificate(selectedCertificate))
-                    .setNegativeButton("No", null)
-                    .show();
+            ListItem selectedItem = items.get(position);
+            if (selectedItem.getType() == ListItem.TYPE_ITEM) {
+                String selectedCertificate = selectedItem.getText();
+                new android.app.AlertDialog.Builder(getActivity())
+                        .setTitle("Delete Certificate")
+                        .setMessage("Are you sure you want to delete " + selectedCertificate + "?")
+                        .setPositiveButton("Yes", (dialog, which) -> deleteCertificate(selectedCertificate))
+                        .setNegativeButton("No", null)
+                        .show();
+            }
         });
 
         return view;
     }
 
+    /**
+     * Načítanie certifikátov zo všetkých platforiem.
+     * Všetky certifikáty sa zoskupia podľa hodnoty getPlatform(). Pre známé platformy (Velká éra, Vrtuľníky, Ultralighty, Vetrone)
+     * sa vytvoria samostatné sekcie s názvom platformy, zatiaľ čo ostatné certifikáty budú zoskupené pod hlavičkou "Ostatné certifikáty".
+     */
+    public void loadCertificatesFromDatabase() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            List<Certificate> certificates = database.certificateDao().getAllCertificates();
+            List<ListItem> tempItems = new ArrayList<>();
+
+            // Definujeme požadované platformy (v poradí, v akom chceme zobraziť sekcie)
+            List<String> knownPlatforms = Arrays.asList("Velká éra", "Vrtuľníky", "Ultralighty", "Vetrone");
+
+            // Zoskupíme certifikáty podľa platformy.
+            // Ak certifikát nemá platformu zo zoznamu knownPlatforms, budeme ho skupinovať pod "Ostatné certifikáty".
+            Map<String, List<Certificate>> groupedByPlatform = new HashMap<>();
+            for (Certificate cert : certificates) {
+                String platform = cert.getPlatform();
+                if (platform == null || platform.isEmpty() || !knownPlatforms.contains(platform)) {
+                    platform = "Ostatné certifikáty";
+                }
+                if (!groupedByPlatform.containsKey(platform)) {
+                    groupedByPlatform.put(platform, new ArrayList<>());
+                }
+                groupedByPlatform.get(platform).add(cert);
+            }
+
+            // Najprv pridáme sekcie pre známe platformy v zvolenom poradí
+            for (String platform : knownPlatforms) {
+                List<Certificate> list = groupedByPlatform.get(platform);
+                if (list != null && !list.isEmpty()) {
+                    tempItems.add(new ListItem(ListItem.TYPE_HEADER, platform));
+                    for (Certificate cert : list) {
+                        String display = cert.getCertificateType() + " - Expires: " +
+                                (cert.getExpiryDate() != null ? cert.getExpiryDate() : "NULL");
+                        tempItems.add(new ListItem(ListItem.TYPE_ITEM, display));
+                    }
+                }
+            }
+            // Potom, ak existujú certifikáty, ktoré boli zoskupené do "Ostatné certifikáty", pridáme ich sekciu.
+            if (groupedByPlatform.containsKey("Ostatné certifikáty")) {
+                List<Certificate> others = groupedByPlatform.get("Ostatné certifikáty");
+                if (others != null && !others.isEmpty()) {
+                    tempItems.add(new ListItem(ListItem.TYPE_HEADER, "Ostatné certifikáty"));
+                    for (Certificate cert : others) {
+                        String display = cert.getCertificateType() + " (" + cert.getPlatform() + ") - Expires: " +
+                                (cert.getExpiryDate() != null ? cert.getExpiryDate() : "NULL");
+                        tempItems.add(new ListItem(ListItem.TYPE_ITEM, display));
+                    }
+                }
+            }
+
+            getActivity().runOnUiThread(() -> {
+                items.clear();
+                items.addAll(tempItems);
+                adapter = new SectionedCertificateAdapter(getActivity(), items);
+                listViewCertificates.setAdapter(adapter);
+            });
+        });
+    }
+
     private void deleteCertificate(String certificateString) {
-        // Extrahujeme názov certifikátu (pred " - Expires: ")
+        // Predpokladáme formát: "CertificateType - Expires: date"
         String[] parts = certificateString.split(" - Expires:");
         String certificateName = parts[0].trim();
 
         Executors.newSingleThreadExecutor().execute(() -> {
-            // Vyhľadáme certifikát podľa certificateType
             Certificate certificateToDelete = database.certificateDao().getCertificateByName(certificateName);
-
             if (certificateToDelete != null) {
                 CertificateApi api = RetrofitClient.getApi();
-                // Najprv vymažeme certifikát zo servera
                 api.deleteCertificate(certificateToDelete.getId()).enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
@@ -85,8 +148,7 @@ public class ProfileFragment extends Fragment {
                             Executors.newSingleThreadExecutor().execute(() -> {
                                 database.certificateDao().deleteCertificate(certificateToDelete);
                                 getActivity().runOnUiThread(() -> {
-                                    certificateList.remove(certificateString);
-                                    adapter.notifyDataSetChanged();
+                                    loadCertificatesFromDatabase();
                                     Toast.makeText(getActivity(), "Certificate deleted: " + certificateName, Toast.LENGTH_SHORT).show();
                                 });
                             });
@@ -94,7 +156,6 @@ public class ProfileFragment extends Fragment {
                             getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Server deletion failed for certificate: " + certificateName, Toast.LENGTH_SHORT).show());
                         }
                     }
-
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
                         getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Error deleting certificate from server: " + t.getMessage(), Toast.LENGTH_SHORT).show());
@@ -111,7 +172,7 @@ public class ProfileFragment extends Fragment {
         super.onResume();
         if (isNetworkAvailable()) {
             syncLocalCertificatesToServer();
-            loadCertificatesFromServer();  // Ak chcete po pripojení synchronizovať aj zo servera
+            loadCertificatesFromServer();
         }
     }
 
@@ -126,26 +187,6 @@ public class ProfileFragment extends Fragment {
             }
         }
         return false;
-    }
-
-    // Načítanie certifikátov z lokálnej databázy
-    public void loadCertificatesFromDatabase() {
-        Executors.newSingleThreadExecutor().execute(() -> {
-            List<Certificate> certificates = database.certificateDao().getAllCertificates();
-            List<String> tempList = new ArrayList<>();
-
-            for (Certificate cert : certificates) {
-                // Použijeme certificateType namiesto name
-                Log.d("DEBUG", "Loaded from DB: " + cert.getCertificateType() + ", Expiry Date: " + cert.getExpiryDate());
-                tempList.add(cert.getCertificateType() + " - Expires: " + (cert.getExpiryDate() != null ? cert.getExpiryDate() : "NULL"));
-            }
-
-            getActivity().runOnUiThread(() -> {
-                certificateList.clear();
-                certificateList.addAll(tempList);
-                adapter.notifyDataSetChanged();
-            });
-        });
     }
 
     private void loadCertificatesFromServer() {
@@ -172,7 +213,6 @@ public class ProfileFragment extends Fragment {
                     Log.e("DEBUG", "Server returned failure: " + response.message());
                 }
             }
-
             @Override
             public void onFailure(Call<List<Certificate>> call, Throwable t) {
                 Log.e("DEBUG", "Failed to fetch from server: " + t.getMessage());
@@ -180,7 +220,6 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    // Synchronizácia lokálnych certifikátov so serverom
     public void syncLocalCertificatesToServer() {
         Executors.newSingleThreadExecutor().execute(() -> {
             List<Certificate> unsyncedCertificates = database.certificateDao().getUnsyncedCertificates();
@@ -211,7 +250,6 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    // Odoslanie certifikátu na server
     private void addCertificateToServer(Certificate cert, CertificateApi api) {
         api.addCertificate(cert).enqueue(new Callback<Void>() {
             @Override
@@ -232,7 +270,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    // Metóda na parsovanie dátumu expirácie
+    // Metóda na parsovanie dátumu expirácie, ak je potrebná inde
     public Date parseExpiryDate(String expiryDate) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         try {
