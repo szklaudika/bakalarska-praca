@@ -48,7 +48,11 @@ public class CertificatesFragment extends Fragment {
         });
 
         btnPlatformVetrone.setOnClickListener(v -> {
-            Toast.makeText(getActivity(), "Vetrone not implemented yet", Toast.LENGTH_SHORT).show();
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.content_frame, new AddVetroneFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
         btnPlatformVrtulniky.setOnClickListener(v -> {
             Toast.makeText(getActivity(), "Vrtuľníky not implemented yet", Toast.LENGTH_SHORT).show();

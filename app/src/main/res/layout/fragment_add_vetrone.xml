@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddVetroneFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Section: Letecké kvalifikácie - Vetrone -->
+        <LinearLayout
+            android:id="@+id/layout_lk_vetrone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#1a1a1a"
+            android:padding="8dp"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Letecké kvalifikácie - Vetrone"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"/>
+
+            <!-- GLD with expiry -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_gld_vetrone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GLD"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_gld_vetrone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date"/>
+            </LinearLayout>
+
+            <!-- TMG with expiry -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_tmg_vetrone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TMG"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_tmg_vetrone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date"/>
+            </LinearLayout>
+
+            <!-- FI with expiry -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_fi_vetrone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FI"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_fi_vetrone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date"/>
+            </LinearLayout>
+
+            <!-- TST with expiry -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_tst_vetrone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TST"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_tst_vetrone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Layout pre Medical - Vetrone -->
+        <LinearLayout
+            android:id="@+id/layout_medical_vetrone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medical - Vetrone"
+                android:textStyle="bold"/>
+
+            <!-- Medical Certificate Class 1 with expiry -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_med_class1_vetrone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Medical Certificate Class 1"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_med_class1_vetrone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date"/>
+            </LinearLayout>
+
+            <!-- Medical Certificate Class 2 with expiry -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_med_class2_vetrone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Medical Certificate Class 2"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_med_class2_vetrone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Layout pre Radio - Vetrone -->
+        <LinearLayout
+            android:id="@+id/layout_radio_vetrone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rádio - Vetrone"
+                android:textStyle="bold"/>
+
+            <!-- Všeobecný preukaz radiofonisty with expiry -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_vseobecny_preukaz_vetrone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Všeobecný preukaz radiofonisty"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_vseobecny_preukaz_vetrone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date"/>
+            </LinearLayout>
+
+            <!-- Obmedzený preukaz radionofisty with expiry -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_obmedzeny_preukaz_vetrone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Obmedzený preukaz radionofisty"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_obmedzeny_preukaz_vetrone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Layout pre Angličtina - Vetrone -->
+        <LinearLayout
+            android:id="@+id/layout_anglictina_vetrone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Angličtina - Vetrone"
+                android:textStyle="bold"/>
+
+            <!-- ICAO English LEVEL 4 with expiry -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_english_level4_vetrone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ICAO English LEVEL 4"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_english_level4_vetrone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date"/>
+            </LinearLayout>
+
+            <!-- ICAO English LEVEL 5 with expiry -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_english_level5_vetrone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ICAO English LEVEL 5"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_english_level5_vetrone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date"/>
+            </LinearLayout>
+
+            <!-- ICAO English LEVEL 6 with expiry -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_english_level6_vetrone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ICAO English LEVEL 6"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_english_level6_vetrone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Layout pre Poistka - Vetrone -->
+        <LinearLayout
+            android:id="@+id/layout_poistka_vetrone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="12dp"
+            android:padding="8dp"
+            android:background="#1a1a1a">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poistka - Vetrone"
+                android:textStyle="bold"/>
+
+            <!-- Poistenie zodpovednosti ČR + SK with expiry -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_poistenie_zodpovednost_cr_sk_vetrone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Poistenie zodpovednosti ČR + SK"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_poistenie_zodpovednost_cr_sk_vetrone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date"/>
+            </LinearLayout>
+
+            <!-- Poistenie zodpovednosti SVET with expiry -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+                <CheckBox
+                    android:id="@+id/chk_zodpovednosti_svet_vetrone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Poistenie zodpovednosti SVET"
+                    android:buttonTint="@color/checkbox_tint"/>
+                <EditText
+                    android:id="@+id/et_expiry_zodpovednosti_svet_vetrone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Expiry (yyyy-MM-dd)"
+                    android:visibility="gone"
+                    android:inputType="date"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Common note field -->
+        <EditText
+            android:id="@+id/et_note_vetrone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Note"
+            android:minHeight="48dp"/>
+
+        <!-- Add Certificate Button -->
+        <Button
+            android:id="@+id/btn_add_certificate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pridať kvalifikáciu"
+            android:layout_marginTop="16dp"/>
+    </LinearLayout>
+</ScrollView>
