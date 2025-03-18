@@ -25,28 +25,41 @@
 
             <!-- Title -->
             <TextView
-                android:id="@+id/tv_title"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pridaj certifikát/licenciu"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="#ffffff"
-                android:layout_marginBottom="24dp"
-                android:gravity="center" />
+                android:layout_gravity="end"
+                android:paddingBottom="10dp"
+                android:text="PRIDAJ CERTIFIKÁT/LICENCIU"
+                android:textAllCaps="true"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                android:layout_marginTop="20dp"/>
+
+            <ImageView
+                android:id="@+id/myImageView"
+                android:layout_width="581dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="centerCrop"
+
+                android:src="@drawable/my_image" />
 
             <!-- Buttons (each full width, with margin, padding, and custom background) -->
+
+
             <Button
                 android:id="@+id/btn_platform_velka_era"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:padding="16dp"
+                android:layout_marginTop="40dp"
                 android:text="Velká éra"
                 android:textSize="16sp"
-                android:textColor="#ffffff"
-                android:background="@drawable/btn_selector"
-                android:contentDescription="Select Velká éra" />
+                android:contentDescription="Select Velká éra"
+                android:background="@drawable/rounded_edittext"/>
 
             <Button
                 android:id="@+id/btn_platform_ultralighty"
@@ -56,8 +69,7 @@
                 android:padding="16dp"
                 android:text="Ultralighty"
                 android:textSize="16sp"
-                android:textColor="#ffffff"
-                android:background="@drawable/btn_selector"
+                android:background="@drawable/rounded_edittext"
                 android:contentDescription="Select Ultralighty" />
 
             <Button
@@ -68,8 +80,7 @@
                 android:padding="16dp"
                 android:text="Vetrone"
                 android:textSize="16sp"
-                android:textColor="#ffffff"
-                android:background="@drawable/btn_selector"
+                android:background="@drawable/rounded_edittext"
                 android:contentDescription="Select Vetrone" />
 
             <Button
@@ -80,8 +91,7 @@
                 android:padding="16dp"
                 android:text="Vrtuľníky"
                 android:textSize="16sp"
-                android:textColor="#ffffff"
-                android:background="@drawable/btn_selector"
+                android:background="@drawable/rounded_edittext"
                 android:contentDescription="Select Vrtuľníky" />
 
         </LinearLayout>

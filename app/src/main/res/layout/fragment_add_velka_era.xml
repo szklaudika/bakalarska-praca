@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="#1a1a1a"
+            android:background="@drawable/checkbox_background"
             android:padding="8dp"
             android:layout_marginTop="12dp">
 
@@ -26,8 +26,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Letecké kvalifikácie - Velká éra"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF" />
+                android:textStyle="normal"
+                android:fontFamily="sans-serif-medium"
+                android:textAllCaps="true"/>
 
             <!-- PPL -->
             <LinearLayout
@@ -40,17 +41,19 @@
                     android:id="@+id/chk_ppl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="PPL"
+                    android:text="PPL   -"
                     android:textColor="#FFFFFF"
                     android:buttonTint="@color/checkbox_tint" />
                 <EditText
                     android:id="@+id/et_expiry_ppl"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"
+                    />
             </LinearLayout>
 
             <!-- CPL -->
@@ -66,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/checkbox_tint"
-                    android:text="CPL"
+                    android:text="CPL   -"
                     android:textColor="#FFFFFF"
                     tools:ignore="TouchTargetSizeCheck" />
                 <EditText
@@ -76,7 +79,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- ATPL -->
@@ -90,7 +94,7 @@
                     android:id="@+id/chk_atpl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ATPL"
+                    android:text="ATPL   -"
                     android:textColor="#FFFFFF"
                     android:buttonTint="@color/checkbox_tint" />
                 <EditText
@@ -100,7 +104,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- SEP land -->
@@ -116,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/checkbox_tint"
-                    android:text="SEP land"
+                    android:text="SEP land   -"
                     android:textColor="#FFFFFF"
                     tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
                 <EditText
@@ -126,7 +131,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- SEP sea -->
@@ -140,7 +146,7 @@
                     android:id="@+id/chk_sep_sea"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SEP sea"
+                    android:text="SEP sea   -"
                     android:textColor="#FFFFFF"
                     android:buttonTint="@color/checkbox_tint" />
                 <EditText
@@ -150,7 +156,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- MEP land -->
@@ -164,7 +171,7 @@
                     android:id="@+id/chk_mep_land"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="MEP land"
+                    android:text="MEP land   -"
                     android:textColor="#FFFFFF"
                     android:buttonTint="@color/checkbox_tint" />
                 <EditText
@@ -174,7 +181,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- MEP sea -->
@@ -188,7 +196,7 @@
                     android:id="@+id/chk_mep_sea"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="MEP sea"
+                    android:text="MEP sea   -"
                     android:textColor="#FFFFFF"
                     android:buttonTint="@color/checkbox_tint" />
                 <EditText
@@ -198,7 +206,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- IR SEP -->
@@ -212,7 +221,7 @@
                     android:id="@+id/chk_ir_sep"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="IR SEP"
+                    android:text="IR SEP   -"
                     android:textColor="#FFFFFF"
                     android:buttonTint="@color/checkbox_tint" />
                 <EditText
@@ -222,7 +231,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- IR -->
@@ -236,7 +246,7 @@
                     android:id="@+id/chk_ir"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="IR"
+                    android:text="IR   -"
                     android:textColor="#FFFFFF"
                     android:buttonTint="@color/checkbox_tint" />
                 <EditText
@@ -246,7 +256,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- MEP -->
@@ -260,7 +271,7 @@
                     android:id="@+id/chk_mep"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="MEP"
+                    android:text="MEP   -"
                     android:textColor="#FFFFFF"
                     android:buttonTint="@color/checkbox_tint" />
                 <EditText
@@ -270,7 +281,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- NIGHT -->
@@ -284,7 +296,7 @@
                     android:id="@+id/chk_night"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="NIGHT"
+                    android:text="NIGHT   -"
                     android:textColor="#FFFFFF"
                     android:buttonTint="@color/checkbox_tint" />
                 <EditText
@@ -294,7 +306,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- FI -->
@@ -308,7 +321,7 @@
                     android:id="@+id/chk_fi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="FI"
+                    android:text="FI   -"
                     android:textColor="#FFFFFF"
                     android:buttonTint="@color/checkbox_tint" />
                 <EditText
@@ -318,7 +331,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- IRI -->
@@ -332,7 +346,7 @@
                     android:id="@+id/chk_iri"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="IRI"
+                    android:text="IRI   -"
                     android:textColor="#FFFFFF"
                     android:buttonTint="@color/checkbox_tint" />
                 <EditText
@@ -342,7 +356,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- TOW -->
@@ -356,7 +371,7 @@
                     android:id="@+id/chk_tow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TOW"
+                    android:text="TOW   -"
                     android:textColor="#FFFFFF"
                     android:buttonTint="@color/checkbox_tint" />
                 <EditText
@@ -366,7 +381,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- TST -->
@@ -380,7 +396,7 @@
                     android:id="@+id/chk_tst"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TST"
+                    android:text="TST   -"
                     android:textColor="#FFFFFF"
                     android:buttonTint="@color/checkbox_tint" />
                 <EditText
@@ -390,7 +406,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- PAR -->
@@ -404,7 +421,7 @@
                     android:id="@+id/chk_par"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="PAR"
+                    android:text="PAR   -"
                     android:textColor="#FFFFFF"
                     android:buttonTint="@color/checkbox_tint" />
                 <EditText
@@ -414,7 +431,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- ACR -->
@@ -428,7 +446,7 @@
                     android:id="@+id/chk_acr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ACR"
+                    android:text="ACR   -"
                     android:textColor="#FFFFFF"
                     android:buttonTint="@color/checkbox_tint" />
                 <EditText
@@ -438,7 +456,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- MCC -->
@@ -452,7 +471,7 @@
                     android:id="@+id/chk_mcc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="MCC"
+                    android:text="MCC   -"
                     android:textColor="#FFFFFF"
                     android:buttonTint="@color/checkbox_tint" />
                 <EditText
@@ -462,7 +481,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -472,64 +492,71 @@
             android:id="@+id/layout_medical_velka_era"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/checkbox_background"
             android:orientation="vertical"
-            android:background="#1a1a1a"
-            android:padding="8dp"
-            android:layout_marginTop="12dp">
+            android:padding="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Medical - Velká éra"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF" />
+                android:textStyle="normal"
+                android:fontFamily="sans-serif-medium"
+                android:textAllCaps="true"/>
 
             <!-- Medical Certificate Class 1 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingVertical="4dp">
+
                 <CheckBox
                     android:id="@+id/chk_med_class1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Medical Certificate Class 1"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:buttonTint="@color/checkbox_tint"
+                    android:text="Medical Certificate Class 1  -"
+                    android:textColor="#FFFFFF" />
+
                 <EditText
                     android:id="@+id/et_expiry_med_class1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
-                    android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- Medical Certificate Class 2 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingVertical="4dp">
+
                 <CheckBox
                     android:id="@+id/chk_med_class2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Medical Certificate Class 2"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:buttonTint="@color/checkbox_tint"
+                    android:text="Medical Certificate Class 2  -"
+                    android:textColor="#FFFFFF" />
+
                 <EditText
                     android:id="@+id/et_expiry_med_class2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
-                    android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
 
@@ -538,64 +565,71 @@
             android:id="@+id/layout_radio_velka_era"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/checkbox_background"
             android:orientation="vertical"
-            android:background="#1a1a1a"
-            android:padding="8dp"
-            android:layout_marginTop="12dp">
+            android:padding="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rádio - Velká éra"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF" />
+                android:textStyle="normal"
+                android:fontFamily="sans-serif-medium"
+                android:textAllCaps="true"/>
 
             <!-- Všeobecný preukaz radiofonisty -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingVertical="4dp">
+
                 <CheckBox
                     android:id="@+id/chk_vseobecny_preukaz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Všeobecný preukaz radiofonisty"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:buttonTint="@color/checkbox_tint"
+                    android:text="Všeobecný preukaz radiofonisty  -"
+                    android:textColor="#FFFFFF" />
+
                 <EditText
                     android:id="@+id/et_expiry_vseobecny_preukaz"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
-                    android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- Obmedzený preukaz radionofisty -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingVertical="4dp">
+
                 <CheckBox
                     android:id="@+id/chk_obmedzeny_preukaz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Obmedzený preukaz radionofisty"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:buttonTint="@color/checkbox_tint"
+                    android:text="Obmedzený preukaz radionofisty  -"
+                    android:textColor="#FFFFFF" />
+
                 <EditText
                     android:id="@+id/et_expiry_obmedzeny_preukaz"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
-                    android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
 
@@ -604,112 +638,125 @@
             android:id="@+id/layout_anglictina_velka_era"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/checkbox_background"
             android:orientation="vertical"
-            android:background="#1a1a1a"
-            android:padding="8dp"
-            android:layout_marginTop="12dp">
+            android:padding="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Angličtina - Velká éra"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF" />
+                android:textStyle="normal"
+                android:fontFamily="sans-serif-medium"
+                android:textAllCaps="true"/>
 
             <!-- ICAO English LEVEL 4 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingVertical="4dp">
+
                 <CheckBox
                     android:id="@+id/chk_english_level4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ICAO English LEVEL 4"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:buttonTint="@color/checkbox_tint"
+                    android:text="ICAO English LEVEL 4   -"
+                    android:textColor="#FFFFFF" />
+
                 <EditText
                     android:id="@+id/et_expiry_english_level4"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
-                    android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- ICAO English LEVEL 5 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingVertical="4dp">
+
                 <CheckBox
                     android:id="@+id/chk_english_level5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ICAO English LEVEL 5"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:buttonTint="@color/checkbox_tint"
+                    android:text="ICAO English LEVEL 5   -"
+                    android:textColor="#FFFFFF" />
+
                 <EditText
                     android:id="@+id/et_expiry_english_level5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
-                    android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- ICAO English LEVEL 6 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingVertical="4dp">
+
                 <CheckBox
                     android:id="@+id/chk_english_level6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ICAO English LEVEL 6"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:buttonTint="@color/checkbox_tint"
+                    android:text="ICAO English LEVEL 6   -"
+                    android:textColor="#FFFFFF" />
+
                 <EditText
                     android:id="@+id/et_expiry_english_level6"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
-                    android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- IFR angličtina -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingVertical="4dp">
+
                 <CheckBox
                     android:id="@+id/chk_english_ifr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="IFR angličtina"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:buttonTint="@color/checkbox_tint"
+                    android:text="IFR angličtina   -"
+                    android:textColor="#FFFFFF" />
+
                 <EditText
                     android:id="@+id/et_expiry_english_ifr"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
-                    android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
 
@@ -718,64 +765,71 @@
             android:id="@+id/layout_poistka_velka_era"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/checkbox_background"
             android:orientation="vertical"
-            android:background="#1a1a1a"
-            android:padding="8dp"
-            android:layout_marginTop="12dp">
+            android:padding="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Poistka - Velká éra"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF" />
+                android:textStyle="normal"
+                android:fontFamily="sans-serif-medium"
+                android:textAllCaps="true"/>
 
             <!-- Poistenie zodpovednosti ČR + SK -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingVertical="4dp">
+
                 <CheckBox
                     android:id="@+id/chk_poistenie_zodpovednost_cr_sk"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Poistenie zodpovednosti ČR + SK"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:buttonTint="@color/checkbox_tint"
+                    android:text="Poistenie zodpovednosti ČR + SK  -"
+                    android:textColor="#FFFFFF" />
+
                 <EditText
                     android:id="@+id/et_expiry_poistka_cr_sk"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
-                    android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- Poistenie zodpovednosti SVET -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingVertical="4dp">
+
                 <CheckBox
                     android:id="@+id/chk_zodpovednosti_svet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Poistenie zodpovednosti SVET"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:buttonTint="@color/checkbox_tint"
+                    android:text="Poistenie zodpovednosti SVET  -"
+                    android:textColor="#FFFFFF" />
+
                 <EditText
                     android:id="@+id/et_expiry_poistka_svet"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
-                    android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
 
@@ -786,15 +840,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="Note"
+            android:background="@drawable/rounded_edittext"
             android:minHeight="48dp" />
 
         <!-- Add Certificate Button -->
         <Button
             android:id="@+id/btn_add_certificate"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
             android:text="Pridať kvalifikáciu"
-            android:layout_marginTop="16dp" />
+            android:textColor="@android:color/black"
+            android:background="@drawable/rounded_button"
+            android:layout_gravity="center_horizontal" />
 
     </LinearLayout>
 

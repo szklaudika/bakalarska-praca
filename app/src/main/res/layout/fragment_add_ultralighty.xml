@@ -52,7 +52,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:layout_gravity="end"/>
             </LinearLayout>
 
             <!-- Riadené lety VFR -->
