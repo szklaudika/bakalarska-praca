@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/flightListHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:paddingBottom="8dp"
+        android:text="Vaše lety"
+        android:textAllCaps="true"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="20sp"
+        android:textStyle="normal" />
+
+
+
+    <ImageView
+        android:id="@+id/myImageView"
+        android:layout_width="581dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="centerCrop"
+        android:src="@drawable/my_image" />
+
+
+</LinearLayout>

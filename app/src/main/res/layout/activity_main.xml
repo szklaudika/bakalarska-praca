@@ -7,21 +7,12 @@
     tools:context=".MainActivity"
     tools:ignore="ExtraText">
 
-    <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#1a1a1a"
-        android:elevation="4dp"
-        android:title="Flight Log"
-        android:titleTextColor="@android:color/white"
-        tools:ignore="MissingClass" />
+
 
     <!-- Content Frame for Fragments -->
     <FrameLayout
         android:id="@+id/content_frame"
-        android:layout_below="@id/toolbar"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation"/>

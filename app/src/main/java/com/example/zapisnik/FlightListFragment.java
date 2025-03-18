@@ -43,8 +43,13 @@ public class FlightListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate your main layout (which might just be a ListView)
         View view = inflater.inflate(R.layout.fragment_flight_list, container, false);
         listView = view.findViewById(R.id.list_view_flights);
+
+        // Inflate the header view from list_header.xml and add it to ListView
+        View headerView = inflater.inflate(R.layout.list_header, listView, false);
+        listView.addHeaderView(headerView);
 
         // Load local flights
         loadFlightsFromDatabase();
@@ -52,44 +57,47 @@ public class FlightListFragment extends Fragment {
         // Fetch flights from the server
         fetchFlightsFromServer();
 
+        // Handle item clicks – adjust index because of header view
         listView.setOnItemClickListener((parent, view1, position, id) -> {
-            Flight selectedFlight = flights.get(position);
-            FlightDetailFragment detailFragment = new FlightDetailFragment();
+            // Subtract header count from position
+            int adjustedPosition = position - listView.getHeaderViewsCount();
+            if (adjustedPosition >= 0 && adjustedPosition < flights.size()) {
+                Flight selectedFlight = flights.get(adjustedPosition);
+                FlightDetailFragment detailFragment = new FlightDetailFragment();
 
-            // Pass flight details via Bundle
-            Bundle args = new Bundle();
-            args.putString("date", selectedFlight.getDate());
-            args.putString("departure", selectedFlight.getDeparturePlace());
-            args.putString("departureTime", selectedFlight.getDepartureTime());
-            args.putString("arrival", selectedFlight.getArrivalPlace());
-            args.putString("arrivalTime", selectedFlight.getArrivalTime());
-            args.putString("aircraftModel", selectedFlight.getAircraftModel());
-            args.putString("registration", selectedFlight.getRegistration());
-            args.putInt("singlePilotTime", selectedFlight.getSinglePilotTime());
-            args.putInt("multiPilotTime", selectedFlight.getMultiPilotTime());
-            args.putInt("totalFlightTime", selectedFlight.getTotalFlightTime());
-            args.putString("pilotName", selectedFlight.getPilotName());
-            args.putBoolean("singlePilot", selectedFlight.isSinglePilot());
-            args.putInt("landingsDay", selectedFlight.getLandingsDay());
-            args.putInt("landingsNight", selectedFlight.getLandingsNight());
-            args.putInt("nightTime", selectedFlight.getNightTime());
-            args.putInt("ifrTime", selectedFlight.getIfrTime());
-            args.putInt("picTime", selectedFlight.getPicTime());
-            args.putInt("copilotTime", selectedFlight.getCopilotTime());
-            args.putInt("dualTime", selectedFlight.getDualTime());
-            args.putInt("instructorTime", selectedFlight.getInstructorTime());
-            args.putString("fstdDate", selectedFlight.getFstdDate());
-            args.putString("fstdType", selectedFlight.getFstdType());
-            args.putInt("fstdTotalTime", selectedFlight.getFstdTotalTime());
-            args.putString("remarks", selectedFlight.getRemarks());
+                Bundle args = new Bundle();
+                args.putString("date", selectedFlight.getDate());
+                args.putString("departure", selectedFlight.getDeparturePlace());
+                args.putString("departureTime", selectedFlight.getDepartureTime());
+                args.putString("arrival", selectedFlight.getArrivalPlace());
+                args.putString("arrivalTime", selectedFlight.getArrivalTime());
+                args.putString("aircraftModel", selectedFlight.getAircraftModel());
+                args.putString("registration", selectedFlight.getRegistration());
+                args.putInt("singlePilotTime", selectedFlight.getSinglePilotTime());
+                args.putInt("multiPilotTime", selectedFlight.getMultiPilotTime());
+                args.putInt("totalFlightTime", selectedFlight.getTotalFlightTime());
+                args.putString("pilotName", selectedFlight.getPilotName());
+                args.putBoolean("singlePilot", selectedFlight.isSinglePilot());
+                args.putInt("landingsDay", selectedFlight.getLandingsDay());
+                args.putInt("landingsNight", selectedFlight.getLandingsNight());
+                args.putInt("nightTime", selectedFlight.getNightTime());
+                args.putInt("ifrTime", selectedFlight.getIfrTime());
+                args.putInt("picTime", selectedFlight.getPicTime());
+                args.putInt("copilotTime", selectedFlight.getCopilotTime());
+                args.putInt("dualTime", selectedFlight.getDualTime());
+                args.putInt("instructorTime", selectedFlight.getInstructorTime());
+                args.putString("fstdDate", selectedFlight.getFstdDate());
+                args.putString("fstdType", selectedFlight.getFstdType());
+                args.putInt("fstdTotalTime", selectedFlight.getFstdTotalTime());
+                args.putString("remarks", selectedFlight.getRemarks());
 
-            detailFragment.setArguments(args);
+                detailFragment.setArguments(args);
 
-            // Replace fragment
-            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-            transaction.replace(R.id.content_frame, detailFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.content_frame, detailFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
         });
 
         return view;
@@ -116,7 +124,6 @@ public class FlightListFragment extends Fragment {
                             JSONObject flightJson = response.getJSONObject(i);
                             Log.d(TAG, "Flight data: " + flightJson.toString());
 
-                            // Parse JSON fields using the updated keys
                             String date = flightJson.optString("date", "Unknown Date");
                             String departurePlace = flightJson.optString("departure_place", "Unknown Departure Place");
                             String departureTime = flightJson.optString("departure_time", "Unknown Departure Time");
@@ -182,7 +189,24 @@ public class FlightListFragment extends Fragment {
         requestQueue.add(jsonArrayRequest);
     }
 
+    /**
+     * Aktualizácia ListView.
+     *
+     * Možnosti:
+     * 1) Použitie vlastného FlightListAdapter-a s CardView, ktorý zobrazí informácie o lete s prispôsobeným dizajnom a šípkou.
+     * 2) Alternatívne, jednoduchý ArrayAdapter, ktorý zobrazuje text (zakomentované nižšie).
+     */
     private void updateListView() {
+        // Použitie vlastného adaptera s vlastným layoutom:
+        FlightListAdapter adapter = new FlightListAdapter(
+                getActivity(),
+                R.layout.list_item_flight,
+                flights
+        );
+        listView.setAdapter(adapter);
+
+        // Alternatívna implementácia pomocou ArrayAdapter (jednoduchý textový zoznam):
+        /*
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_1,
                 flights.stream()
@@ -191,6 +215,7 @@ public class FlightListFragment extends Fragment {
                                 f.getTotalFlightTime() + " min")
                         .collect(Collectors.toList()));
         listView.setAdapter(adapter);
+        */
     }
 
     @Override

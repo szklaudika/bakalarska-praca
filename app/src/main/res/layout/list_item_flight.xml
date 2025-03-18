@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_flight"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@android:color/transparent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Flight Date (bold) -->
+        <TextView
+            android:id="@+id/tvDeparture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DEPARTURE"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Brief flight info (below tvDate) with each detail on a new row -->
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvDeparture"
+            android:layout_marginTop="8dp"
+            android:text="Date&#10;Aircraft&#10;Pilot&#10;FlightTime"
+            android:textSize="14sp" />
+
+        <!-- Arrow in the bottom-right corner -->
+        <ImageView
+            android:id="@+id/imgArrow"
+            android:layout_width="60dp"
+            android:layout_height="34dp"
+            android:layout_alignBaseline="@+id/tvDescription"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="4dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_arrow_right"
+            android:text="More Detail" />
+
+        <TextView
+            android:id="@+id/tvMoreDetail"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imgArrow"
+            android:layout_alignStart="@id/imgArrow"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="4dp"
+            android:text="More Detail"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

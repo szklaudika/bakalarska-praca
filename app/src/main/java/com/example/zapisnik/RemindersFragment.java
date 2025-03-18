@@ -7,7 +7,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,10 +29,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class RemindersFragment extends Fragment {
 
@@ -56,13 +50,27 @@ public class RemindersFragment extends Fragment {
 
         database = CertificateDatabase.getInstance(getActivity());
 
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, expiringCertificatesList);
+        // Použitie vlastného ArrayAdapter-u, ktorý zmení štýl položiek pre hlavičky
+        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, expiringCertificatesList) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView textView = view.findViewById(android.R.id.text1);
+                String item = getItem(position);
+                if ("Expiring Soon:".equals(item) || "Expired Certifications:".equals(item)) {
+                    textView.setTypeface(null, android.graphics.Typeface.BOLD);
+                } else {
+                    textView.setTypeface(null, android.graphics.Typeface.NORMAL);
+                }
+                return view;
+            }
+        };
         listViewExpiring.setAdapter(adapter);
 
-        // Naplánuj periodickú prácu pre pripomienky certifikátov
+        // Naplánovanie periodickej práce pre pripomienky certifikátov
         schedulePeriodicWork();
 
-        // Ihneď skontrolujeme a zobrazíme certifikáty, ktoré sa blížia k expirácii vrátane zostávajúcich dní
+        // Ihneď skontrolujeme a zobrazíme certifikáty, ktoré expirujú do 7 dní a tie, ktoré už vypršali.
         checkAndDisplayExpiringCertificates();
 
         return view;
@@ -76,46 +84,77 @@ public class RemindersFragment extends Fragment {
     }
 
     /**
-     * Metóda, ktorá v samostatnom vlákne získa zo všetkých certifikátov tie, ktoré expirujú do 7 dní,
-     * vypočíta zostávajúce dni, odošle notifikácie a aktualizuje zoznam v UI.
+     * Táto metóda v samostatnom vlákne:
+     * - Získa certifikáty, ktoré expirujú do 7 dní (s počtom zostávajúcich dní),
+     * - Získa aj certifikáty, ktoré už vypršali (s počtom dní, ktoré uplynuli od expirácie),
+     * - Pripraví zoznam s oddelenými sekciami ("Expiring Soon:" a "Expired Certifications:"),
+     * - Zobrazí notifikácie pre každý certifikát.
      */
     private void checkAndDisplayExpiringCertificates() {
         Executors.newSingleThreadExecutor().execute(() -> {
-            List<Certificate> expiringCerts = getExpiringCertificates();
-            expiringCertificatesList.clear();
+            List<Certificate> soonExpiring = getExpiringCertificates();
+            List<Certificate> expired = getExpiredCertificates();
+
+            // Vytvoríme dočasný zoznam, do ktorého budeme ukladať reťazce
+            List<String> newList = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date today = new Date();
 
-            for (Certificate cert : expiringCerts) {
-                try {
-                    Date expiryDate = sdf.parse(cert.getExpiryDate());
-                    long diffInMillis = expiryDate.getTime() - today.getTime();
-                    long diffInDays = diffInMillis / (24 * 60 * 60 * 1000);
-                    String certificateInfo = cert.getCertificateType() + " - Expires: " + cert.getExpiryDate()
-                            + " (" + diffInDays + " days remaining)";
-                    expiringCertificatesList.add(certificateInfo);
-                    showNotification(cert, diffInDays);
-                } catch (ParseException e) {
-                    Log.e("RemindersFragment", "Error parsing expiry date for certificate: " + cert.getCertificateType(), e);
+            if (!soonExpiring.isEmpty()) {
+                newList.add("Expiring Soon:");
+                for (Certificate cert : soonExpiring) {
+                    try {
+                        Date expiryDate = sdf.parse(cert.getExpiryDate());
+                        long diffInMillis = expiryDate.getTime() - today.getTime();
+                        long diffInDays = diffInMillis / (24 * 60 * 60 * 1000);
+                        String certificateInfo = cert.getCertificateType() + " - Expires: " + cert.getExpiryDate()
+                                + " (" + diffInDays + " days remaining)";
+                        newList.add(certificateInfo);
+                        showNotification(cert, diffInDays, false);
+                    } catch (ParseException e) {
+                        Log.e("RemindersFragment", "Error parsing expiry date for certificate: "
+                                + cert.getCertificateType(), e);
+                    }
                 }
             }
+            if (!expired.isEmpty()) {
+                newList.add("Expired Certifications:");
+                for (Certificate cert : expired) {
+                    try {
+                        Date expiryDate = sdf.parse(cert.getExpiryDate());
+                        long diffInMillis = today.getTime() - expiryDate.getTime();
+                        long diffInDays = diffInMillis / (24 * 60 * 60 * 1000);
+                        String certificateInfo = cert.getCertificateType() + " - Expired on: " + cert.getExpiryDate()
+                                + " (" + diffInDays + " days ago)";
+                        newList.add(certificateInfo);
+                        showNotification(cert, diffInDays, true);
+                    } catch (ParseException e) {
+                        Log.e("RemindersFragment", "Error parsing expiry date for certificate: "
+                                + cert.getCertificateType(), e);
+                    }
+                }
+            }
+            // Aktualizácia UI – zmeňte pôvodný zoznam na UI vlákne
             getActivity().runOnUiThread(() -> {
-                if (expiringCerts.isEmpty()) {
-                    tvStatus.setText("No certifications expiring soon.");
+                expiringCertificatesList.clear();
+                expiringCertificatesList.addAll(newList);
+                if (newList.isEmpty()) {
+                    tvStatus.setText("No certifications expiring or expired.");
                 } else {
-                    tvStatus.setText("Expiring Certifications (" + expiringCerts.size() + "):");
+                    tvStatus.setText("Certification Reminders:");
                 }
                 adapter.notifyDataSetChanged();
             });
         });
     }
 
+
     /**
-     * Prejde všetky certifikáty v databáze a vráti tie, ktoré expirujú do 7 dní.
+     * Prejde všetky certifikáty v databáze a vráti tie, ktoré expirujú do 7 dní (teda zostávajúce dni >= 0 a <= 7).
      */
     private List<Certificate> getExpiringCertificates() {
         List<Certificate> allCertificates = database.certificateDao().getAllCertificates();
-        List<Certificate> expiringCerts = new ArrayList<>();
+        List<Certificate> soonExpiring = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date today = new Date();
 
@@ -125,19 +164,44 @@ public class RemindersFragment extends Fragment {
                 long diffInMillis = expiryDate.getTime() - today.getTime();
                 long diffInDays = diffInMillis / (24 * 60 * 60 * 1000);
                 if (diffInDays <= 7 && diffInDays >= 0) {
-                    expiringCerts.add(cert);
+                    soonExpiring.add(cert);
                 }
             } catch (ParseException e) {
                 Log.e("RemindersFragment", "Error parsing expiry date for certificate: " + cert.getCertificateType(), e);
             }
         }
-        return expiringCerts;
+        return soonExpiring;
     }
 
     /**
-     * Zobrazí notifikáciu pre daný certifikát, vrátane zostávajúceho počtu dní.
+     * Prejde všetky certifikáty v databáze a vráti tie, ktoré už sú expirované (teda zostávajúce dni < 0).
      */
-    private void showNotification(Certificate certificate, long remainingDays) {
+    private List<Certificate> getExpiredCertificates() {
+        List<Certificate> allCertificates = database.certificateDao().getAllCertificates();
+        List<Certificate> expired = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = new Date();
+
+        for (Certificate cert : allCertificates) {
+            try {
+                Date expiryDate = sdf.parse(cert.getExpiryDate());
+                long diffInMillis = today.getTime() - expiryDate.getTime();
+                long diffInDays = diffInMillis / (24 * 60 * 60 * 1000);
+                if (diffInDays > 0) {
+                    expired.add(cert);
+                }
+            } catch (ParseException e) {
+                Log.e("RemindersFragment", "Error parsing expiry date for certificate: " + cert.getCertificateType(), e);
+            }
+        }
+        return expired;
+    }
+
+    /**
+     * Zobrazenie notifikácie pre daný certifikát.
+     * Ak je isExpired true, notifikácia indikuje, že certifikát už vypršal, inak že expiruje čoskoro.
+     */
+    private void showNotification(Certificate certificate, long days, boolean isExpired) {
         NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
         String CHANNEL_ID = "certification_reminder_channel";
 
@@ -150,15 +214,22 @@ public class RemindersFragment extends Fragment {
             notificationManager.createNotificationChannel(channel);
         }
 
+        String contentText;
+        if (isExpired) {
+            contentText = certificate.getCertificateType() + " expired on " + certificate.getExpiryDate()
+                    + " (" + days + " days ago)";
+        } else {
+            contentText = certificate.getCertificateType() + " expires on " + certificate.getExpiryDate()
+                    + " (" + days + " days remaining)";
+        }
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification) // Uistite sa, že máte túto ikonu v res/drawable
-                .setContentTitle("Certification Expiring Soon")
-                .setContentText(certificate.getCertificateType() + " expires on " + certificate.getExpiryDate()
-                        + " (" + remainingDays + " days remaining)")
+                .setContentTitle("Certification Reminder")
+                .setContentText(contentText)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
 
-        // Používame jedinečné ID certifikátu pre notifikáciu
         notificationManager.notify(certificate.getId(), builder.build());
     }
 

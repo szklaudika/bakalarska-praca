@@ -75,6 +75,8 @@ public class ProfileFragment extends Fragment {
      * Načítanie certifikátov zo všetkých platforiem.
      * Všetky certifikáty sa zoskupia podľa hodnoty getPlatform(). Pre známé platformy (Velká éra, Vrtuľníky, Ultralighty, Vetrone)
      * sa vytvoria samostatné sekcie s názvom platformy, zatiaľ čo ostatné certifikáty budú zoskupené pod hlavičkou "Ostatné certifikáty".
+     *
+     * Pri vypisovaní certifikátov sa teraz zobrazí aj hodnota fieldu section.
      */
     public void loadCertificatesFromDatabase() {
         Executors.newSingleThreadExecutor().execute(() -> {
@@ -104,7 +106,8 @@ public class ProfileFragment extends Fragment {
                 if (list != null && !list.isEmpty()) {
                     tempItems.add(new ListItem(ListItem.TYPE_HEADER, platform));
                     for (Certificate cert : list) {
-                        String display = cert.getCertificateType() + " - Expires: " +
+                        // Pridáme aj section - ak ju máte, inak vypíše NULL
+                        String display = cert.getCertificateType() + " (" + cert.getSection() + ") - Expires: " +
                                 (cert.getExpiryDate() != null ? cert.getExpiryDate() : "NULL");
                         tempItems.add(new ListItem(ListItem.TYPE_ITEM, display));
                     }
@@ -116,7 +119,8 @@ public class ProfileFragment extends Fragment {
                 if (others != null && !others.isEmpty()) {
                     tempItems.add(new ListItem(ListItem.TYPE_HEADER, "Ostatné certifikáty"));
                     for (Certificate cert : others) {
-                        String display = cert.getCertificateType() + " (" + cert.getPlatform() + ") - Expires: " +
+                        // Pri ostatných certifikátoch zobrazíme aj platformu a section
+                        String display = cert.getCertificateType() + " (" + cert.getSection() + ", " + cert.getPlatform() + ") - Expires: " +
                                 (cert.getExpiryDate() != null ? cert.getExpiryDate() : "NULL");
                         tempItems.add(new ListItem(ListItem.TYPE_ITEM, display));
                     }
@@ -133,7 +137,8 @@ public class ProfileFragment extends Fragment {
     }
 
     private void deleteCertificate(String certificateString) {
-        // Predpokladáme formát: "CertificateType - Expires: date"
+        // Predpokladáme formát: "CertificateType (section) - Expires: date"
+        // alebo "CertificateType (section, platform) - Expires: date"
         String[] parts = certificateString.split(" - Expires:");
         String certificateName = parts[0].trim();
 
