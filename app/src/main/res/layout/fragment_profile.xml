@@ -1,31 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_profile_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@drawable/fragment_background">
 
-    <TextView
-        android:id="@+id/tv_pilot_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pilot Profile"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:paddingBottom="16dp"/>
-
-    <TextView
-        android:id="@+id/tv_platforms"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Vaše certifikáty/licencie"
-        android:textSize="16sp"
-        android:layout_gravity="center_horizontal"
-        android:paddingBottom="16dp"/>
-
+    <!-- ListView, do ktorého neskôr pripojíme header -->
     <ListView
         android:id="@+id/list_view_certificates"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
 </LinearLayout>

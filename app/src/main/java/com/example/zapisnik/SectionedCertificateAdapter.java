@@ -46,21 +46,44 @@ public class SectionedCertificateAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         int viewType = getItemViewType(position);
-        if (convertView == null) {
-            if (viewType == ListItem.TYPE_HEADER) {
-                convertView = inflater.inflate(R.layout.list_item_header, parent, false);
-            } else {
-                convertView = inflater.inflate(R.layout.list_item_certificate, parent, false);
-            }
-        }
-        ListItem item = items.get(position);
+
         if (viewType == ListItem.TYPE_HEADER) {
-            TextView tvHeader = convertView.findViewById(R.id.tvHeader);
-            tvHeader.setText(item.getText());
-        } else {
-            TextView tvItem = convertView.findViewById(R.id.tvItem);
-            tvItem.setText(item.getText());
+            HeaderViewHolder headerHolder;
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.list_item_header, parent, false);
+                headerHolder = new HeaderViewHolder();
+                headerHolder.tvHeader = convertView.findViewById(R.id.tvHeader);
+                convertView.setTag(headerHolder);
+            } else {
+                headerHolder = (HeaderViewHolder) convertView.getTag();
+            }
+            headerHolder.tvHeader.setText(items.get(position).getText());
+        } else { // TYPE_ITEM
+            CertificateViewHolder certHolder;
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.list_item_certificate, parent, false);
+                certHolder = new CertificateViewHolder();
+                certHolder.tvExpiryDate = convertView.findViewById(R.id.tv_expiry_date);
+                certHolder.tvCertificateDetails = convertView.findViewById(R.id.tv_certificate_details);
+                convertView.setTag(certHolder);
+            } else {
+                certHolder = (CertificateViewHolder) convertView.getTag();
+            }
+            ListItem item = items.get(position);
+            certHolder.tvExpiryDate.setText(item.getDate());
+            certHolder.tvCertificateDetails.setText(item.getText());
         }
         return convertView;
+    }
+
+    // ViewHolder pre hlavičky
+    private static class HeaderViewHolder {
+        TextView tvHeader;
+    }
+
+    // ViewHolder pre certifikáty
+    private static class CertificateViewHolder {
+        TextView tvExpiryDate;
+        TextView tvCertificateDetails;
     }
 }

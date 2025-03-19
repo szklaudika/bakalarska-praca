@@ -111,7 +111,7 @@ public class FlightListFragment extends Fragment {
     }
 
     private void fetchFlightsFromServer() {
-        String url = "http://10.0.2.2/zapisnik_db/get_flights.php";
+        String url = "https://21e5-195-168-204-49.ngrok-free.app/zapisnik_db/get_flights.php";
         assert getActivity() != null;
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 

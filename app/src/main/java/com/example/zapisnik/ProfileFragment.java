@@ -1,16 +1,21 @@
 package com.example.zapisnik;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -38,6 +43,9 @@ public class ProfileFragment extends Fragment {
     private ListView listViewCertificates;
     private SectionedCertificateAdapter adapter;
     private List<ListItem> items = new ArrayList<>();
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private ImageView profileImageView;
+    private TextView tvTotalFlightTime;  // Nová premenna pre TextView s celkovým letovým časom
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -49,45 +57,77 @@ public class ProfileFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         listViewCertificates = view.findViewById(R.id.list_view_certificates);
+
+        // Inflatujeme header, ktorý obsahuje ImageView, tv_platforms a nový tv_total_flight_time
+        View headerView = inflater.inflate(R.layout.list_header_profile, null);
+        listViewCertificates.addHeaderView(headerView, null, false);
+
+        // Získame referenciu na profilovú fotku a nastavíme listener pre výber obrázku
+        profileImageView = headerView.findViewById(R.id.img_profile_pic);
+        profileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Spustíme intent pre výber obrázku z galérie
+                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, PICK_IMAGE_REQUEST);
+            }
+        });
+
+        // Získame referenciu na nový TextView, kde sa zobrazí celkový letový čas
+        tvTotalFlightTime = headerView.findViewById(R.id.tv_total_flight_time);
+
         database = CertificateDatabase.getInstance(getActivity());
 
-        // Na začiatku načítame certifikáty z lokálnej databázy
+        // Načítame certifikáty z lokálnej databázy
         loadCertificatesFromDatabase();
+
+        // Načítame a zobrazíme celkový letový čas
+        loadTotalFlightTime();
 
         // Listener pre vymazávanie certifikátu po kliknutí (použijeme len položky, nie hlavičky)
         listViewCertificates.setOnItemClickListener((parent, view1, position, id) -> {
-            ListItem selectedItem = items.get(position);
-            if (selectedItem.getType() == ListItem.TYPE_ITEM) {
-                String selectedCertificate = selectedItem.getText();
-                new android.app.AlertDialog.Builder(getActivity())
-                        .setTitle("Delete Certificate")
-                        .setMessage("Are you sure you want to delete " + selectedCertificate + "?")
-                        .setPositiveButton("Yes", (dialog, which) -> deleteCertificate(selectedCertificate))
-                        .setNegativeButton("No", null)
-                        .show();
+            // Vzhľadom na pridaný header upravíme index
+            int adjustedPosition = position - listViewCertificates.getHeaderViewsCount();
+            if (adjustedPosition >= 0 && adjustedPosition < items.size()) {
+                ListItem selectedItem = items.get(adjustedPosition);
+                if (selectedItem.getType() == ListItem.TYPE_ITEM) {
+                    String selectedCertificate = selectedItem.getText();
+                    new android.app.AlertDialog.Builder(getActivity())
+                            .setTitle("Delete Certificate")
+                            .setMessage("Are you sure you want to delete " + selectedCertificate + "?")
+                            .setPositiveButton("Yes", (dialog, which) -> deleteCertificate(selectedCertificate))
+                            .setNegativeButton("No", null)
+                            .show();
+                }
             }
         });
 
         return view;
     }
 
+    // Výsledok výberu obrázku z galérie
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            Uri selectedImageUri = data.getData();
+            profileImageView.setImageURI(selectedImageUri);
+        }
+    }
+
     /**
      * Načítanie certifikátov zo všetkých platforiem.
-     * Všetky certifikáty sa zoskupia podľa hodnoty getPlatform(). Pre známé platformy (Velká éra, Vrtuľníky, Ultralighty, Vetrone)
-     * sa vytvoria samostatné sekcie s názvom platformy, zatiaľ čo ostatné certifikáty budú zoskupené pod hlavičkou "Ostatné certifikáty".
-     *
-     * Pri vypisovaní certifikátov sa teraz zobrazí aj hodnota fieldu section.
+     * Všetky certifikáty sa zoskupia podľa hodnoty getPlatform() a zobrazia sa so sekciami.
      */
     public void loadCertificatesFromDatabase() {
         Executors.newSingleThreadExecutor().execute(() -> {
             List<Certificate> certificates = database.certificateDao().getAllCertificates();
             List<ListItem> tempItems = new ArrayList<>();
 
-            // Definujeme požadované platformy (v poradí, v akom chceme zobraziť sekcie)
+            // Definované známe platformy
             List<String> knownPlatforms = Arrays.asList("Velká éra", "Vrtuľníky", "Ultralighty", "Vetrone");
 
-            // Zoskupíme certifikáty podľa platformy.
-            // Ak certifikát nemá platformu zo zoznamu knownPlatforms, budeme ho skupinovať pod "Ostatné certifikáty".
+            // Zoskupenie certifikátov podľa platformy
             Map<String, List<Certificate>> groupedByPlatform = new HashMap<>();
             for (Certificate cert : certificates) {
                 String platform = cert.getPlatform();
@@ -100,33 +140,53 @@ public class ProfileFragment extends Fragment {
                 groupedByPlatform.get(platform).add(cert);
             }
 
-            // Najprv pridáme sekcie pre známe platformy v zvolenom poradí
+            // Najprv pre známe platformy
             for (String platform : knownPlatforms) {
                 List<Certificate> list = groupedByPlatform.get(platform);
                 if (list != null && !list.isEmpty()) {
                     tempItems.add(new ListItem(ListItem.TYPE_HEADER, platform));
                     for (Certificate cert : list) {
-                        // Pridáme aj section - ak ju máte, inak vypíše NULL
-                        String display = cert.getCertificateType() + " (" + cert.getSection() + ") - Expires: " +
-                                (cert.getExpiryDate() != null ? cert.getExpiryDate() : "NULL");
-                        tempItems.add(new ListItem(ListItem.TYPE_ITEM, display));
+                        String formattedExpiry = "N/A";
+                        if (cert.getExpiryDate() != null && !cert.getExpiryDate().isEmpty()) {
+                            try {
+                                SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                                Date date = originalFormat.parse(cert.getExpiryDate());
+                                SimpleDateFormat newFormat = new SimpleDateFormat("yyyy\nMMM dd", Locale.US);
+                                formattedExpiry = newFormat.format(date);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        String detailPart = cert.getCertificateType() + "\n(" + cert.getSection() + ")";
+                        tempItems.add(new ListItem(ListItem.TYPE_ITEM, formattedExpiry, detailPart));
                     }
                 }
             }
-            // Potom, ak existujú certifikáty, ktoré boli zoskupené do "Ostatné certifikáty", pridáme ich sekciu.
+
+            // Potom pre "Ostatné certifikáty"
             if (groupedByPlatform.containsKey("Ostatné certifikáty")) {
                 List<Certificate> others = groupedByPlatform.get("Ostatné certifikáty");
                 if (others != null && !others.isEmpty()) {
                     tempItems.add(new ListItem(ListItem.TYPE_HEADER, "Ostatné certifikáty"));
                     for (Certificate cert : others) {
-                        // Pri ostatných certifikátoch zobrazíme aj platformu a section
-                        String display = cert.getCertificateType() + " (" + cert.getSection() + ", " + cert.getPlatform() + ") - Expires: " +
-                                (cert.getExpiryDate() != null ? cert.getExpiryDate() : "NULL");
-                        tempItems.add(new ListItem(ListItem.TYPE_ITEM, display));
+                        String formattedExpiry = "N/A";
+                        if (cert.getExpiryDate() != null && !cert.getExpiryDate().isEmpty()) {
+                            try {
+                                SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                                Date date = originalFormat.parse(cert.getExpiryDate());
+                                SimpleDateFormat newFormat = new SimpleDateFormat("yyyy\nMMM dd", Locale.US);
+                                formattedExpiry = newFormat.format(date);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        String detailPart = cert.getCertificateType() + "\n(" + cert.getSection() + ", " + cert.getPlatform() + ")";
+                        tempItems.add(new ListItem(ListItem.TYPE_ITEM, formattedExpiry, detailPart));
                     }
                 }
             }
 
+            // Aktualizácia UI vo vlákně UI
             getActivity().runOnUiThread(() -> {
                 items.clear();
                 items.addAll(tempItems);
@@ -136,9 +196,24 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    // Metóda na načítanie celkového letového času zo všetkých letov z FlightDatabase
+    private void loadTotalFlightTime() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            // Načítame všetky lety z FlightDatabase
+            List<Flight> flights = FlightDatabase.getInstance(getActivity()).flightDao().getAllFlights();
+            int totalMinutes = 0;
+            for (Flight flight : flights) {
+                totalMinutes += flight.getTotalFlightTime();
+            }
+            int hours = totalMinutes / 60;
+            int minutes = totalMinutes % 60;
+            String totalTimeStr = "Celkový letový čas: " + hours + " h " + minutes + " min";
+            getActivity().runOnUiThread(() -> tvTotalFlightTime.setText(totalTimeStr));
+        });
+    }
+
     private void deleteCertificate(String certificateString) {
         // Predpokladáme formát: "CertificateType (section) - Expires: date"
-        // alebo "CertificateType (section, platform) - Expires: date"
         String[] parts = certificateString.split(" - Expires:");
         String certificateName = parts[0].trim();
 
@@ -178,6 +253,8 @@ public class ProfileFragment extends Fragment {
         if (isNetworkAvailable()) {
             syncLocalCertificatesToServer();
             loadCertificatesFromServer();
+            // Aktualizujeme aj celkový letový čas
+            loadTotalFlightTime();
         }
     }
 

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- Obrázok v hornej časti -->
+    <ImageView
+        android:id="@+id/img_profile_pic"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/profile_pic" />
+
+    <TextView
+        android:id="@+id/tv_total_flight_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Celkový letový čas: 0 h 0 min"
+        android:textSize="16sp"
+        android:textStyle="normal" />
+
+    <!-- TextView pre názov sekcie -->
+    <TextView
+        android:id="@+id/tv_platforms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-medium"
+        android:paddingBottom="16dp"
+        android:text="Vaše certifikáty/licencie"
+        android:textAllCaps="true"
+        android:textSize="16sp"
+        android:textStyle="normal" />
+
+    <!-- Nový TextView pre zobrazenie celkového letového času -->
+
+</LinearLayout>

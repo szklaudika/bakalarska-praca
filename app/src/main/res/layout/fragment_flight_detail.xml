@@ -14,10 +14,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Header Image -->
-
-        <!-- CardView with Flight Details -->
-
         <ImageView
             android:id="@+id/headerImage"
             android:layout_width="match_parent"
