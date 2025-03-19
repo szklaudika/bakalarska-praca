@@ -18,27 +18,22 @@ public class ExpiryDayDecorator implements DayViewDecorator {
     private final HashSet<CalendarDay> dates;
     private final Drawable highlightDrawable;
 
-    public ExpiryDayDecorator(Context context, List<Date> expiryDates) {
-        // Convert your expiryDates into CalendarDay objects
+    public ExpiryDayDecorator(Context context, List<Date> expiryDates, int drawableResId) {
         dates = new HashSet<>();
         for (Date date : expiryDates) {
-            CalendarDay day = CalendarDay.from(date);
-            dates.add(day);
+            dates.add(CalendarDay.from(date));
         }
-        // Prepare a highlight drawable
-        highlightDrawable = ContextCompat.getDrawable(context, R.drawable.custom_highlight);
+        highlightDrawable = ContextCompat.getDrawable(context, drawableResId);
     }
 
     @Override
     public boolean shouldDecorate(CalendarDay day) {
-        // Only decorate if the day is in our set of "special" days
         return dates.contains(day);
     }
 
     @Override
     public void decorate(DayViewFacade view) {
-        // Apply the custom highlight
         view.setSelectionDrawable(highlightDrawable);
-        // e.g., view.addSpan(new ForegroundColorSpan(Color.RED)); // additional styling
     }
 }
+

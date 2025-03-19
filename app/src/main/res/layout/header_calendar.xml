@@ -22,7 +22,6 @@
         android:id="@+id/materialCalendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:mcv_selectionColor="@android:color/black"
         app:mcv_arrowColor="@android:color/white"
         app:mcv_weekDayLabels="@array/custom_weekday_labels"
         app:mcv_dateTextAppearance="@style/CalendarDayGreyText" />
