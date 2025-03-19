@@ -1,25 +1,16 @@
-<!-- res/layout/fragment_reminders.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_reminders"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
-    <!-- TextView na zobrazenie statusu alebo inštrukcií -->
-    <TextView
-        android:id="@+id/tv_status"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Your upcoming certification reminders will appear here."
-        android:textSize="18sp"
-        android:layout_marginBottom="20dp" />
-
-    <!-- ListView pre zobrazenie certifikátov, ktoré je potrebné obnoviť -->
+    <!-- The ListView that will have a header and items -->
     <ListView
         android:id="@+id/list_view_expiring"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:divider="@android:color/darker_gray"
         android:dividerHeight="1dp" />
 

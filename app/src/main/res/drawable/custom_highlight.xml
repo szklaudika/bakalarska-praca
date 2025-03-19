@@ -1,0 +1,13 @@
+<!-- res/drawable/custom_highlight.xml -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetLeft="5dp"
+    android:insetRight="5dp"
+    android:insetTop="5dp"
+    android:insetBottom="5dp">
+    <shape android:shape="oval">
+        <solid android:color="#70352b" />
+        <size
+            android:width="8dp"
+            android:height="8dp"/>
+    </shape>
+</inset>

@@ -22,6 +22,7 @@
             android:padding="8dp"
             android:layout_marginTop="12dp">
 
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -491,7 +492,7 @@
         <LinearLayout
             android:id="@+id/layout_medical_velka_era"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="137dp"
             android:layout_marginTop="12dp"
             android:background="@drawable/checkbox_background"
             android:orientation="vertical"
@@ -500,10 +501,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Medical - Velká éra"
-                android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
-                android:textAllCaps="true"/>
+                android:text="Medical - Velká éra"
+                android:textAllCaps="true"
+                android:textStyle="normal" />
 
             <!-- Medical Certificate Class 1 -->
             <LinearLayout
@@ -564,7 +565,7 @@
         <LinearLayout
             android:id="@+id/layout_radio_velka_era"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="145dp"
             android:layout_marginTop="12dp"
             android:background="@drawable/checkbox_background"
             android:orientation="vertical"
@@ -573,10 +574,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rádio - Velká éra"
-                android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
-                android:textAllCaps="true"/>
+                android:text="Rádio - Velká éra"
+                android:textAllCaps="true"
+                android:textStyle="normal" />
 
             <!-- Všeobecný preukaz radiofonisty -->
             <LinearLayout
@@ -637,7 +638,7 @@
         <LinearLayout
             android:id="@+id/layout_anglictina_velka_era"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="234dp"
             android:layout_marginTop="12dp"
             android:background="@drawable/checkbox_background"
             android:orientation="vertical"
@@ -646,10 +647,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Angličtina - Velká éra"
-                android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
-                android:textAllCaps="true"/>
+                android:text="Angličtina - Velká éra"
+                android:textAllCaps="true"
+                android:textStyle="normal" />
 
             <!-- ICAO English LEVEL 4 -->
             <LinearLayout
@@ -764,7 +765,7 @@
         <LinearLayout
             android:id="@+id/layout_poistka_velka_era"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="129dp"
             android:layout_marginTop="12dp"
             android:background="@drawable/checkbox_background"
             android:orientation="vertical"
@@ -773,10 +774,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Poistka - Velká éra"
-                android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
-                android:textAllCaps="true"/>
+                android:text="Poistka - Velká éra"
+                android:textAllCaps="true"
+                android:textStyle="normal" />
 
             <!-- Poistenie zodpovednosti ČR + SK -->
             <LinearLayout
