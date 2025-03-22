@@ -184,21 +184,6 @@ public class FlightDetailFragment extends Fragment {
                 }
             }
 
-            String aggregates = "Aggregated Flight Data:\n" +
-                    "Total Flight Time: " + formatMinutes(totalFlightTime) + "\n" +
-                    "Multi-Pilot Time: " + formatMinutes(totalMultiPilotTime) + "\n" +
-                    "Day Landings: " + totalLandingsDay + ", Night Landings: " + totalLandingsNight + "\n" +
-                    "Operation Times (Night, IFR): " + formatMinutes(totalNightTime) + ", " + formatMinutes(totalIfrTime) + "\n" +
-                    "Pilot Functions (PIC, Copilot, Dual, Instructor): " +
-                    formatMinutes(totalPicTime) + ", " +
-                    formatMinutes(totalCopilotTime) + ", " +
-                    formatMinutes(totalDualTime) + ", " +
-                    formatMinutes(totalInstructorTime) + "\n" +
-                    "FSTD Sessions:\n" + getFstdSummaryString(fstdSummary);
-
-            getActivity().runOnUiThread(() -> {
-                Toast.makeText(getActivity(), aggregates, Toast.LENGTH_LONG).show();
-            });
         });
     }
 

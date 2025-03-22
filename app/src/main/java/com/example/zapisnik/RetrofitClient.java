@@ -52,4 +52,10 @@ public class RetrofitClient {
     public static FlightApi getFlightApi() {
         return getRetrofitInstance().create(FlightApi.class);
     }
+
+    public static UserApi getUserApi() {
+        return getRetrofitInstance().create(UserApi.class);
+    }
+
+
 }

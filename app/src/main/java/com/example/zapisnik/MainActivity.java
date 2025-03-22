@@ -23,34 +23,33 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-
         // BottomNavigationView setup
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
-        // Predvolený fragment
+        // Set default fragment.
+        // Instead of showing the FlightListFragment, we show the RegistrationFragment.
+        // You can change this later (for example, check if the user is already logged in).
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_frame, new FlightListFragment())
+                    .replace(R.id.content_frame, new LoginFragment())
                     .commit();
         }
 
-        // Zaregistruj NetworkChangeReceiver pre monitorovanie Wi-Fi pripojenia
+        // Register NetworkChangeReceiver for monitoring Wi-Fi connectivity
         networkChangeReceiver = new NetworkChangeReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         registerReceiver(networkChangeReceiver, filter);
 
-        // Spusti okamžitú kontrolu pripomienok hneď po štarte aplikácie
+        // Schedule immediate work to show reminders right after startup
         scheduleImmediateReminderWork();
 
-        // Naplánuj periodickú prácu pre pripomienky certifikátov
+        // Schedule periodic work for certificate reminders
         scheduleReminderWork();
     }
 
-    // Spustí one-time prácu ihneď, aby sa notifikácie zobrazili hneď po štarte
+    // One-time work for immediate notification check
     private void scheduleImmediateReminderWork() {
         OneTimeWorkRequest immediateWorkRequest = new OneTimeWorkRequest.Builder(CertificationReminderWorker.class)
                 .setInitialDelay(0, TimeUnit.SECONDS)
@@ -58,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         WorkManager.getInstance(this).enqueue(immediateWorkRequest);
     }
 
+    // Periodic work for certificate reminders (every day)
     private void scheduleReminderWork() {
         PeriodicWorkRequest reminderWorkRequest = new PeriodicWorkRequest.Builder(
                 CertificationReminderWorker.class, 1, TimeUnit.DAYS)
@@ -72,11 +72,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Zrušiť registráciu NetworkChangeReceiver pri zničení aktivity
+        // Unregister the NetworkChangeReceiver when the activity is destroyed.
         unregisterReceiver(networkChangeReceiver);
     }
 
-    // Navigácia medzi fragmentami
+    // Bottom navigation listener for switching between fragments
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -98,14 +98,12 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.nav_profile:
                             selectedFragment = new ProfileFragment();
                             break;
-
-
+                        // Optionally add a new case for login or registration if you want to navigate to it later
                     }
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.content_frame, selectedFragment)
                             .commitAllowingStateLoss();
                     return true;
-
                 }
             };
 }
