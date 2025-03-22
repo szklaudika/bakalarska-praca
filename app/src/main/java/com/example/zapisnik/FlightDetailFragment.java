@@ -1,6 +1,5 @@
 package com.example.zapisnik;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.concurrent.Executors;
 
 import retrofit2.Call;
@@ -23,10 +24,9 @@ import retrofit2.Response;
 public class FlightDetailFragment extends Fragment {
 
     private static final String TAG = "FlightDetailFragment";
-
     private FlightDatabase database;
 
-    // Declare TextViews for flight details (including new fields)
+    // Declare TextViews for flight details
     private TextView tvDate, tvDeparture, tvDepartureTime, tvArrival, tvArrivalTime, tvAircraftModel,
             tvRegistration, tvSinglePilotTime, tvMultiPilotTime, tvTotalFlightTime, tvPilotName,
             tvSinglePilot, tvLandingsDay, tvLandingsNight, tvNightTime, tvIfrTime, tvPicTime,
@@ -36,8 +36,6 @@ public class FlightDetailFragment extends Fragment {
         // Required empty public constructor
     }
 
-    @SuppressLint("MissingInflatedId")
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -69,73 +67,22 @@ public class FlightDetailFragment extends Fragment {
         tvFstdTotalTime = view.findViewById(R.id.tv_flight_fstd_total_time);
         tvRemarks = view.findViewById(R.id.tv_flight_remarks);
 
-        // Initialize the local database instance
         database = FlightDatabase.getInstance(getActivity());
 
-        // For logging purposes, load flights from database and server.
-        loadFlightsFromDatabase();
-        loadFlightsFromServer();
-
-        // Retrieve passed data via Bundle and set flight details.
+        // Set flight details from passed Bundle, if available.
         Bundle args = getArguments();
         if (args != null) {
             setFlightDetails(args);
         }
 
+        // Calculate and display aggregated flight data
+        calculateFlightAggregates();
+
         return view;
     }
 
     /**
-     * Converts minutes into a formatted string "Xh Ym".
-     */
-    private String formatTime(int totalMinutes) {
-        int hours = totalMinutes / 60;
-        int minutes = totalMinutes % 60;
-        return hours + "h " + minutes + "m";
-    }
-
-    /**
-     * Returns the string value or "-" if null or empty.
-     */
-    private String getStringOrDash(Bundle args, String key) {
-        String value = args.getString(key);
-        // Check if the value is actually null, empty, or the literal string "null"
-        if (value == null || value.trim().isEmpty() || value.equalsIgnoreCase("null")) {
-            return "-";
-        }
-        return value;
-    }
-
-
-    /**
-     * Returns a numeric value as formatted time (if requested) or raw value.
-     * Also, if the numeric field equals 0 (and formatting is requested), returns "-".
-     */
-    private String getIntOrDash(Bundle args, String key, boolean format) {
-        if (args.containsKey(key)) {
-            int value = args.getInt(key);
-            if (format && value == 0) {
-                return "-";
-            }
-            return format ? formatTime(value) : String.valueOf(value);
-        }
-        return "-";
-    }
-
-    /**
-     * Returns the boolean value as provided true/false string or "-" if not provided.
-     */
-    private String getBooleanOrDash(Bundle args, String key, String trueText, String falseText) {
-        if (args.containsKey(key)) {
-            boolean value = args.getBoolean(key);
-            return value ? trueText : falseText;
-        }
-        return "-";
-    }
-
-    /**
-     * Retrieves values from the Bundle and sets them into the appropriate TextViews.
-     * If a field is null, missing, or (for time fields) equals 0, a dash ("-") is displayed.
+     * Sets the flight details in the UI from the passed Bundle.
      */
     private void setFlightDetails(Bundle args) {
         tvDate.setText(" " + getStringOrDash(args, "date"));
@@ -145,7 +92,7 @@ public class FlightDetailFragment extends Fragment {
         tvArrivalTime.setText(" " + getStringOrDash(args, "arrivalTime"));
         tvAircraftModel.setText(" " + getStringOrDash(args, "aircraftModel"));
         tvRegistration.setText(" " + getStringOrDash(args, "registration"));
-        tvSinglePilotTime.setText(" " + getIntOrDash(args, "singlePilotTime", false)); // Required field
+        tvSinglePilotTime.setText(" " + getIntOrDash(args, "singlePilotTime", false));
         tvMultiPilotTime.setText(" " + getIntOrDash(args, "multiPilotTime", true));
         tvTotalFlightTime.setText(" " + getIntOrDash(args, "totalFlightTime", true));
         tvPilotName.setText(" " + getStringOrDash(args, "pilotName"));
@@ -164,35 +111,127 @@ public class FlightDetailFragment extends Fragment {
         tvRemarks.setText(" " + getStringOrDash(args, "remarks"));
     }
 
+    private String getStringOrDash(Bundle args, String key) {
+        String value = args.getString(key);
+        if (value == null || value.trim().isEmpty() || value.equalsIgnoreCase("null")) {
+            return "-";
+        }
+        return value;
+    }
+
+    private String getIntOrDash(Bundle args, String key, boolean format) {
+        if (args.containsKey(key)) {
+            int value = args.getInt(key);
+            if (format && value == 0) {
+                return "-";
+            }
+            return format ? formatTime(value) : String.valueOf(value);
+        }
+        return "-";
+    }
+
+    private String getBooleanOrDash(Bundle args, String key, String trueText, String falseText) {
+        if (args.containsKey(key)) {
+            boolean value = args.getBoolean(key);
+            return value ? trueText : falseText;
+        }
+        return "-";
+    }
+
+    private String formatTime(int totalMinutes) {
+        int hours = totalMinutes / 60;
+        int minutes = totalMinutes % 60;
+        return hours + "h " + minutes + "m";
+    }
+
     /**
-     * Load flights from the local database (for logging purposes).
+     * Calculates aggregated flight data from all flights stored in the local database.
+     * Displays the results via a Toast.
      */
-    public void loadFlightsFromDatabase() {
+    private void calculateFlightAggregates() {
         Executors.newSingleThreadExecutor().execute(() -> {
-            List<Flight> flights = database.flightDao().getAllFlights();
-            Log.d(TAG, "Loaded flights from DB: " + flights.size());
+            List<Flight> flights = FlightDatabase.getInstance(getActivity()).flightDao().getAllFlights();
+            int totalFlightTime = 0;
+            int totalMultiPilotTime = 0;
+            int totalLandingsDay = 0;
+            int totalLandingsNight = 0;
+            int totalNightTime = 0;
+            int totalIfrTime = 0;
+            int totalPicTime = 0;
+            int totalCopilotTime = 0;
+            int totalDualTime = 0;
+            int totalInstructorTime = 0;
+            Map<String, Integer> fstdSummary = new HashMap<>();
+
+            for (Flight flight : flights) {
+                // Use null-safe operations in case any field is null
+                totalFlightTime += flight.getTotalFlightTime();
+                totalMultiPilotTime += (flight.getMultiPilotTime() == null ? 0 : flight.getMultiPilotTime());
+                totalLandingsDay += (flight.getLandingsDay() == null ? 0 : flight.getLandingsDay());
+                totalLandingsNight += (flight.getLandingsNight() == null ? 0 : flight.getLandingsNight());
+                totalNightTime += (flight.getNightTime() == null ? 0 : flight.getNightTime());
+                totalIfrTime += (flight.getIfrTime() == null ? 0 : flight.getIfrTime());
+                totalPicTime += (flight.getPicTime() == null ? 0 : flight.getPicTime());
+                totalCopilotTime += (flight.getCopilotTime() == null ? 0 : flight.getCopilotTime());
+                totalDualTime += (flight.getDualTime() == null ? 0 : flight.getDualTime());
+                totalInstructorTime += (flight.getInstructorTime() == null ? 0 : flight.getInstructorTime());
+
+                String fstdType = flight.getFstdType();
+                int fstdTotalTime = (flight.getFstdTotalTime() == null ? 0 : flight.getFstdTotalTime());
+                if (fstdType != null && !fstdType.isEmpty() && fstdTotalTime > 0) {
+                    int prev = fstdSummary.containsKey(fstdType) ? fstdSummary.get(fstdType) : 0;
+                    fstdSummary.put(fstdType, prev + fstdTotalTime);
+                }
+            }
+
+            String aggregates = "Aggregated Flight Data:\n" +
+                    "Total Flight Time: " + formatMinutes(totalFlightTime) + "\n" +
+                    "Multi-Pilot Time: " + formatMinutes(totalMultiPilotTime) + "\n" +
+                    "Day Landings: " + totalLandingsDay + ", Night Landings: " + totalLandingsNight + "\n" +
+                    "Operation Times (Night, IFR): " + formatMinutes(totalNightTime) + ", " + formatMinutes(totalIfrTime) + "\n" +
+                    "Pilot Functions (PIC, Copilot, Dual, Instructor): " +
+                    formatMinutes(totalPicTime) + ", " +
+                    formatMinutes(totalCopilotTime) + ", " +
+                    formatMinutes(totalDualTime) + ", " +
+                    formatMinutes(totalInstructorTime) + "\n" +
+                    "FSTD Sessions:\n" + getFstdSummaryString(fstdSummary);
+
+            getActivity().runOnUiThread(() -> {
+                Toast.makeText(getActivity(), aggregates, Toast.LENGTH_LONG).show();
+            });
         });
     }
 
     /**
-     * Load flights from the server using Retrofit (for logging purposes).
+     * Helper method to format minutes into a string showing hours and minutes.
      */
-    private void loadFlightsFromServer() {
-        FlightApi api = RetrofitClient.getFlightApi();
-        Call<List<Flight>> call = api.getAllFlights();
-        call.enqueue(new Callback<List<Flight>>() {
-            @Override
-            public void onResponse(Call<List<Flight>> call, Response<List<Flight>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<Flight> serverFlights = response.body();
-                    Log.d(TAG, "Loaded flights from server: " + serverFlights.size());
-                }
-            }
+    private String formatMinutes(int totalMinutes) {
+        int hours = totalMinutes / 60;
+        int minutes = totalMinutes % 60;
+        return hours + " h " + minutes + " m";
+    }
 
-            @Override
-            public void onFailure(Call<List<Flight>> call, Throwable t) {
-                Toast.makeText(getActivity(), "Failed to load flights from server: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+    /**
+     * Helper method to build a summary string for FSTD sessions.
+     */
+    private String getFstdSummaryString(Map<String, Integer> fstdSummary) {
+        StringBuilder summary = new StringBuilder();
+        for (Map.Entry<String, Integer> entry : fstdSummary.entrySet()) {
+            int totalMinutes = entry.getValue();
+            int hours = totalMinutes / 60;
+            int minutes = totalMinutes % 60;
+            summary.append(entry.getKey())
+                    .append(": ")
+                    .append(hours).append(" h ")
+                    .append(minutes).append(" m\n");
+        }
+        return summary.toString();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Recalculate aggregates when the fragment resumes.
+        calculateFlightAggregates();
     }
 }

@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
 
     private static volatile Retrofit retrofit = null;
-    private static final String BASE_URL = "https://21e5-195-168-204-49.ngrok-free.app/zapisnik_db/";
+    private static final String BASE_URL = "http://10.0.2.2/zapisnik_db/";
 
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {

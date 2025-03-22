@@ -1,6 +1,7 @@
 package com.example.zapisnik;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -19,4 +20,7 @@ public interface FlightDao {
 
     @Query("UPDATE flights SET is_synced = 1 WHERE id = :flightId")
     void markAsSynced(int flightId);
+
+    @Delete
+    void delete(Flight flight);
 }

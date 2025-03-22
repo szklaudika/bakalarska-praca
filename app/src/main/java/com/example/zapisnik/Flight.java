@@ -44,7 +44,6 @@ public class Flight {
     @SerializedName("pilotName")
     private String pilotName;
 
-    // New fields
     @SerializedName("singlePilot")
     private boolean singlePilot; // Required (assumed)
 
@@ -87,7 +86,6 @@ public class Flight {
     @ColumnInfo(name = "is_synced")
     private boolean isSynced;
 
-    // Constructor with updated fields
     public Flight(String date, String departurePlace, String departureTime, String arrivalPlace, String arrivalTime,
                   String aircraftModel, String registration, int singlePilotTime, Integer multiPilotTime, int totalFlightTime,
                   String pilotName, boolean singlePilot, Integer landingsDay, Integer landingsNight, Integer nightTime, Integer ifrTime,

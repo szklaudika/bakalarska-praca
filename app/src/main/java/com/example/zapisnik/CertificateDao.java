@@ -41,4 +41,6 @@ public interface CertificateDao {
 
     @Query("SELECT * FROM certificates WHERE id = :id LIMIT 1")
     Certificate getCertificateById(int id);
+
+
 }
