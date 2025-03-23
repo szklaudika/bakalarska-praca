@@ -1,5 +1,7 @@
 package com.example.zapisnik;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -132,7 +134,7 @@ public class FlightListFragment extends Fragment {
                             String aircraftModel = flightJson.optString("aircraft_model", "Unknown Aircraft Model");
                             String registration = flightJson.optString("registration", "Unknown Registration");
                             int singlePilotTime = flightJson.optInt("single_pilot_time", 0);
-                            int multiPilotTime = flightJson.optInt("multi_pilot_time", 0);
+                            int multiPilotTime = flightJson.optInt("multiPilotTime", 0);
                             int totalFlightTime = flightJson.optInt("total_flight_time", 0);
                             String pilotName = flightJson.optString("pilot_name", "Unknown Pilot");
                             boolean singlePilot = flightJson.optBoolean("single_pilot", false);
@@ -177,6 +179,15 @@ public class FlightListFragment extends Fragment {
                             );
                             flights.add(flight);
 
+                            // Insert the flight locally if it doesn't already exist.
+                            Executors.newSingleThreadExecutor().execute(() -> {
+                                FlightDatabase db = FlightDatabase.getInstance(getActivity());
+                                List<Flight> existing = db.flightDao().getFlightByUnique(date, departurePlace, arrivalPlace, pilotName);
+                                if (existing == null || existing.isEmpty()) {
+                                    db.flightDao().insert(flight);
+                                }
+                            });
+
                         } catch (JSONException e) {
                             Log.e(TAG, "JSON Parsing error: " + e.getMessage());
                         }
@@ -188,6 +199,7 @@ public class FlightListFragment extends Fragment {
 
         requestQueue.add(jsonArrayRequest);
     }
+
 
     /**
      * Aktualizácia ListView.
@@ -222,9 +234,17 @@ public class FlightListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (isNetworkAvailable()) {
-            syncOfflineFlights();
+            SharedPreferences syncPrefs = getActivity().getSharedPreferences("SyncPrefs", Context.MODE_PRIVATE);
+            boolean justSynced = syncPrefs.getBoolean("justSynced", false);
+            if (!justSynced) {
+                syncOfflineFlights();
+            } else {
+                // Clear the flag so future resumes can sync if needed
+                syncPrefs.edit().remove("justSynced").apply();
+            }
         }
     }
+
 
     private boolean isNetworkAvailable() {
         assert getActivity() != null;
@@ -236,7 +256,8 @@ public class FlightListFragment extends Fragment {
 
     private void syncOfflineFlights() {
         Executors.newSingleThreadExecutor().execute(() -> {
-            List<Flight> unsyncedFlights = FlightDatabase.getInstance(getActivity()).flightDao().getUnsyncedFlights();
+            FlightDatabase flightDb = FlightDatabase.getInstance(getActivity());
+            List<Flight> unsyncedFlights = flightDb.flightDao().getUnsyncedOfflineFlights();
             for (Flight flight : unsyncedFlights) {
                 sendFlightToServer(flight);
             }

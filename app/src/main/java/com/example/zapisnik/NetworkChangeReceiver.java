@@ -64,12 +64,13 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
         FlightDatabase flightDb = FlightDatabase.getInstance(context);
 
         Executors.newSingleThreadExecutor().execute(() -> {
-            List<Flight> unsyncedFlights = flightDb.flightDao().getUnsyncedFlights();
+            List<Flight> unsyncedFlights = flightDb.flightDao().getUnsyncedOfflineFlights();
             for (Flight flight : unsyncedFlights) {
                 sendFlightToServer(flight, flightDb);
             }
         });
     }
+
 
     private void sendFlightToServer(Flight flight, FlightDatabase db) {
         RetrofitClient.getFlightApi().addFlight(flight).enqueue(new Callback<Void>() {

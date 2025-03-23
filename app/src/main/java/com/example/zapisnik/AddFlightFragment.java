@@ -1,6 +1,8 @@
 package com.example.zapisnik;
 
+import com.example.zapisnik.FlightDatabase;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -31,7 +33,6 @@ public class AddFlightFragment extends Fragment {
 
     // RadioGroup for selecting if the flight is single pilot
     private RadioGroup rgSinglePilot;
-
     private Button btnAddFlight;
     private FlightDatabase flightDatabase;
 
@@ -80,10 +81,8 @@ public class AddFlightFragment extends Fragment {
         etDate.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) { }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) { }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 String formattedText = formatDate(editable.toString());
@@ -160,6 +159,14 @@ public class AddFlightFragment extends Fragment {
     }
 
     private void addFlight() {
+        // Retrieve the user id from SharedPreferences
+        SharedPreferences prefs = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        int userId = prefs.getInt("userId", 0);
+        if (userId == 0) {
+            Toast.makeText(getActivity(), "User not logged in. Please log in first.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // Format required flight date
         String formattedDate = formatDate(etDate.getText().toString().trim());
         if (formattedDate.isEmpty()) {
@@ -233,7 +240,7 @@ public class AddFlightFragment extends Fragment {
                 isSinglePilot = option.equalsIgnoreCase("yes");
             }
 
-            // Create Flight object
+            // Create Flight object and set the userId (assuming Flight class has setUserId)
             Flight flight = new Flight(
                     formattedDate,
                     departurePlace,
@@ -260,16 +267,32 @@ public class AddFlightFragment extends Fragment {
                     fstdTotalTime,
                     remarks
             );
+            // Set the user ID for the flight
+            flight.setUserId(userId);
+
+            // Check network connectivity: if online, mark as not added offline and send immediately;
+            // if offline, mark as added offline and skip immediate sending.
+            boolean offline = !isNetworkAvailable();
+            flight.setAddedOffline(offline);
 
             // 1) Save flight locally
             saveFlightLocally(flight);
 
-            // 2) Always try sending flight to the server
-            sendFlightToServer(flight);
+            // 2) If online, send flight to the server immediately
+            if (!offline) {
+                sendFlightToServer(flight);
+            }
 
         } catch (NumberFormatException e) {
             Toast.makeText(getActivity(), "Please enter valid numeric values", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    // Helper method to check network availability
+    private boolean isNetworkAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnected();
     }
 
     private void saveFlightLocally(Flight flight) {
@@ -286,9 +309,18 @@ public class AddFlightFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(getActivity(), "Flight added to server!", Toast.LENGTH_SHORT).show();
+                    Executors.newSingleThreadExecutor().execute(() -> {
+                        FlightDatabase.getInstance(getActivity()).flightDao().markAsSynced(flight.getId());
+                        // Optional: clear any SharedPreferences flag if used.
+                    });
+                    if(getActivity() != null) {
+                        getActivity().runOnUiThread(() ->
+                                Toast.makeText(getActivity(), "Flight added to server!", Toast.LENGTH_SHORT).show());
+                    }
                 } else {
-                    Toast.makeText(getActivity(), "Server Error: " + response.message(), Toast.LENGTH_SHORT).show();
+                    if(getActivity() != null) {
+                        Toast.makeText(getActivity(), "Server Error: " + response.message(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 

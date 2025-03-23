@@ -12,76 +12,108 @@ public class Flight {
     private int id;
 
     @SerializedName("date")
+    @ColumnInfo(name = "date")
     private String date;
 
     @SerializedName("departurePlace")
+    @ColumnInfo(name = "departure_place")
     private String departurePlace;
 
     @SerializedName("departureTime")
+    @ColumnInfo(name = "departure_time")
     private String departureTime;
 
     @SerializedName("arrivalPlace")
+    @ColumnInfo(name = "arrival_place")
     private String arrivalPlace;
 
     @SerializedName("arrivalTime")
+    @ColumnInfo(name = "arrival_time")
     private String arrivalTime;
 
     @SerializedName("aircraftModel")
+    @ColumnInfo(name = "aircraft_model")
     private String aircraftModel;
 
     @SerializedName("registration")
+    @ColumnInfo(name = "registration")
     private String registration;
 
     @SerializedName("singlePilotTime")
-    private int singlePilotTime; // Required
+    @ColumnInfo(name = "singlePilotTime")
+    private int singlePilotTime; // If your DB column is named "singlePilotTime", otherwise change to snake_case
 
     @SerializedName("multiPilotTime")
-    private Integer multiPilotTime; // Optional
+    @ColumnInfo(name = "multiPilotTime")
+    private Integer multiPilotTime;
 
     @SerializedName("totalFlightTime")
-    private int totalFlightTime; // Required
+    @ColumnInfo(name = "totalFlightTime")
+    private int totalFlightTime;
 
     @SerializedName("pilotName")
+    @ColumnInfo(name = "pilot_name")
     private String pilotName;
 
     @SerializedName("singlePilot")
-    private boolean singlePilot; // Required (assumed)
+    @ColumnInfo(name = "singlePilot")
+    private boolean singlePilot;
 
     @SerializedName("landingsDay")
-    private Integer landingsDay; // Optional
+    @ColumnInfo(name = "landings_day")
+    private Integer landingsDay;
 
     @SerializedName("landingsNight")
-    private Integer landingsNight; // Optional
+    @ColumnInfo(name = "landings_night")
+    private Integer landingsNight;
 
     @SerializedName("nightTime")
-    private Integer nightTime; // Optional
+    @ColumnInfo(name = "nightTime")
+    private Integer nightTime;
 
     @SerializedName("ifrTime")
-    private Integer ifrTime; // Optional
+    @ColumnInfo(name = "ifr_time")
+    private Integer ifrTime;
 
     @SerializedName("picTime")
-    private Integer picTime; // Optional
+    @ColumnInfo(name = "pic_time")
+    private Integer picTime;
 
     @SerializedName("copilotTime")
-    private Integer copilotTime; // Optional
+    @ColumnInfo(name = "copilot_time")
+    private Integer copilotTime;
 
     @SerializedName("dualTime")
-    private Integer dualTime; // Optional
+    @ColumnInfo(name = "dual_time")
+    private Integer dualTime;
 
     @SerializedName("instructorTime")
-    private Integer instructorTime; // Optional
+    @ColumnInfo(name = "instructor_time")
+    private Integer instructorTime;
 
     @SerializedName("fstdDate")
-    private String fstdDate; // Optional
+    @ColumnInfo(name = "fstd_date")
+    private String fstdDate;
 
     @SerializedName("fstdType")
-    private String fstdType; // Optional
+    @ColumnInfo(name = "fstd_type")
+    private String fstdType;
 
     @SerializedName("fstdTotalTime")
-    private Integer fstdTotalTime; // Optional
+    @ColumnInfo(name = "fstd_total_time")
+    private Integer fstdTotalTime;
 
     @SerializedName("remarks")
+    @ColumnInfo(name = "remarks")
     private String remarks;
+
+    @SerializedName("userId")
+    @ColumnInfo(name = "user_id")
+    private int userId;
+
+    @SerializedName("addedOffline")
+    @ColumnInfo(name = "added_offline")
+    private boolean addedOffline;
 
     @ColumnInfo(name = "is_synced")
     private boolean isSynced;
@@ -119,7 +151,6 @@ public class Flight {
     }
 
     // Getters and setters
-
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -194,6 +225,12 @@ public class Flight {
 
     public String getRemarks() { return remarks; }
     public void setRemarks(String remarks) { this.remarks = remarks; }
+
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
+
+    public boolean isAddedOffline() { return addedOffline; }
+    public void setAddedOffline(boolean addedOffline) { this.addedOffline = addedOffline; }
 
     public boolean isSynced() { return isSynced; }
     public void setSynced(boolean synced) { isSynced = synced; }
