@@ -2,6 +2,7 @@ package com.example.zapisnik;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -210,8 +211,18 @@ public class AddUltralightyFragment extends Fragment {
     }
 
     // Hlavná metóda: Zhromažďuje údaje, vytvára objekty Certificate, ukladá ich lokálne a odosiela na server.
+    // Inside AddUltralightyFragment.java
+
     private void addCertificate() {
-        // Overenie, či je vybraný aspoň jeden typ kvalifikácie.
+        // Retrieve user id from SharedPreferences
+        SharedPreferences prefs = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        int userId = prefs.getInt("userId", 0);
+        if (userId == 0) {
+            Toast.makeText(getActivity(), "User not logged in. Please log in first.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Check that at least one certificate type is selected.
         if (!chkUllUltralighty.isChecked() && !chkVfrUltralighty.isChecked() &&
                 !chkInstruktor.isChecked() && !chkVlekar.isChecked() &&
                 !chkSkusobnyPilot.isChecked() && !chkVysadzovac.isChecked() &&
@@ -225,7 +236,6 @@ public class AddUltralightyFragment extends Fragment {
         }
 
         String note = etNote.getText().toString().trim();
-
         List<Certificate> certificatesToAdd = new ArrayList<>();
 
         // Letecké kvalifikácie - Ultralighty
@@ -313,7 +323,16 @@ public class AddUltralightyFragment extends Fragment {
             return;
         }
 
-        // Vloženie certifikátov do lokálnej databázy a odoslanie na server, ak je dostupná sieť.
+        // Determine if we're offline
+        boolean offline = !isWiFiConnected();
+
+        // Set the userId and offline flag for each certificate
+        for (Certificate cert : certificatesToAdd) {
+            cert.setUserId(userId);
+            cert.setAddedOffline(offline);
+        }
+
+        // Insert certificates into local database and send to server if connected
         Executors.newSingleThreadExecutor().execute(() -> {
             for (Certificate cert : certificatesToAdd) {
                 database.certificateDao().insertCertificate(cert);
@@ -333,6 +352,7 @@ public class AddUltralightyFragment extends Fragment {
             }
         });
     }
+
 
     // Vyčistenie všetkých vstupných polí a reset checkboxov.
     private void clearFields() {

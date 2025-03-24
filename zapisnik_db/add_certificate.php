@@ -23,14 +23,17 @@ $certificate_type = isset($data['certificate_type']) ? $data['certificate_type']
 $expiry_date = isset($data['expiry_date']) ? $data['expiry_date'] : '';
 $note = isset($data['note']) ? $data['note'] : '';
 
-// Prepare the SQL query for insertion
-$stmt = $conn->prepare("INSERT INTO certificates (section, platform, certificate_type, expiry_date, note) VALUES (?, ?, ?, ?, ?)");
+// Use the same JSON key as in the flights code ("userId")
+$user_id = isset($data['userId']) ? (int)$data['userId'] : 0;
+
+// Prepare the SQL query for insertion, now including user_id
+$stmt = $conn->prepare("INSERT INTO certificates (section, platform, certificate_type, expiry_date, note, user_id) VALUES (?, ?, ?, ?, ?, ?)");
 if ($stmt === false) {
     die('Error preparing the SQL query: ' . $conn->error);
 }
 
-// Bind parameters: "sssss" means five strings.
-$stmt->bind_param("sssss", $section, $platform, $certificate_type, $expiry_date, $note);
+// Bind parameters: "sssss" for five strings and "i" for the user_id integer.
+$stmt->bind_param("sssssi", $section, $platform, $certificate_type, $expiry_date, $note, $user_id);
 
 // Execute the query
 if ($stmt->execute()) {

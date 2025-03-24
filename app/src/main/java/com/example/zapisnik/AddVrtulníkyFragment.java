@@ -1,6 +1,7 @@
 package com.example.zapisnik;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -226,7 +227,15 @@ public class AddVrtulníkyFragment extends Fragment {
 
     // Hlavná metóda na zber dát, vytvorenie objektov Certificate a ich uloženie lokálne (a odoslanie na server, ak je sieť dostupná).
     private void addCertificate() {
-        // Overenie, či bolo aspoň jedno certifikačné pole vybraté.
+        // Retrieve user id from SharedPreferences
+        SharedPreferences prefs = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        int userId = prefs.getInt("userId", 0);
+        if (userId == 0) {
+            Toast.makeText(getActivity(), "User not logged in. Please log in first.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Ensure at least one certificate type is selected.
         if (!chkPpl.isChecked() && !chkCpl.isChecked() && !chkAtpl.isChecked() &&
                 !chkIr.isChecked() && !chkNight.isChecked() && !chkFi.isChecked() &&
                 !chkIri.isChecked() && !chkTst.isChecked() && !chkPar.isChecked() &&
@@ -240,9 +249,6 @@ public class AddVrtulníkyFragment extends Fragment {
         }
 
         String note = etNote.getText().toString().trim();
-        String acquiredDate = "";
-        int daysRemaining = 0;
-
         List<Certificate> certificatesToAdd = new ArrayList<>();
 
         // Letecké kvalifikácie - Vrtuľníky
@@ -350,6 +356,14 @@ public class AddVrtulníkyFragment extends Fragment {
             return;
         }
 
+        // Set the user id and offline flag for each certificate
+        boolean offline = !isWiFiConnected();
+        for (Certificate cert : certificatesToAdd) {
+            cert.setUserId(userId);
+            cert.setAddedOffline(offline);
+        }
+
+        // Insert certificates locally and send them to the server if network is available.
         Executors.newSingleThreadExecutor().execute(() -> {
             for (Certificate cert : certificatesToAdd) {
                 database.certificateDao().insertCertificate(cert);
@@ -369,6 +383,7 @@ public class AddVrtulníkyFragment extends Fragment {
             }
         });
     }
+
 
     // Vyčistenie všetkých vstupných polí a reset checkboxov.
     private void clearFields() {

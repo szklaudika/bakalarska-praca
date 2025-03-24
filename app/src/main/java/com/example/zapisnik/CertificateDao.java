@@ -24,14 +24,8 @@ public interface CertificateDao {
     @Query("SELECT * FROM certificates")
     List<Certificate> getAllCertificates();
 
-    @Query("SELECT * FROM certificates WHERE is_synced = 0")
-    List<Certificate> getUnsyncedCertificates();
-
     @Query("SELECT * FROM certificates WHERE is_synced = 1")
     List<Certificate> getSyncedCertificates();
-
-    @Query("UPDATE certificates SET is_synced = 1 WHERE id = :id")
-    void markAsSynced(int id);
 
     @Query("SELECT * FROM certificates WHERE certificate_type = :certificateName LIMIT 1")
     Certificate getCertificateByName(String certificateName);
@@ -41,6 +35,12 @@ public interface CertificateDao {
 
     @Query("SELECT * FROM certificates WHERE id = :id LIMIT 1")
     Certificate getCertificateById(int id);
+
+    @Query("SELECT * FROM certificates WHERE is_synced = 0 AND added_offline = 1")
+    List<Certificate> getUnsyncedCertificates();
+
+    @Query("UPDATE certificates SET is_synced = 1 WHERE id = :certificateId")
+    void markAsSynced(int certificateId);
 
 
 }

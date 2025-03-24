@@ -205,12 +205,14 @@ public class ProfileFragment extends Fragment {
                 }
             }
 
-            getActivity().runOnUiThread(() -> {
-                items.clear();
-                items.addAll(tempItems);
-                adapter = new SectionedCertificateAdapter(getActivity(), items);
-                listViewCertificates.setAdapter(adapter);
-            });
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    items.clear();
+                    items.addAll(tempItems);
+                    adapter = new SectionedCertificateAdapter(getActivity(), items);
+                    listViewCertificates.setAdapter(adapter);
+                });
+            }
         });
     }
 
@@ -259,17 +261,14 @@ public class ProfileFragment extends Fragment {
      * Removes local certificate records that are not present in the server data.
      */
     private void removeLocalJunkCertificates(List<Certificate> serverCertificates) {
-        // Create a set of certificate IDs from the server
         Set<Integer> serverIds = new HashSet<>();
         for (Certificate cert : serverCertificates) {
             serverIds.add(cert.getId());
         }
-        // Run deletion on a background thread
         Executors.newSingleThreadExecutor().execute(() -> {
             List<Certificate> localCertificates = database.certificateDao().getAllCertificates();
             for (Certificate localCert : localCertificates) {
                 if (!serverIds.contains(localCert.getId())) {
-                    // This local certificate is considered junk and should be deleted
                     database.certificateDao().deleteCertificate(localCert);
                     Log.d(TAG, "Deleted junk local certificate with id: " + localCert.getId());
                 }
@@ -431,5 +430,43 @@ public class ProfileFragment extends Fragment {
         super.onResume();
         // Recalculate flight aggregates when the fragment resumes
         calculateFlightAggregatesFromLocal();
+
+        // If network is available, sync offline certificates to the server
+        if (isNetworkAvailable()) {
+            syncOfflineCertificates();
+        }
+    }
+
+    // Method to sync all offline certificates to the server
+    private void syncOfflineCertificates() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            // Fetch certificates that were added offline and are not yet synced
+            List<Certificate> unsyncedCertificates = database.certificateDao().getUnsyncedCertificates();
+            for (Certificate cert : unsyncedCertificates) {
+                sendCertificateToServer(cert);
+            }
+        });
+    }
+
+    // Sends a certificate to the server using Retrofit and marks it as synced on success.
+    private void sendCertificateToServer(Certificate certificate) {
+        RetrofitClient.getApi().addCertificate(certificate).enqueue(new retrofit2.Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    // Mark certificate as synced in the local database.
+                    Executors.newSingleThreadExecutor().execute(() -> {
+                        database.certificateDao().markAsSynced(certificate.getId());
+                    });
+                } else {
+                    Log.d("ProfileFragment", "Failed to sync certificate: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("ProfileFragment", "Failed to sync certificate: " + t.getMessage());
+            }
+        });
     }
 }

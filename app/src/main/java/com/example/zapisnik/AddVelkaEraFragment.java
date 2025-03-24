@@ -2,6 +2,7 @@ package com.example.zapisnik;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -11,10 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -54,6 +55,7 @@ public class AddVelkaEraFragment extends Fragment {
     private EditText etNote;
     private Button btnAddCertificate;
 
+    // Database instance
     private CertificateDatabase database;
 
     @Nullable
@@ -236,7 +238,7 @@ public class AddVelkaEraFragment extends Fragment {
                 sb.replace(5, 7, "12");
             }
         }
-        // Similar check can be done for the day.
+        // Similar check for the day.
         if (sb.length() >= 10) {
             String day = sb.substring(8, 10);
             if (!day.isEmpty() && Integer.parseInt(day) > 31) {
@@ -247,7 +249,6 @@ public class AddVelkaEraFragment extends Fragment {
     }
 
     // Helper: Validates the expiry date for a checked certificate.
-    // Returns the expiry text if valid; if the input is "0" (or similar), shows a Toast and returns null.
     private String requireExpiry(CheckBox checkbox, EditText expiryEditText, String fieldName) {
         if (checkbox.isChecked()) {
             String expiry = expiryEditText.getText().toString().trim();
@@ -262,6 +263,14 @@ public class AddVelkaEraFragment extends Fragment {
 
     // Main method: Collects data, creates Certificate objects, inserts them locally, and sends each to the server.
     private void addCertificate() {
+        // Retrieve user id from SharedPreferences
+        SharedPreferences prefs = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        int userId = prefs.getInt("userId", 0);
+        if (userId == 0) {
+            Toast.makeText(getActivity(), "User not logged in. Please log in first.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // Check that at least one certificate type is selected.
         if (!chkPpl.isChecked() && !chkCpl.isChecked() && !chkAtpl.isChecked() &&
                 !chkSepLand.isChecked() && !chkSepSea.isChecked() && !chkMepLand.isChecked() &&
@@ -279,9 +288,6 @@ public class AddVelkaEraFragment extends Fragment {
         }
 
         String note = etNote.getText().toString().trim();
-        String acquiredDate = ""; // Not used here
-        int daysRemaining = 0;    // Not used here
-
         // Create a list to hold certificate records.
         List<Certificate> certificatesToAdd = new ArrayList<>();
 
@@ -434,6 +440,14 @@ public class AddVelkaEraFragment extends Fragment {
         if (certificatesToAdd.isEmpty()) {
             Toast.makeText(getActivity(), "Please select at least one certificate type and provide expiry date", Toast.LENGTH_SHORT).show();
             return;
+        }
+
+        // Retrieve and set the user id for each certificate and mark as addedOffline if no network.
+
+        boolean offline = !isWiFiConnected();
+        for (Certificate cert : certificatesToAdd) {
+            cert.setUserId(userId);
+            cert.setAddedOffline(offline);
         }
 
         // Insert each certificate locally and send immediately to server (if network available).

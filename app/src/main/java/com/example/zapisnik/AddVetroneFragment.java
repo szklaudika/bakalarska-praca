@@ -2,6 +2,7 @@ package com.example.zapisnik;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -209,7 +210,15 @@ public class AddVetroneFragment extends Fragment {
 
     // Zhromažďuje údaje, vytvára objekty Certificate, ukladá ich lokálne a odosiela na server.
     private void addCertificate() {
-        // Overí, či je vybraný aspoň jeden typ certifikátu.
+        // Retrieve user id from SharedPreferences
+        SharedPreferences prefs = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        int userId = prefs.getInt("userId", 0);
+        if (userId == 0) {
+            Toast.makeText(getActivity(), "User not logged in. Please log in first.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Check that at least one certificate type is selected.
         if (!chkGldVetrone.isChecked() && !chkTmgVetrone.isChecked() && !chkFiVetrone.isChecked() && !chkTstVetrone.isChecked() &&
                 !chkMedClass1Vetrone.isChecked() && !chkMedClass2Vetrone.isChecked() &&
                 !chkVseobecnyPreukazVetrone.isChecked() && !chkObmedzenyPreukazVetrone.isChecked() &&
@@ -298,7 +307,14 @@ public class AddVetroneFragment extends Fragment {
             return;
         }
 
-        // Vloženie certifikátov do lokálnej databázy a odoslanie na server (ak je sieť dostupná).
+        // Set the user id and mark as addedOffline if no network is available.
+        boolean offline = !isWiFiConnected();
+        for (Certificate cert : certificatesToAdd) {
+            cert.setUserId(userId);
+            cert.setAddedOffline(offline);
+        }
+
+        // Insert certificates locally and send them to the server (if network available).
         Executors.newSingleThreadExecutor().execute(() -> {
             for (Certificate cert : certificatesToAdd) {
                 database.certificateDao().insertCertificate(cert);
@@ -318,6 +334,7 @@ public class AddVetroneFragment extends Fragment {
             }
         });
     }
+
 
     // Vyčistenie všetkých vstupných polí a reset checkboxov.
     private void clearFields() {

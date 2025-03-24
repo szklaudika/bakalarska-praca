@@ -25,7 +25,6 @@ public class Certificate {
     @ColumnInfo(name = "expiry_date")
     private String expiryDate;
 
-
     @ColumnInfo(name = "note")
     private String note;
 
@@ -35,20 +34,27 @@ public class Certificate {
     @SerializedName("error")
     private String error;
 
-    // Nový konštruktor so všetkými potrebnými poľami
+    // Add userId field with appropriate column info if needed.
+    @ColumnInfo(name = "user_id")
+    private int userId;
+
+    // Add the addedOffline field.
+    @ColumnInfo(name = "added_offline")
+    private boolean addedOffline;
+
+    // Constructor with required fields
     public Certificate(String section, String platform, String certificateType, String expiryDate, String note) {
         this.section = section;
         this.platform = platform;
         this.certificateType = certificateType;
-
         this.expiryDate = expiryDate;
-
         this.note = note;
         this.isSynced = false;
         this.error = null;
+        // Optionally, you can set defaults for userId and addedOffline here if needed.
     }
 
-    // Gettery a settery
+    // Getters and setters
     public int getId() {
         return id;
     }
@@ -73,14 +79,12 @@ public class Certificate {
     public void setCertificateType(String certificateType) {
         this.certificateType = certificateType;
     }
-
     public String getExpiryDate() {
         return expiryDate;
     }
     public void setExpiryDate(String expiryDate) {
         this.expiryDate = expiryDate;
     }
-
     public String getNote() {
         return note;
     }
@@ -99,6 +103,16 @@ public class Certificate {
     public void setError(String error) {
         this.error = error;
     }
-
-
+    public int getUserId() {
+        return userId;
+    }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+    public boolean isAddedOffline() {
+        return addedOffline;
+    }
+    public void setAddedOffline(boolean addedOffline) {
+        this.addedOffline = addedOffline;
+    }
 }
