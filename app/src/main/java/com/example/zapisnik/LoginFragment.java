@@ -2,6 +2,8 @@ package com.example.zapisnik;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -76,6 +78,32 @@ public class LoginFragment extends Fragment {
     }
 
     private void loginUser(String usernameOrEmail, String password) {
+        // Check if network is available
+        if (!isNetworkAvailable()) {
+            // Offline login: Compare with stored credentials (these should have been saved on a previous successful login)
+            SharedPreferences prefs = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+            String storedUsername = prefs.getString("username", "");
+            String storedEmail = prefs.getString("email", "");
+            String storedPassword = prefs.getString("password", "");  // Ensure password was stored on successful online login.
+            int storedUserId = prefs.getInt("userId", 0);
+
+            if (storedUserId != 0 &&
+                    ((storedUsername.equals(usernameOrEmail)) || (storedEmail.equals(usernameOrEmail))) &&
+                    storedPassword.equals(password)) {
+                Toast.makeText(getActivity(), "Offline login successful", Toast.LENGTH_SHORT).show();
+
+                // Redirect to ProfileFragment after successful offline login
+                ProfileFragment profileFragment = new ProfileFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, profileFragment)
+                        .commit();
+            } else {
+                Toast.makeText(getActivity(), "Offline login failed. Please connect to the internet for first-time login.", Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
+
+        // Online login process
         UserApi api = RetrofitClient.getUserApi();
         Call<LoginResponse> call = api.loginUser(usernameOrEmail, password);
 
@@ -85,12 +113,13 @@ public class LoginFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     LoginResponse loginResponse = response.body();
                     if (loginResponse.isSuccess()) {
-                        // Store user data in SharedPreferences
+                        // Store user data in SharedPreferences, including password for offline login.
                         SharedPreferences prefs = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putInt("userId", loginResponse.getUser().getId());
                         editor.putString("username", loginResponse.getUser().getUsername());
                         editor.putString("email", loginResponse.getUser().getEmail());
+                        editor.putString("password", password); // Storing password (note: consider using secure storage)
                         editor.apply();
 
                         Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
@@ -114,5 +143,11 @@ public class LoginFragment extends Fragment {
                 Toast.makeText(getActivity(), "Login failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

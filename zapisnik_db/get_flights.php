@@ -15,17 +15,27 @@ if ($conn->connect_error) {
     exit();
 }
 
+// Build SQL query, optionally filtering by user_id if provided
+$userIdFilter = "";
+if (isset($_GET['user_id']) && !empty($_GET['user_id'])) {
+    $userId = intval($_GET['user_id']);
+    $userIdFilter = " WHERE user_id = $userId";
+}
+
 $sql = "SELECT id, date, departure_place, departure_time, arrival_place, arrival_time, aircraft_model, registration, 
-         single_pilot_time, multi_pilot_time, total_flight_time, pilot_name, single_pilot, landings_day, landings_night, 
-         night_time, ifr_time, pic_time, copilot_time, dual_time, instructor_time, fstd_date, fstd_type, fstd_total_time, remarks FROM flights";
+        single_pilot_time, multi_pilot_time, total_flight_time, pilot_name, single_pilot, landings_day, landings_night, 
+        night_time, ifr_time, pic_time, copilot_time, dual_time, instructor_time, fstd_date, fstd_type, fstd_total_time, remarks, user_id 
+        FROM flights" . $userIdFilter;
+
 $result = $conn->query($sql);
 
 $flights = array();
-if ($result->num_rows > 0) {
+if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $flights[] = $row;
     }
 }
+
 echo json_encode($flights);
 $conn->close();
 ?>

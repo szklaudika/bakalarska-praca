@@ -75,22 +75,24 @@ public class FlightListFragment extends Fragment {
                 args.putString("arrivalTime", selectedFlight.getArrivalTime());
                 args.putString("aircraftModel", selectedFlight.getAircraftModel());
                 args.putString("registration", selectedFlight.getRegistration());
+                // singlePilotTime is a primitive int, so it's safe
                 args.putInt("singlePilotTime", selectedFlight.getSinglePilotTime());
-                args.putInt("multiPilotTime", selectedFlight.getMultiPilotTime());
+                // For nullable Integer fields, use a null-check with a default value of 0.
+                args.putInt("multiPilotTime", selectedFlight.getMultiPilotTime() == null ? 0 : selectedFlight.getMultiPilotTime());
                 args.putInt("totalFlightTime", selectedFlight.getTotalFlightTime());
                 args.putString("pilotName", selectedFlight.getPilotName());
                 args.putBoolean("singlePilot", selectedFlight.isSinglePilot());
-                args.putInt("landingsDay", selectedFlight.getLandingsDay());
-                args.putInt("landingsNight", selectedFlight.getLandingsNight());
-                args.putInt("nightTime", selectedFlight.getNightTime());
-                args.putInt("ifrTime", selectedFlight.getIfrTime());
-                args.putInt("picTime", selectedFlight.getPicTime());
-                args.putInt("copilotTime", selectedFlight.getCopilotTime());
-                args.putInt("dualTime", selectedFlight.getDualTime());
-                args.putInt("instructorTime", selectedFlight.getInstructorTime());
+                args.putInt("landingsDay", selectedFlight.getLandingsDay() == null ? 0 : selectedFlight.getLandingsDay());
+                args.putInt("landingsNight", selectedFlight.getLandingsNight() == null ? 0 : selectedFlight.getLandingsNight());
+                args.putInt("nightTime", selectedFlight.getNightTime() == null ? 0 : selectedFlight.getNightTime());
+                args.putInt("ifrTime", selectedFlight.getIfrTime() == null ? 0 : selectedFlight.getIfrTime());
+                args.putInt("picTime", selectedFlight.getPicTime() == null ? 0 : selectedFlight.getPicTime());
+                args.putInt("copilotTime", selectedFlight.getCopilotTime() == null ? 0 : selectedFlight.getCopilotTime());
+                args.putInt("dualTime", selectedFlight.getDualTime() == null ? 0 : selectedFlight.getDualTime());
+                args.putInt("instructorTime", selectedFlight.getInstructorTime() == null ? 0 : selectedFlight.getInstructorTime());
                 args.putString("fstdDate", selectedFlight.getFstdDate());
                 args.putString("fstdType", selectedFlight.getFstdType());
-                args.putInt("fstdTotalTime", selectedFlight.getFstdTotalTime());
+                args.putInt("fstdTotalTime", selectedFlight.getFstdTotalTime() == null ? 0 : selectedFlight.getFstdTotalTime());
                 args.putString("remarks", selectedFlight.getRemarks());
 
                 detailFragment.setArguments(args);
@@ -101,26 +103,35 @@ public class FlightListFragment extends Fragment {
                 transaction.commit();
             }
         });
-
         return view;
     }
 
     private void loadFlightsFromDatabase() {
-        List<Flight> flightsFromDb = FlightDatabase.getInstance(getActivity()).flightDao().getAllFlights();
+        SharedPreferences prefs = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        int userId = prefs.getInt("userId", 0);
+        List<Flight> flightsFromDb = FlightDatabase.getInstance(getActivity())
+                .flightDao().getFlightsByUserId(userId);
         flights.clear();
         flights.addAll(flightsFromDb);
         updateListView();
     }
 
+
     private void fetchFlightsFromServer() {
-        String url = "http://10.0.2.2/zapisnik_db/get_flights.php";
+        // Retrieve the logged-in user's id
+        SharedPreferences prefs = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        int userId = prefs.getInt("userId", 0);
+
+        // Append the user_id parameter to the URL
+        String url = "http://10.0.2.2/zapisnik_db/get_flights.php?user_id=" + userId;
+
         assert getActivity() != null;
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     Log.d(TAG, "Response from server: " + response.toString());
-                    flights.clear();
+                    // Instead of clearing the in-memory flights list, update the local DB with new server data.
                     for (int i = 0; i < response.length(); i++) {
                         try {
                             JSONObject flightJson = response.getJSONObject(i);
@@ -177,9 +188,7 @@ public class FlightListFragment extends Fragment {
                                     fstdTotalTime,
                                     remarks
                             );
-                            flights.add(flight);
-
-                            // Insert the flight locally if it doesn't already exist.
+                            // Update the local DB only if this flight doesn't already exist.
                             Executors.newSingleThreadExecutor().execute(() -> {
                                 FlightDatabase db = FlightDatabase.getInstance(getActivity());
                                 List<Flight> existing = db.flightDao().getFlightByUnique(date, departurePlace, arrivalPlace, pilotName);
@@ -187,18 +196,20 @@ public class FlightListFragment extends Fragment {
                                     db.flightDao().insert(flight);
                                 }
                             });
-
                         } catch (JSONException e) {
                             Log.e(TAG, "JSON Parsing error: " + e.getMessage());
                         }
                     }
-                    updateListView();
+                    // Refresh the UI by re-loading all flights from the local database.
+                    loadFlightsFromDatabase();
                 },
                 error -> Log.e(TAG, "Error fetching flights: " + error.getMessage())
         );
 
         requestQueue.add(jsonArrayRequest);
     }
+
+
 
 
     /**

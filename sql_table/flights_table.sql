@@ -25,3 +25,5 @@ CREATE TABLE flights (
     fstd_total_time INT,
     remarks TEXT
 );
+
+

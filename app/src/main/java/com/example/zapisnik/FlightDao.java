@@ -11,8 +11,8 @@ public interface FlightDao {
     @Insert
     void insert(Flight flight);
 
-    @Query("SELECT * FROM flights")
-    List<Flight> getAllFlights();
+    @Query("SELECT * FROM flights WHERE user_id = :userId")
+    List<Flight> getFlightsByUserId(int userId);
 
     // Only get flights that were added offline and not yet synced.
     @Query("SELECT * FROM flights WHERE is_synced = 0 AND added_offline = 1")
@@ -23,6 +23,13 @@ public interface FlightDao {
 
     @Delete
     void delete(Flight flight);
+
+    @Query("SELECT * FROM flights")
+    List<Flight> getAllFlights();
+
+    @Query("SELECT * FROM flights WHERE id = :flightId LIMIT 1")
+    Flight getFlightById(int flightId);
+
 
     // New method to check for an existing flight by unique fields.
     @Query("SELECT * FROM flights WHERE date = :date AND departure_place = :departurePlace AND arrival_place = :arrivalPlace AND pilot_name = :pilotName")

@@ -41,7 +41,7 @@ public class Flight {
 
     @SerializedName("singlePilotTime")
     @ColumnInfo(name = "singlePilotTime")
-    private int singlePilotTime; // If your DB column is named "singlePilotTime", otherwise change to snake_case
+    private int singlePilotTime;
 
     @SerializedName("multiPilotTime")
     @ColumnInfo(name = "multiPilotTime")
