@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/checkbox_background"
+
             android:padding="8dp"
             android:layout_marginTop="12dp">
 
@@ -43,8 +43,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="PPL   -"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
                 <EditText
                     android:id="@+id/et_expiry_ppl"
                     android:layout_width="0dp"
@@ -69,9 +69,9 @@
                     android:id="@+id/chk_cpl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@color/checkbox_tint"
+                    android:buttonTint="?attr/checkboxTint"
                     android:text="CPL   -"
-                    android:textColor="#FFFFFF"
+                    android:textColor="?android:textColorPrimary"
                     tools:ignore="TouchTargetSizeCheck" />
                 <EditText
                     android:id="@+id/et_expiry_cpl"
@@ -96,8 +96,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ATPL   -"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
                 <EditText
                     android:id="@+id/et_expiry_atpl"
                     android:layout_width="0dp"
@@ -121,9 +121,9 @@
                     android:id="@+id/chk_sep_land"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@color/checkbox_tint"
+                    android:buttonTint="?attr/checkboxTint"
                     android:text="SEP land   -"
-                    android:textColor="#FFFFFF"
+                    android:textColor="?android:textColorPrimary"
                     tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
                 <EditText
                     android:id="@+id/et_expiry_sep_land"
@@ -148,8 +148,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="SEP sea   -"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
                 <EditText
                     android:id="@+id/et_expiry_sep_sea"
                     android:layout_width="0dp"
@@ -173,8 +173,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="MEP land   -"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
                 <EditText
                     android:id="@+id/et_expiry_mep_land"
                     android:layout_width="0dp"
@@ -198,8 +198,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="MEP sea   -"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
                 <EditText
                     android:id="@+id/et_expiry_mep_sea"
                     android:layout_width="0dp"
@@ -223,8 +223,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="IR SEP   -"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
                 <EditText
                     android:id="@+id/et_expiry_ir_sep"
                     android:layout_width="0dp"
@@ -248,8 +248,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="IR   -"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
                 <EditText
                     android:id="@+id/et_expiry_ir"
                     android:layout_width="0dp"
@@ -273,8 +273,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="MEP   -"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
                 <EditText
                     android:id="@+id/et_expiry_mep"
                     android:layout_width="0dp"
@@ -298,8 +298,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="NIGHT   -"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
                 <EditText
                     android:id="@+id/et_expiry_night"
                     android:layout_width="0dp"
@@ -323,8 +323,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="FI   -"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
                 <EditText
                     android:id="@+id/et_expiry_fi"
                     android:layout_width="0dp"
@@ -348,8 +348,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="IRI   -"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
                 <EditText
                     android:id="@+id/et_expiry_iri"
                     android:layout_width="0dp"
@@ -373,8 +373,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TOW   -"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
                 <EditText
                     android:id="@+id/et_expiry_tow"
                     android:layout_width="0dp"
@@ -398,8 +398,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TST   -"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
                 <EditText
                     android:id="@+id/et_expiry_tst"
                     android:layout_width="0dp"
@@ -423,8 +423,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="PAR   -"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
                 <EditText
                     android:id="@+id/et_expiry_par"
                     android:layout_width="0dp"
@@ -448,8 +448,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ACR   -"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
                 <EditText
                     android:id="@+id/et_expiry_acr"
                     android:layout_width="0dp"
@@ -473,8 +473,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="MCC   -"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
                 <EditText
                     android:id="@+id/et_expiry_mcc"
                     android:layout_width="0dp"
@@ -488,13 +488,19 @@
 
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginVertical="8dp"
+            android:background="@drawable/dashed_divider" />
+
         <!-- Medical - Velká éra -->
         <LinearLayout
             android:id="@+id/layout_medical_velka_era"
             android:layout_width="match_parent"
             android:layout_height="137dp"
             android:layout_marginTop="12dp"
-            android:background="@drawable/checkbox_background"
+
             android:orientation="vertical"
             android:padding="8dp">
 
@@ -518,9 +524,9 @@
                     android:id="@+id/chk_med_class1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@color/checkbox_tint"
+                    android:buttonTint="?attr/checkboxTint"
                     android:text="Medical Certificate Class 1  -"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="?android:textColorPrimary" />
 
                 <EditText
                     android:id="@+id/et_expiry_med_class1"
@@ -545,9 +551,9 @@
                     android:id="@+id/chk_med_class2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@color/checkbox_tint"
+                    android:buttonTint="?attr/checkboxTint"
                     android:text="Medical Certificate Class 2  -"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="?android:textColorPrimary" />
 
                 <EditText
                     android:id="@+id/et_expiry_med_class2"
@@ -561,13 +567,19 @@
             </LinearLayout>
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginVertical="8dp"
+            android:background="@drawable/dashed_divider" />
+
         <!-- Rádio - Velká éra -->
         <LinearLayout
             android:id="@+id/layout_radio_velka_era"
             android:layout_width="match_parent"
             android:layout_height="145dp"
             android:layout_marginTop="12dp"
-            android:background="@drawable/checkbox_background"
+
             android:orientation="vertical"
             android:padding="8dp">
 
@@ -591,9 +603,9 @@
                     android:id="@+id/chk_vseobecny_preukaz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@color/checkbox_tint"
+                    android:buttonTint="?attr/checkboxTint"
                     android:text="Všeobecný preukaz radiofonisty  -"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="?android:textColorPrimary" />
 
                 <EditText
                     android:id="@+id/et_expiry_vseobecny_preukaz"
@@ -618,9 +630,9 @@
                     android:id="@+id/chk_obmedzeny_preukaz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@color/checkbox_tint"
+                    android:buttonTint="?attr/checkboxTint"
                     android:text="Obmedzený preukaz radionofisty  -"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="?android:textColorPrimary" />
 
                 <EditText
                     android:id="@+id/et_expiry_obmedzeny_preukaz"
@@ -634,13 +646,19 @@
             </LinearLayout>
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginVertical="8dp"
+            android:background="@drawable/dashed_divider" />
+
         <!-- Angličtina - Velká éra -->
         <LinearLayout
             android:id="@+id/layout_anglictina_velka_era"
             android:layout_width="match_parent"
             android:layout_height="234dp"
             android:layout_marginTop="12dp"
-            android:background="@drawable/checkbox_background"
+
             android:orientation="vertical"
             android:padding="8dp">
 
@@ -664,9 +682,9 @@
                     android:id="@+id/chk_english_level4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@color/checkbox_tint"
+                    android:buttonTint="?attr/checkboxTint"
                     android:text="ICAO English LEVEL 4   -"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="?android:textColorPrimary" />
 
                 <EditText
                     android:id="@+id/et_expiry_english_level4"
@@ -691,9 +709,9 @@
                     android:id="@+id/chk_english_level5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@color/checkbox_tint"
+                    android:buttonTint="?attr/checkboxTint"
                     android:text="ICAO English LEVEL 5   -"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="?android:textColorPrimary" />
 
                 <EditText
                     android:id="@+id/et_expiry_english_level5"
@@ -718,9 +736,9 @@
                     android:id="@+id/chk_english_level6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@color/checkbox_tint"
+                    android:buttonTint="?attr/checkboxTint"
                     android:text="ICAO English LEVEL 6   -"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="?android:textColorPrimary" />
 
                 <EditText
                     android:id="@+id/et_expiry_english_level6"
@@ -745,9 +763,9 @@
                     android:id="@+id/chk_english_ifr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@color/checkbox_tint"
+                    android:buttonTint="?attr/checkboxTint"
                     android:text="IFR angličtina   -"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="?android:textColorPrimary" />
 
                 <EditText
                     android:id="@+id/et_expiry_english_ifr"
@@ -761,13 +779,19 @@
             </LinearLayout>
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginVertical="8dp"
+            android:background="@drawable/dashed_divider" />
+
         <!-- Poistka - Velká éra -->
         <LinearLayout
             android:id="@+id/layout_poistka_velka_era"
             android:layout_width="match_parent"
             android:layout_height="129dp"
             android:layout_marginTop="12dp"
-            android:background="@drawable/checkbox_background"
+
             android:orientation="vertical"
             android:padding="8dp">
 
@@ -791,9 +815,9 @@
                     android:id="@+id/chk_poistenie_zodpovednost_cr_sk"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@color/checkbox_tint"
+                    android:buttonTint="?attr/checkboxTint"
                     android:text="Poistenie zodpovednosti ČR + SK  -"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="?android:textColorPrimary" />
 
                 <EditText
                     android:id="@+id/et_expiry_poistka_cr_sk"
@@ -818,9 +842,9 @@
                     android:id="@+id/chk_zodpovednosti_svet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@color/checkbox_tint"
+                    android:buttonTint="?attr/checkboxTint"
                     android:text="Poistenie zodpovednosti SVET  -"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="?android:textColorPrimary" />
 
                 <EditText
                     android:id="@+id/et_expiry_poistka_svet"
@@ -841,7 +865,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="Note"
-            android:background="@drawable/rounded_edittext"
+            android:background="?attr/editTextBackground"
             android:minHeight="48dp" />
 
         <!-- Add Certificate Button -->

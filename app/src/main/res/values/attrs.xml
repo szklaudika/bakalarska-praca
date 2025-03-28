@@ -1,0 +1,15 @@
+<resources>
+    <attr name="bottomNavBackgroundColor" format="color"/>
+    <attr name="bottomNavItemColor" format="reference"/>
+    <attr name="profileImage" format="reference" />
+    <attr name="fragmentImage" format="reference" />
+    <attr name="certificateImage" format="reference" />
+    <attr name="calendarDateTextAppearance" format="reference"/>
+    <attr name="calendarArrowColor" format="color"/>
+    <attr name="calendarWeekDayTextAppearance" format="reference"/>
+    <attr name="calendarTitleTextAppearance" format="reference"/>
+    <attr name="popupReminderBackground" format="reference"/>
+    <attr name="platformImage" format="reference"/>
+    <attr name="editTextBackground" format="reference"/>
+    <attr name="checkboxTint" format="reference"/>
+</resources>

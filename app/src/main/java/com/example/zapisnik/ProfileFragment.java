@@ -1,6 +1,5 @@
 package com.example.zapisnik;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -10,6 +9,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -45,8 +47,6 @@ public class ProfileFragment extends Fragment {
     private ListView listViewCertificates;
     private SectionedCertificateAdapter adapter;
     private List<ListItem> items = new ArrayList<>();
-    private static final int PICK_IMAGE_REQUEST = 1;
-    private ImageView profileImageView;
 
     // Aggregated flight data TextViews
     private TextView tvTotalFlightTime;
@@ -60,6 +60,13 @@ public class ProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
+    // Enable options menu in onCreate
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true); // Enables the menu in this fragment
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -67,19 +74,26 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         listViewCertificates = view.findViewById(R.id.list_view_certificates);
 
-        // Inflate header which contains the profile image and flight data TextViews
+        // Inflate header which contains the profile image, flight data TextViews, and settings icon
         View headerView = inflater.inflate(R.layout.list_header_profile, null);
         listViewCertificates.addHeaderView(headerView, null, false);
 
-        // Set up profile image and listener for selecting an image from the gallery
-        profileImageView = headerView.findViewById(R.id.img_profile_pic);
-        profileImageView.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_PICK,
-                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        // Set up profile image (removed clickable functionality)
+        ImageView profileImageView = headerView.findViewById(R.id.img_profile_pic);
+        // Removed onClickListener so users cannot change the profile photo.
+
+        // Set up the settings icon click listener
+        ImageView settingsIcon = headerView.findViewById(R.id.img_settings);
+        settingsIcon.setOnClickListener(v -> {
+            // Replace this fragment with the SettingsFragment.
+            // Ensure your activity layout has a container with the id 'content_frame' (or update as needed)
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, new SettingsFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
 
-        // Find TextViews for aggregated flight data (using IDs defined in your XML)
+        // Find TextViews for aggregated flight data
         tvTotalFlightTime = headerView.findViewById(R.id.tv_total_flight_time);
         tvMultiPilotTime = headerView.findViewById(R.id.tv_multi_pilot_time);
         tvLandings = headerView.findViewById(R.id.tv_landings);
@@ -128,14 +142,24 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
+    // Inflate the menu resource (profile_menu.xml)
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK &&
-                data != null && data.getData() != null) {
-            Uri selectedImageUri = data.getData();
-            profileImageView.setImageURI(selectedImageUri);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.profile_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    // Handle options menu item clicks (if using action bar menu)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, new SettingsFragment())
+                    .addToBackStack(null)
+                    .commit();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -450,7 +474,7 @@ public class ProfileFragment extends Fragment {
 
     // Sends a certificate to the server using Retrofit and marks it as synced on success.
     private void sendCertificateToServer(Certificate certificate) {
-        RetrofitClient.getApi().addCertificate(certificate).enqueue(new retrofit2.Callback<Void>() {
+        RetrofitClient.getApi().addCertificate(certificate).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {

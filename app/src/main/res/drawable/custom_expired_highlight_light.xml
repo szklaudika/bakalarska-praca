@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval"
+    android:insetLeft="5dp"
+    android:insetRight="5dp"
+    android:insetTop="5dp"
+    android:insetBottom="5dp">
+
+    <!-- A colored stroke with no fill for a ring -->
+    <stroke
+        android:width="2dp"
+        android:color="#FF03A9F4" />
+    <solid android:color="@android:color/transparent" />
+</shape>

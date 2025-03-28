@@ -7,4 +7,9 @@
     <color name="colorAccent">#dd1818</color> <!-- Example color -->
     <color name="bottom_nav_item_selected">#dd1818</color> <!-- Selected item color -->
     <color name="bottom_nav_item_unselected">#A9A9A9</color> <!-- Unselected item color -->
+    <color name="bottom_nav_light">#d4dce3</color>
+    <color name="bottom_nav_dark">#1a1a1a</color>
+    <color name="colorPrimaryLight">#FF03A9F4</color>
+
+
 </resources>

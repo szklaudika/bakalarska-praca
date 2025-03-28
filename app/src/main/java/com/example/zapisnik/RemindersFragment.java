@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -90,6 +91,14 @@ public class RemindersFragment extends Fragment {
                             .inflate(R.layout.reminder_item_header, parent, false);
                     TextView headerTv = convertView.findViewById(R.id.tv_header);
                     headerTv.setText(item);
+                    // Check current mode to adjust text color: black in light mode, white in dark mode.
+                    SharedPreferences prefs = getContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
+                    boolean isLightMode = prefs.getBoolean("dark_mode", true);
+                    if (isLightMode) {
+                        headerTv.setTextColor(getContext().getResources().getColor(android.R.color.black));
+                    } else {
+                        headerTv.setTextColor(getContext().getResources().getColor(android.R.color.white));
+                    }
                 } else {
                     // Inflate the certificate item layout with a CardView.
                     convertView = LayoutInflater.from(getContext())
@@ -100,6 +109,7 @@ public class RemindersFragment extends Fragment {
                 return convertView;
             }
         };
+
         listViewExpiring.setAdapter(adapter);
 
         database = CertificateDatabase.getInstance(requireActivity());
@@ -246,11 +256,15 @@ public class RemindersFragment extends Fragment {
 
 
     private void highlightExpiryDatesOnCalendar(List<Certificate> soonExpiring, List<Certificate> expired) {
+        // Retrieve the current mode (true = light mode) from SharedPreferences.
+        SharedPreferences prefs = requireActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
+        boolean isLightMode = prefs.getBoolean("dark_mode", true);
+
         List<Date> soonDates = new ArrayList<>();
         List<Date> expiredDates = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        // Convert soon-expiring
+        // Convert soon-expiring certificate dates.
         for (Certificate cert : soonExpiring) {
             try {
                 soonDates.add(sdf.parse(cert.getExpiryDate()));
@@ -258,7 +272,7 @@ public class RemindersFragment extends Fragment {
                 e.printStackTrace();
             }
         }
-        // Convert expired
+        // Convert expired certificate dates.
         for (Certificate cert : expired) {
             try {
                 expiredDates.add(sdf.parse(cert.getExpiryDate()));
@@ -267,29 +281,36 @@ public class RemindersFragment extends Fragment {
             }
         }
 
-        // Create two decorators
+        // Select the appropriate drawable for expired and soon-expiring certificates.
+        int expiredDrawable = isLightMode
+                ? R.drawable.custom_expired_highlight_light
+                : R.drawable.custom_expired_highlight;
+        int soonDrawable = isLightMode
+                ? R.drawable.custom_highlight_light
+                : R.drawable.custom_highlight;
+
+        // Create decorators using the selected drawable resources.
         ExpiryDayDecorator soonDecorator = new ExpiryDayDecorator(
                 requireContext(),
                 soonDates,
-                R.drawable.custom_highlight  // Filled circle
+                soonDrawable  // Use custom_highlight_ligh in light mode.
         );
 
         ExpiryDayDecorator expiredDecorator = new ExpiryDayDecorator(
                 requireContext(),
                 expiredDates,
-                R.drawable.custom_expired_highlight  // Ring shape
+                expiredDrawable  // Use custom_expired_highlist_ligh in light mode.
         );
 
-        // Apply both decorators on the main thread
+        // Apply both decorators on the main thread.
         requireActivity().runOnUiThread(() -> {
-            // Clear old decorators if needed
             materialCalendarView.removeDecorators();
-
-            // Add them in any order (so both sets show up)
             materialCalendarView.addDecorator(soonDecorator);
             materialCalendarView.addDecorator(expiredDecorator);
         });
     }
+
+
 
 
     private List<Certificate> getExpiringCertificates() {

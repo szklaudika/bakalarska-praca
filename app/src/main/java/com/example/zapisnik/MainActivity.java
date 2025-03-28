@@ -1,6 +1,7 @@
 package com.example.zapisnik;
 
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
@@ -20,6 +21,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Apply theme based on preference before calling super.onCreate()
+        SharedPreferences prefs = getSharedPreferences("app_prefs", MODE_PRIVATE);
+        if (prefs.getBoolean("dark_mode", true)) {
+            // When true, use light mode theme (Theme.Zapisnik.Lightmode)
+            setTheme(R.style.Theme_Zapisnik_Lightmode);
+        } else {
+            // Otherwise, use the default theme
+            setTheme(R.style.Theme_Zapisnik);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -28,8 +39,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
         // Set default fragment.
-        // Instead of showing the FlightListFragment, we show the RegistrationFragment.
-        // You can change this later (for example, check if the user is already logged in).
+        // Instead of showing the FlightListFragment, we show the LoginFragment.
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, new LoginFragment())
@@ -98,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.nav_profile:
                             selectedFragment = new ProfileFragment();
                             break;
-                        // Optionally add a new case for login or registration if you want to navigate to it later
+                        // Optionally add a new case for login or registration if needed
                     }
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.content_frame, selectedFragment)

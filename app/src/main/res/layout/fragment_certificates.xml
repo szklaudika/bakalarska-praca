@@ -3,8 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -25,7 +24,6 @@
 
             <!-- Title -->
             <TextView
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -43,11 +41,9 @@
                 android:layout_height="45dp"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="centerCrop"
-
-                android:src="@drawable/my_image" />
+                android:src="?attr/platformImage"/>
 
             <!-- Buttons (each full width, with margin, padding, and custom background) -->
-
 
             <Button
                 android:id="@+id/btn_platform_velka_era"
@@ -59,7 +55,7 @@
                 android:text="Velká éra"
                 android:textSize="16sp"
                 android:contentDescription="Select Velká éra"
-                android:background="@drawable/rounded_edittext"/>
+                android:background="?attr/editTextBackground"/>
 
             <Button
                 android:id="@+id/btn_platform_ultralighty"
@@ -69,8 +65,8 @@
                 android:padding="16dp"
                 android:text="Ultralighty"
                 android:textSize="16sp"
-                android:background="@drawable/rounded_edittext"
-                android:contentDescription="Select Ultralighty" />
+                android:contentDescription="Select Ultralighty"
+                android:background="?attr/editTextBackground"/>
 
             <Button
                 android:id="@+id/btn_platform_vetrone"
@@ -80,8 +76,8 @@
                 android:padding="16dp"
                 android:text="Vetrone"
                 android:textSize="16sp"
-                android:background="@drawable/rounded_edittext"
-                android:contentDescription="Select Vetrone" />
+                android:contentDescription="Select Vetrone"
+                android:background="?attr/editTextBackground"/>
 
             <Button
                 android:id="@+id/btn_platform_vrtulniky"
@@ -91,8 +87,8 @@
                 android:padding="16dp"
                 android:text="Vrtuľníky"
                 android:textSize="16sp"
-                android:background="@drawable/rounded_edittext"
-                android:contentDescription="Select Vrtuľníky" />
+                android:contentDescription="Select Vrtuľníky"
+                android:background="?attr/editTextBackground"/>
 
         </LinearLayout>
     </ScrollView>

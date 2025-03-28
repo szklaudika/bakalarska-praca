@@ -6,7 +6,21 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@drawable/bg_image</item>
-        <!-- Other customizations -->
+        <item name="bottomNavBackgroundColor">@color/bottom_nav_dark</item>
+        <item name="bottomNavItemColor">@color/bottom_nav_item_color_dark</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="profileImage">@drawable/profile_pic</item>
+        <item name="fragmentImage">@drawable/fragment_background</item>
+        <item name="certificateImage">@drawable/certificate_bg</item>
+        <item name="calendarDateTextAppearance">@style/CalendarDayGreyText</item>
+        <item name="calendarArrowColor">@android:color/white</item>
+        <item name="calendarWeekDayTextAppearance">@style/CalendarWeekDayWhiteText</item>
+        <item name="calendarTitleTextAppearance">@style/CalendarTitleWhiteText</item>
+        <item name="popupReminderBackground">@drawable/rounded_reminder</item>
+        <item name="platformImage">@drawable/my_image</item>
+        <item name="editTextBackground">@drawable/rounded_edittext</item>
+        <item name="checkboxTint">@color/checkbox_tint</item>
+
     </style>
 
     <style name="TableHeader">
@@ -27,6 +41,54 @@
 
     <style name="CalendarDayGreyText" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@android:color/darker_gray</item>
+    </style>
+
+    <style name="TextAppearance.Zapisnik.Light" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="CalendarDayBlackText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="CalendarWeekDayWhiteText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="CalendarWeekDayBlackText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="CalendarTitleWhiteText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="CalendarTitleBlackText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <!-- Light mode theme -->
+    <style name="Theme.Zapisnik.Lightmode" parent="Theme.Zapisnik">
+        <item name="colorPrimary">#FFFFFF</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryLight</item>
+        <item name="colorAccent">#FF03A9F4</item>
+        <item name="android:windowBackground">@drawable/bg_image_light</item>
+        <item name="bottomNavBackgroundColor">@color/bottom_nav_light</item>
+        <item name="bottomNavItemColor">@color/bottom_nav_item_color</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textColorPrimary">@android:color/black</item>
+        <item name="profileImage">@drawable/profile_pic_light</item>
+        <item name="fragmentImage">@drawable/fragment_background_light</item>
+        <item name="certificateImage">@drawable/certificate_bg_light</item>
+        <item name="calendarDateTextAppearance">@style/CalendarDayBlackText</item>
+        <item name="calendarArrowColor">@android:color/black</item>
+        <item name="calendarWeekDayTextAppearance">@style/CalendarWeekDayBlackText</item>
+        <item name="calendarTitleTextAppearance">@style/CalendarTitleBlackText</item>
+        <item name="popupReminderBackground">@drawable/rounded_reminder_light</item>
+        <item name="platformImage">@drawable/my_image_light</item>
+        <item name="editTextBackground">@drawable/rounded_edittext_light</item>
+        <item name="android:textColorHint">@android:color/darker_gray</item>
+        <item name="checkboxTint">@color/checkbox_tint_light</item>
     </style>
 
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+android:shape="rectangle">
+<!-- Light mode fill -->
+<solid android:color="#FFFFFF"/>
+<!-- Border for light mode -->
+<stroke
+    android:width="1dp"
+    android:color="#FF03A9F4"/>
+<!-- Curved corners -->
+<corners android:radius="8dp"/>
+<!-- Padding inside the border -->
+<padding
+    android:left="8dp"
+    android:top="8dp"
+    android:right="8dp"
+    android:bottom="8dp"/>
+</shape>

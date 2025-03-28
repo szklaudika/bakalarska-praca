@@ -8,21 +8,23 @@
     tools:ignore="ExtraText">
 
     <!-- Content Frame for Fragments -->
+
+    <!-- Bottom Navigation Menu -->
     <FrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_navigation"/>
+        android:layout_above="@id/bottom_navigation"
+        android:layout_marginBottom="-64dp" />
 
-    <!-- Bottom Navigation Menu -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#1a1a1a"
-        app:itemTextColor="@color/bottom_nav_item_color"
-        app:itemIconTint="@color/bottom_nav_item_color"
+        android:background="?attr/bottomNavBackgroundColor"
+        app:itemIconTint="?attr/bottomNavItemColor"
+        app:itemTextColor="?attr/bottomNavItemColor"
         app:menu="@menu/bottom_nav_menu"
         tools:ignore="MissingClass" />
 
