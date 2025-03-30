@@ -1,11 +1,10 @@
 package com.example.zapisnik;
 
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,13 +48,17 @@ public class ProfileFragment extends Fragment {
     private SectionedCertificateAdapter adapter;
     private List<ListItem> items = new ArrayList<>();
 
-    // Aggregated flight data TextViews
-    private TextView tvTotalFlightTime;
-    private TextView tvMultiPilotTime;
-    private TextView tvLandings;
-    private TextView tvOperationTime;
-    private TextView tvPilotFunctionTime;
-    private TextView tvFstdSummary;
+    // Aggregated flight data TextViews – using new IDs from the redesigned layout
+    private TextView tvTotalFlightTime;     // from tv_total_flight_time_value
+    private TextView tvMultiPilotTime;      // from tv_multi_pilot_time_value
+    private TextView tvLandings;            // from tv_landings_value
+    private TextView tvNocnyLet;            // from tv_nocny_let_value
+    private TextView tvIfr;                 // from tv_ifr_value
+    private TextView tvPic;                 // from tv_pic_value
+    private TextView tvKopilot;             // from tv_kopilot_value
+    private TextView tvDvojpilot;           // from tv_dvojpilot_value
+    private TextView tvInstructor;          // from tv_instructor_value
+    private TextView tvFstdSummary;         // from tv_fstd_summary_value
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -71,52 +75,68 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        listViewCertificates = view.findViewById(R.id.list_view_certificates);
+        // Inflate the new coordinator layout with the redesigned summarizations container
+        View view = inflater.inflate(R.layout.activity_profile_coordinator, container, false);
 
-        // Inflate header which contains the profile image, flight data TextViews, and settings icon
-        View headerView = inflater.inflate(R.layout.list_header_profile, null);
-        listViewCertificates.addHeaderView(headerView, null, false);
-
-        // Set up profile image (removed clickable functionality)
-        ImageView profileImageView = headerView.findViewById(R.id.img_profile_pic);
-        // Removed onClickListener so users cannot change the profile photo.
-
-        // Set up the settings icon click listener
-        ImageView settingsIcon = headerView.findViewById(R.id.img_settings);
+        // --- Profile Header Setup ---
+        ImageView profileImageView = view.findViewById(R.id.img_profile_pic);
+        ImageView settingsIcon = view.findViewById(R.id.img_settings);
         settingsIcon.setOnClickListener(v -> {
-            // Replace this fragment with the SettingsFragment.
-            // Ensure your activity layout has a container with the id 'content_frame' (or update as needed)
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, new SettingsFragment())
                     .addToBackStack(null)
                     .commit();
         });
 
-        // Find TextViews for aggregated flight data
-        tvTotalFlightTime = headerView.findViewById(R.id.tv_total_flight_time);
-        tvMultiPilotTime = headerView.findViewById(R.id.tv_multi_pilot_time);
-        tvLandings = headerView.findViewById(R.id.tv_landings);
-        tvOperationTime = headerView.findViewById(R.id.tv_operation_time);
-        tvPilotFunctionTime = headerView.findViewById(R.id.tv_pilot_function_time);
-        tvFstdSummary = headerView.findViewById(R.id.tv_fstd_summary);
+        // --- Retrieve Flight Data Views from Redesigned Layout ---
+        tvTotalFlightTime = view.findViewById(R.id.tv_total_flight_time_value);
+        tvMultiPilotTime = view.findViewById(R.id.tv_multi_pilot_time_value);
+        tvLandings = view.findViewById(R.id.tv_landings_value);
+        tvNocnyLet = view.findViewById(R.id.tv_nocny_let_value);
+        tvIfr = view.findViewById(R.id.tv_ifr_value);
+        tvPic = view.findViewById(R.id.tv_pic_value);
+        tvKopilot = view.findViewById(R.id.tv_kopilot_value);
+        tvDvojpilot = view.findViewById(R.id.tv_dvojpilot_value);
+        tvInstructor = view.findViewById(R.id.tv_instructor_value);
+        tvFstdSummary = view.findViewById(R.id.tv_fstd_summary_value);
 
-        // Initialize local certificate database
+        // --- Toggle Bar Setup ---
+        TextView tvToggleSummarizations = view.findViewById(R.id.tv_toggle_summarizations);
+        TextView tvToggleCertificates = view.findViewById(R.id.tv_toggle_certificates);
+        final LinearLayout llSummarizations = view.findViewById(R.id.ll_summarizations);
+        final LinearLayout llCertificates = view.findViewById(R.id.ll_certificates);
+
+        // Default: show summarizations, hide certificates.
+        tvToggleSummarizations.setBackgroundResource(R.drawable.toggle_segment_selected);
+        tvToggleCertificates.setBackgroundResource(android.R.color.transparent);
+        llSummarizations.setVisibility(View.VISIBLE);
+        llCertificates.setVisibility(View.GONE);
+
+        tvToggleSummarizations.setOnClickListener(v -> {
+            tvToggleSummarizations.setBackgroundResource(R.drawable.toggle_segment_selected);
+            tvToggleCertificates.setBackgroundResource(android.R.color.transparent);
+            llSummarizations.setVisibility(View.VISIBLE);
+            llCertificates.setVisibility(View.GONE);
+        });
+        tvToggleCertificates.setOnClickListener(v -> {
+            tvToggleCertificates.setBackgroundResource(R.drawable.toggle_segment_selected);
+            tvToggleSummarizations.setBackgroundResource(android.R.color.transparent);
+            llSummarizations.setVisibility(View.GONE);
+            llCertificates.setVisibility(View.VISIBLE);
+        });
+
+        // --- Initialize certificate database and load data ---
         database = CertificateDatabase.getInstance(getActivity());
-
-        // Load certificates from local database and from the server
         loadCertificatesFromDatabase();
         loadCertificatesFromServer();
-
-        // Calculate flight aggregates from local flight data
         calculateFlightAggregatesFromLocal();
 
-        // Listener for deleting a certificate when a list item (not header) is clicked
-        listViewCertificates.setOnItemClickListener((parent, view1, position, id) -> {
+        // --- Setup Certificates ListView ---
+        listViewCertificates = view.findViewById(R.id.list_view_certificates);
+        listViewCertificates.setOnItemClickListener((parent, itemView, position, id) -> {
             try {
-                int adjustedPosition = position - listViewCertificates.getHeaderViewsCount();
-                if (adjustedPosition >= 0 && adjustedPosition < items.size()) {
-                    ListItem selectedItem = items.get(adjustedPosition);
+                if (position >= 0 && position < items.size()) {
+                    ListItem selectedItem = items.get(position);
                     if (selectedItem.getType() == ListItem.TYPE_ITEM) {
                         String selectedCertificate = selectedItem.getText();
                         String[] parts = selectedCertificate.split(" - Expires:");
@@ -125,7 +145,7 @@ public class ProfileFragment extends Fragment {
                             return;
                         }
                         String certificateName = parts[0].trim();
-                        new android.app.AlertDialog.Builder(getActivity())
+                        new AlertDialog.Builder(getActivity())
                                 .setTitle("Delete Certificate")
                                 .setMessage("Are you sure you want to delete " + certificateName + "?")
                                 .setPositiveButton("Yes", (dialog, which) -> deleteCertificate(certificateName))
@@ -140,6 +160,26 @@ public class ProfileFragment extends Fragment {
         });
 
         return view;
+    }
+
+    /**
+     * Call this method after setting the ListView adapter to calculate its height based on children.
+     */
+    private void setListViewHeightBasedOnChildren(ListView listView) {
+        if (listView.getAdapter() == null) {
+            return;
+        }
+        int totalHeight = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        for (int i = 0; i < listView.getAdapter().getCount(); i++) {
+            View listItem = listView.getAdapter().getView(i, null, listView);
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listView.getAdapter().getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 
     // Inflate the menu resource (profile_menu.xml)
@@ -235,6 +275,8 @@ public class ProfileFragment extends Fragment {
                     items.addAll(tempItems);
                     adapter = new SectionedCertificateAdapter(getActivity(), items);
                     listViewCertificates.setAdapter(adapter);
+                    // Adjust the ListView's height to display all items
+                    setListViewHeightBasedOnChildren(listViewCertificates);
                 });
             }
         });
@@ -400,14 +442,15 @@ public class ProfileFragment extends Fragment {
                 }
             }
 
-            final String totalFlightTimeStr = formatMinutes(totalFlightTime, "Celkový letový čas");
-            final String totalMultiPilotTimeStr = formatMinutes(totalMultiPilotTime, "Celkový multi pilot čas");
-            final String landingsStr = "Súčet pristátí: " + totalLandingsDay + " (deň), " + totalLandingsNight + " (noc)";
-            final String operationTimeStr = formatMinutes(totalNightTime, "Nočný let") + ", " + formatMinutes(totalIfrTime, "IFR let");
-            final String pilotFunctionTimeStr = formatMinutes(totalPicTime, "PIC") + ", "
-                    + formatMinutes(totalCopilotTime, "Kopilot") + ", "
-                    + formatMinutes(totalDualTime, "Dvojpilot") + ", "
-                    + formatMinutes(totalInstructorTime, "Inštruktor");
+            final String totalFlightTimeStr = formatMinutes(totalFlightTime);
+            final String totalMultiPilotTimeStr = formatMinutes(totalMultiPilotTime);
+            final String landingsStr = totalLandingsDay + " (deň), " + totalLandingsNight + " (noc)";
+            final String nocnyLetStr = formatMinutes(totalNightTime);
+            final String ifrStr = formatMinutes(totalIfrTime);
+            final String picStr = formatMinutes(totalPicTime);
+            final String kopilotStr = formatMinutes(totalCopilotTime);
+            final String dvojpilotStr = formatMinutes(totalDualTime);
+            final String instructorStr = formatMinutes(totalInstructorTime);
             final String fstdSummaryStr = getFstdSummaryString(fstdSummary);
 
             if (getActivity() != null) {
@@ -415,13 +458,24 @@ public class ProfileFragment extends Fragment {
                     tvTotalFlightTime.setText(totalFlightTimeStr);
                     tvMultiPilotTime.setText(totalMultiPilotTimeStr);
                     tvLandings.setText(landingsStr);
-                    tvOperationTime.setText(operationTimeStr);
-                    tvPilotFunctionTime.setText(pilotFunctionTimeStr);
-                    tvFstdSummary.setText("FSTD Sumarizácia:\n" + fstdSummaryStr);
+                    tvNocnyLet.setText(nocnyLetStr);
+                    tvIfr.setText(ifrStr);
+                    tvPic.setText(picStr);
+                    tvKopilot.setText(kopilotStr);
+                    tvDvojpilot.setText(dvojpilotStr);
+                    tvInstructor.setText(instructorStr);
+                    tvFstdSummary.setText(fstdSummaryStr);
                 });
             }
         });
     }
+
+    private String formatMinutes(int totalMinutes) {
+        int hours = totalMinutes / 60;
+        int minutes = totalMinutes % 60;
+        return hours + " h " + minutes + " m";
+    }
+
 
     /**
      * Helper method to format minutes into a string with hours and minutes.

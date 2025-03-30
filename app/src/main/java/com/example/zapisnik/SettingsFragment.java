@@ -53,7 +53,7 @@ public class SettingsFragment extends Fragment {
         // 1) Dark Mode Switch: interpret "dark_mode" preference as:
         //    true = Light mode (Theme.Zapisnik.Lightmode)
         //    false = Dark mode (Theme.Zapisnik)
-        boolean isLightMode = prefs.getBoolean("dark_mode", true);
+        boolean isLightMode = prefs.getBoolean("dark_mode", false);
         darkModeSwitch.setChecked(isLightMode);
 
         // When toggled, save the preference and recreate the activity so the new theme is applied

@@ -8,4 +8,5 @@
     android:textSize="18sp"
     android:fontFamily="sans-serif-medium"
     android:textAllCaps="true"
-    android:textStyle="normal"/>
+    android:textStyle="normal"
+    android:textColor="?attr/flightDateTextColor"/>

@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:hint="Username or Email"
         android:minHeight="48dp"
-        android:background="@drawable/rounded_edittext"
+        android:background="?attr/editTextBackground"
         android:layout_marginTop="24dp"
         app:layout_constraintTop_toBottomOf="@id/tvLoginTitle"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:hint="Password"
         android:minHeight="48dp"
-        android:background="@drawable/rounded_edittext"
+        android:background="?attr/editTextBackground"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/etUsernameOrEmail"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +70,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="32dp"
-        android:background="@drawable/rounded_button"/>
+        android:background="?attr/buttonBackground"/>
 
     <!-- "Don't have an account? Sign up" Text -->
     <TextView

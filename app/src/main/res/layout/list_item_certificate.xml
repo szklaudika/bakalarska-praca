@@ -14,7 +14,8 @@
         android:gravity="center"
         android:text="2025&#10;Mar 19"
         android:textSize="15sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_certificate_details"

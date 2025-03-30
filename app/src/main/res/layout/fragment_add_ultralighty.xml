@@ -18,7 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="#1a1a1a"
             android:padding="8dp"
             android:layout_marginTop="12dp">
 
@@ -26,8 +25,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Letecké kvalifikácie - Ultralighty"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF" />
+                android:textStyle="normal"
+                android:fontFamily="sans-serif-medium"
+                android:textAllCaps="true" />
 
             <!-- ULL(a) -->
             <LinearLayout
@@ -41,9 +41,9 @@
                     android:id="@+id/chk_ull_ultralighty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ULL(a)"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:text="ULL(a)   -"
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
 
                 <EditText
                     android:id="@+id/et_expiry_ull_ultralighty"
@@ -53,7 +53,7 @@
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
                     android:inputType="date"
-                    android:layout_gravity="end"/>
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- Riadené lety VFR -->
@@ -68,9 +68,9 @@
                     android:id="@+id/chk_vfr_ultralighty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Riadené lety VFR"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:text="Riadené lety VFR   -"
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
 
                 <EditText
                     android:id="@+id/et_expiry_vfr_ultralighty"
@@ -79,7 +79,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- Inštruktor -->
@@ -94,9 +95,9 @@
                     android:id="@+id/chk_instruktor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Inštruktor"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:text="Inštruktor   -"
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
 
                 <EditText
                     android:id="@+id/et_expiry_instruktor"
@@ -105,7 +106,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- Vlekár -->
@@ -120,9 +122,9 @@
                     android:id="@+id/chk_vlekar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Vlekár"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:text="Vlekár   -"
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
 
                 <EditText
                     android:id="@+id/et_expiry_vlekar"
@@ -131,7 +133,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- Skúšobný pilot -->
@@ -146,9 +149,9 @@
                     android:id="@+id/chk_skusobny_pilot"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Skúšobný pilot"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:text="Skúšobný pilot   -"
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
 
                 <EditText
                     android:id="@+id/et_expiry_skusobny_pilot"
@@ -157,7 +160,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- Vysadzovač -->
@@ -172,9 +176,9 @@
                     android:id="@+id/chk_vysadzovac"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Vysadzovač"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:text="Vysadzovač   -"
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
 
                 <EditText
                     android:id="@+id/et_expiry_vysadzovac"
@@ -183,10 +187,17 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginVertical="8dp"
+            android:background="@drawable/dashed_divider" />
 
 
         <!-- Layout pre Medical - Ultralighty -->
@@ -196,15 +207,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="12dp"
-            android:padding="8dp"
-            android:background="#1a1a1a">
+            android:padding="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Medical - Ultralighty"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold" />
+                android:textStyle="normal"
+                android:fontFamily="sans-serif-medium"
+                android:textAllCaps="true" />
 
             <!-- Osvedčenie zdravotnej spôsobilosti 2. triedy -->
             <LinearLayout
@@ -216,11 +227,11 @@
 
                 <CheckBox
                     android:id="@+id/chk_osvedcenie_ultralighty"
-                    android:layout_width="wrap_content"
+                    android:layout_width="189dp"
                     android:layout_height="wrap_content"
-                    android:text="Osvedčenie zdravotnej spôsobilosti 2. triedy"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:buttonTint="?attr/checkboxTint"
+                    android:text="Osvedčenie zdravotnej spôsobilosti 2. triedy   -"
+                    android:textColor="?android:textColorPrimary" />
 
                 <EditText
                     android:id="@+id/et_expiry_osvedcenie_ultralighty"
@@ -229,9 +240,16 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginVertical="8dp"
+            android:background="@drawable/dashed_divider" />
 
 
         <!-- Layout pre Rádio - Ultralighty -->
@@ -241,15 +259,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="12dp"
-            android:padding="8dp"
-            android:background="#1a1a1a">
+            android:padding="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rádio - Ultralighty"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold" />
+                android:textStyle="normal"
+                android:fontFamily="sans-serif-medium"
+                android:textAllCaps="true" />
 
             <!-- Všeobecný preukaz radiofonisty -->
             <LinearLayout
@@ -263,9 +281,9 @@
                     android:id="@+id/chk_vseobecny_preukaz_ultralighty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Všeobecný preukaz radiofonisty"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:text="Všeobecný preukaz radiofonisty   -"
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
 
                 <EditText
                     android:id="@+id/et_expiry_vseobecny_preukaz_ultralighty"
@@ -274,7 +292,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- Obmedzený preukaz radiofonisty -->
@@ -289,9 +308,9 @@
                     android:id="@+id/chk_obmedzeny_preukaz_ultralighty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Obmedzený preukaz radiofonisty"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:text="Obmedzený preukaz radiofonisty   -"
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
 
                 <EditText
                     android:id="@+id/et_expiry_obmedzeny_preukaz_ultralighty"
@@ -300,9 +319,16 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginVertical="8dp"
+            android:background="@drawable/dashed_divider" />
 
 
         <!-- Layout pre Angličtina - Ultralighty -->
@@ -312,15 +338,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="12dp"
-            android:padding="8dp"
-            android:background="#1a1a1a">
+            android:padding="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Angličtina - Ultralighty"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold" />
+                android:textStyle="normal"
+                android:fontFamily="sans-serif-medium"
+                android:textAllCaps="true" />
 
             <!-- ICAO English LEVEL 4 -->
             <LinearLayout
@@ -334,9 +360,9 @@
                     android:id="@+id/chk_english_level4_ultralighty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ICAO English LEVEL 4"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:text="ICAO English LEVEL 4   -"
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
 
                 <EditText
                     android:id="@+id/et_expiry_english_level4_ultralighty"
@@ -345,7 +371,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- ICAO English LEVEL 5 -->
@@ -360,9 +387,9 @@
                     android:id="@+id/chk_english_level5_ultralighty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ICAO English LEVEL 5"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:text="ICAO English LEVEL 5   -"
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
 
                 <EditText
                     android:id="@+id/et_expiry_english_level5_ultralighty"
@@ -371,7 +398,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- ICAO English LEVEL 6 -->
@@ -386,9 +414,9 @@
                     android:id="@+id/chk_english_level6_ultralighty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ICAO English LEVEL 6"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:text="ICAO English LEVEL 6   -"
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
 
                 <EditText
                     android:id="@+id/et_expiry_english_level6_ultralighty"
@@ -397,9 +425,16 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_marginVertical="8dp"
+            android:background="@drawable/dashed_divider" />
 
 
         <!-- Layout pre Poistka - Ultralighty -->
@@ -409,15 +444,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="12dp"
-            android:padding="8dp"
-            android:background="#1a1a1a">
+            android:padding="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Poistka - Ultralighty"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold" />
+                android:textStyle="normal"
+                android:fontFamily="sans-serif-medium"
+                android:textAllCaps="true" />
 
             <!-- Poistenie zodpovednosti ČR + SK -->
             <LinearLayout
@@ -431,9 +466,9 @@
                     android:id="@+id/chk_poistenie_zodpovednost_cr_sk_ultralighty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Poistenie zodpovednosti ČR + SK"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:text="Poistenie zodpovednosti ČR + SK   -"
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
 
                 <EditText
                     android:id="@+id/et_expiry_poistenie_zodpovednost_cr_sk_ultralighty"
@@ -442,7 +477,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <!-- Poistenie zodpovednosti SVET -->
@@ -457,9 +493,9 @@
                     android:id="@+id/chk_zodpovednosti_svet_ultralighty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Poistenie zodpovednosti SVET"
-                    android:textColor="#FFFFFF"
-                    android:buttonTint="@color/checkbox_tint" />
+                    android:text="Poistenie zodpovednosti SVET   -"
+                    android:textColor="?android:textColorPrimary"
+                    android:buttonTint="?attr/checkboxTint" />
 
                 <EditText
                     android:id="@+id/et_expiry_zodpovednosti_svet_ultralighty"
@@ -468,7 +504,8 @@
                     android:layout_weight="1"
                     android:hint="Expiry (yyyy-MM-dd)"
                     android:visibility="gone"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:textSize="14sp"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -479,15 +516,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="Note"
+            android:background="?attr/editTextBackground"
             android:minHeight="48dp" />
 
         <!-- Add Certificate Button -->
         <Button
             android:id="@+id/btn_add_certificate"
-            android:layout_width="match_parent"
+            android:layout_width="375dp"
             android:layout_height="wrap_content"
-            android:text="Pridať kvalifikáciu"
-            android:layout_marginTop="16dp" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:background="?attr/buttonBackground"
+            android:text="Pridať kvalifikáciu" />
 
 
     </LinearLayout>

@@ -1,14 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/header_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <!-- Top container for the image and settings icon -->
+    <!-- Top container for the profile image and settings icon -->
     <RelativeLayout
+        android:id="@+id/rl_profile_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <ImageView
             android:id="@+id/img_profile_pic"
             android:layout_width="match_parent"
@@ -16,8 +18,6 @@
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:src="?attr/profileImage" />
-
-        <!-- Settings icon positioned in the top right -->
         <ImageView
             android:id="@+id/img_settings"
             android:layout_width="wrap_content"
@@ -28,14 +28,57 @@
             android:contentDescription="Settings" />
     </RelativeLayout>
 
-    <!-- A separate container with padding for text fields -->
+    <!-- Toggle Bar -->
     <LinearLayout
+        android:id="@+id/toggle_bar"
+        android:layout_width="282dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/toggle_bar_background"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
+        <!-- Summarizations Toggle -->
+        <TextView
+            android:id="@+id/tv_toggle_summarizations"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/toggle_segment_selected"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="SUMMARIZATIONS"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <!-- Certificates Toggle -->
+        <TextView
+            android:id="@+id/tv_toggle_certificates"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="CERTIFICATES"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- Container for Summarizations (Flight Data) -->
+    <LinearLayout
+        android:id="@+id/ll_summarizations"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Total Flight Time -->
+        <!-- Flight data TextViews -->
         <TextView
             android:id="@+id/tv_total_flight_time"
             android:layout_width="wrap_content"
@@ -44,7 +87,6 @@
             android:textSize="16sp"
             android:layout_marginTop="8dp" />
 
-        <!-- Total Multi Pilot Time -->
         <TextView
             android:id="@+id/tv_multi_pilot_time"
             android:layout_width="wrap_content"
@@ -53,7 +95,6 @@
             android:textSize="16sp"
             android:layout_marginTop="4dp" />
 
-        <!-- Landings: Day and Night -->
         <TextView
             android:id="@+id/tv_landings"
             android:layout_width="wrap_content"
@@ -62,7 +103,6 @@
             android:textSize="16sp"
             android:layout_marginTop="4dp" />
 
-        <!-- Operation Condition Time: Night and IFR -->
         <TextView
             android:id="@+id/tv_operation_time"
             android:layout_width="wrap_content"
@@ -71,7 +111,6 @@
             android:textSize="16sp"
             android:layout_marginTop="4dp" />
 
-        <!-- Pilot Function Time: PIC, Copilot, Dual, Instructor -->
         <TextView
             android:id="@+id/tv_pilot_function_time"
             android:layout_width="wrap_content"
@@ -80,7 +119,6 @@
             android:textSize="16sp"
             android:layout_marginTop="4dp" />
 
-        <!-- FSTD Session Summary (if needed) -->
         <TextView
             android:id="@+id/tv_fstd_summary"
             android:layout_width="wrap_content"
@@ -88,19 +126,5 @@
             android:text="FSTD Sumarizácia: "
             android:textSize="16sp"
             android:layout_marginTop="4dp" />
-
-        <!-- Section Title for Certificates -->
-        <TextView
-            android:id="@+id/tv_platforms"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Vaše certifikáty/licencie"
-            android:textAllCaps="true"
-            android:textSize="16sp"
-            android:fontFamily="sans-serif-medium"
-            android:layout_marginTop="8dp"
-            android:paddingBottom="16dp" />
-
     </LinearLayout>
-
 </LinearLayout>

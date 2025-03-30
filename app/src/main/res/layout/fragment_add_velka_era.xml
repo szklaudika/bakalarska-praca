@@ -18,7 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-
             android:padding="8dp"
             android:layout_marginTop="12dp">
 
@@ -871,14 +870,13 @@
         <!-- Add Certificate Button -->
         <Button
             android:id="@+id/btn_add_certificate"
-            android:layout_width="wrap_content"
+            android:layout_width="375dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="10dp"
-            android:text="Pridať kvalifikáciu"
-            android:textColor="@android:color/black"
-            android:background="@drawable/rounded_button"
-            android:layout_gravity="center_horizontal" />
+            android:background="?attr/buttonBackground"
+            android:text="Pridať kvalifikáciu" />
 
     </LinearLayout>
 

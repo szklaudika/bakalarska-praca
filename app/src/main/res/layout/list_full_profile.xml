@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <!-- Single direct child of ScrollView -->
+    <LinearLayout
+        android:id="@+id/ll_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Top container for the profile image and settings icon -->
+        <RelativeLayout
+            android:id="@+id/rl_profile_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/img_profile_pic"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="?attr/profileImage" />
+            <ImageView
+                android:id="@+id/img_settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_settings"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="16dp"
+                android:contentDescription="Settings" />
+        </RelativeLayout>
+
+        <!-- Toggle Bar -->
+        <LinearLayout
+            android:id="@+id/toggle_bar"
+            android:layout_width="282dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/toggle_bar_background"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <!-- Summarizations Toggle -->
+            <TextView
+                android:id="@+id/tv_toggle_summarizations"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/toggle_segment_selected"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="SUMMARIZATIONS"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+            <!-- Certificates Toggle -->
+            <TextView
+                android:id="@+id/tv_toggle_certificates"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="CERTIFICATES"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Container for Summarizations (Flight Data) -->
+        <LinearLayout
+            android:id="@+id/ll_summarizations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Flight data TextViews -->
+            <TextView
+                android:id="@+id/tv_total_flight_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Celkový letový čas: 0 h 0 min"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/tv_multi_pilot_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Celkový multi pilot čas: 0 h 0 min"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/tv_landings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Súčet pristátí: 0 (deň), 0 (noc)"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/tv_operation_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Prevádzkové lety: Nočný 0 h 0 m, IFR 0 h 0 m"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/tv_pilot_function_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Letové funkcie: PIC 0 h 0 m, Kopilot 0 h 0 m, Dvojpilot 0 h 0 m, Inštruktor 0 h 0 m"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/tv_fstd_summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FSTD Sumarizácia: "
+                android:textSize="16sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <!-- Container for Certificates -->
+        <LinearLayout
+            android:id="@+id/ll_certificates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:padding="16dp">
+
+            <!-- ListView for Certificate Items -->
+            <ListView
+                android:id="@+id/list_view_certificates"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

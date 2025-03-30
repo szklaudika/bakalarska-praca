@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="@drawable/fragment_background"
+    android:src="?attr/fragmentImage"
     android:padding="0dp">
 
     <LinearLayout
@@ -22,7 +22,7 @@
         android:layout_height="250dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/bg_detail" />
+        android:src="?attr/bgDetail" />
 
     <!-- A separate container with padding for the CardView and its contents -->
     <LinearLayout
@@ -65,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:text="03/07/14"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- Departure -->
@@ -86,7 +86,7 @@
                         android:layout_height="wrap_content"
                         android:text="LKLT"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
                         android:layout_height="wrap_content"
                         android:text="09:00"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- Arrival -->
@@ -119,7 +119,7 @@
                         android:layout_height="wrap_content"
                         android:text="LKMT"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -131,7 +131,7 @@
                         android:layout_height="wrap_content"
                         android:text="10:40"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- Aircraft (Model / Registration) -->
@@ -151,7 +151,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -162,7 +162,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- Single Pilot Time -->
@@ -182,7 +182,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -193,7 +193,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- Multi Pilot Time -->
@@ -213,7 +213,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- Total Flight Time -->
@@ -233,7 +233,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- Pilot Name -->
@@ -253,7 +253,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- Landings Day -->
@@ -273,7 +273,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- Landings Night -->
@@ -293,7 +293,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- Night Time -->
@@ -313,7 +313,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- IFR Time -->
@@ -333,7 +333,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- PIC Time -->
@@ -353,7 +353,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- Copilot Time -->
@@ -373,7 +373,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- Dual Time -->
@@ -393,7 +393,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- Instructor Time -->
@@ -413,7 +413,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- FSTD Date -->
@@ -433,7 +433,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- FSTD Type -->
@@ -453,7 +453,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- FSTD Total Time -->
@@ -473,7 +473,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
                 <!-- Remarks -->
@@ -492,7 +492,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:textColor="#E57373" />
+                        android:textColor="?attr/flightDateTextColor" />
                 </LinearLayout>
 
             </LinearLayout>

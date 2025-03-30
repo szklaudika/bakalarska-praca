@@ -20,6 +20,10 @@
         <item name="platformImage">@drawable/my_image</item>
         <item name="editTextBackground">@drawable/rounded_edittext</item>
         <item name="checkboxTint">@color/checkbox_tint</item>
+        <item name="buttonBackground">@drawable/rounded_button</item>
+        <item name="arrowIcon">@drawable/ic_arrow_right</item>
+        <item name="bgDetail">@drawable/bg_detail</item>
+        <item name="flightDateTextColor">#E57373</item>
 
     </style>
 
@@ -39,38 +43,38 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <style name="CalendarDayGreyText" parent="TextAppearance.AppCompat">
+    <style name="CalendarDayGreyText" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@android:color/darker_gray</item>
     </style>
 
-    <style name="TextAppearance.Zapisnik.Light" parent="TextAppearance.AppCompat">
+    <style name="TextAppearance.Zapisnik.Light" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <style name="CalendarDayBlackText" parent="TextAppearance.AppCompat">
+    <style name="CalendarDayBlackText" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <style name="CalendarWeekDayWhiteText" parent="TextAppearance.AppCompat">
+    <style name="CalendarWeekDayWhiteText" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="CalendarWeekDayBlackText" parent="TextAppearance.AppCompat">
+    <style name="CalendarWeekDayBlackText" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <style name="CalendarTitleWhiteText" parent="TextAppearance.AppCompat">
+    <style name="CalendarTitleWhiteText" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="CalendarTitleBlackText" parent="TextAppearance.AppCompat">
+    <style name="CalendarTitleBlackText" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="android:textColor">@android:color/black</item>
     </style>
 
     <!-- Light mode theme -->
     <style name="Theme.Zapisnik.Lightmode" parent="Theme.Zapisnik">
         <item name="colorPrimary">#FFFFFF</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryLight</item>
+        <item name="colorPrimaryDark">#000000</item>
         <item name="colorAccent">#FF03A9F4</item>
         <item name="android:windowBackground">@drawable/bg_image_light</item>
         <item name="bottomNavBackgroundColor">@color/bottom_nav_light</item>
@@ -89,7 +93,14 @@
         <item name="editTextBackground">@drawable/rounded_edittext_light</item>
         <item name="android:textColorHint">@android:color/darker_gray</item>
         <item name="checkboxTint">@color/checkbox_tint_light</item>
+        <item name="buttonBackground">@drawable/rounded_button_light</item>
+        <item name="arrowIcon">@drawable/ic_arrow_right_light</item>
+        <item name="bgDetail">@drawable/bg_detail_light</item>
+        <item name="flightDateTextColor">#FF03A9F4</item>
     </style>
+
+
+
 
 
 </resources>
