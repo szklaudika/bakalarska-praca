@@ -6,7 +6,6 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
-
 import java.util.List;
 
 @Dao
@@ -24,8 +23,8 @@ public interface CertificateDao {
     @Query("SELECT * FROM certificates")
     List<Certificate> getAllCertificates();
 
-    @Query("SELECT * FROM certificates WHERE is_synced = 1")
-    List<Certificate> getSyncedCertificates();
+    @Query("SELECT * FROM certificates WHERE user_id = :userId")
+    List<Certificate> getCertificatesByUserId(int userId);
 
     @Query("SELECT * FROM certificates WHERE certificate_type = :certificateName LIMIT 1")
     Certificate getCertificateByName(String certificateName);
@@ -41,6 +40,4 @@ public interface CertificateDao {
 
     @Query("UPDATE certificates SET is_synced = 1 WHERE id = :certificateId")
     void markAsSynced(int certificateId);
-
-
 }

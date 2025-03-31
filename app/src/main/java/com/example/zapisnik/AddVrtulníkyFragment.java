@@ -466,4 +466,5 @@ public class AddVrtulníkyFragment extends Fragment {
             }
         });
     }
+
 }

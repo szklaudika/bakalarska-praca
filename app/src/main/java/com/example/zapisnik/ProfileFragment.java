@@ -2,6 +2,7 @@ package com.example.zapisnik;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -48,23 +49,22 @@ public class ProfileFragment extends Fragment {
     private SectionedCertificateAdapter adapter;
     private List<ListItem> items = new ArrayList<>();
 
-    // Aggregated flight data TextViews – using new IDs from the redesigned layout
-    private TextView tvTotalFlightTime;     // from tv_total_flight_time_value
-    private TextView tvMultiPilotTime;      // from tv_multi_pilot_time_value
-    private TextView tvLandings;            // from tv_landings_value
-    private TextView tvNocnyLet;            // from tv_nocny_let_value
-    private TextView tvIfr;                 // from tv_ifr_value
-    private TextView tvPic;                 // from tv_pic_value
-    private TextView tvKopilot;             // from tv_kopilot_value
-    private TextView tvDvojpilot;           // from tv_dvojpilot_value
-    private TextView tvInstructor;          // from tv_instructor_value
-    private TextView tvFstdSummary;         // from tv_fstd_summary_value
+    // Aggregated flight data TextViews
+    private TextView tvTotalFlightTime;
+    private TextView tvMultiPilotTime;
+    private TextView tvLandings;
+    private TextView tvNocnyLet;
+    private TextView tvIfr;
+    private TextView tvPic;
+    private TextView tvKopilot;
+    private TextView tvDvojpilot;
+    private TextView tvInstructor;
+    private TextView tvFstdSummary;
 
     public ProfileFragment() {
         // Required empty public constructor
     }
 
-    // Enable options menu in onCreate
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +75,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        // Inflate the new coordinator layout with the redesigned summarizations container
+        // Inflate the layout with the redesigned summarizations container
         View view = inflater.inflate(R.layout.activity_profile_coordinator, container, false);
 
         // --- Profile Header Setup ---
@@ -88,7 +88,7 @@ public class ProfileFragment extends Fragment {
                     .commit();
         });
 
-        // --- Retrieve Flight Data Views from Redesigned Layout ---
+        // --- Retrieve Flight Data Views from the layout ---
         tvTotalFlightTime = view.findViewById(R.id.tv_total_flight_time_value);
         tvMultiPilotTime = view.findViewById(R.id.tv_multi_pilot_time_value);
         tvLandings = view.findViewById(R.id.tv_landings_value);
@@ -106,20 +106,25 @@ public class ProfileFragment extends Fragment {
         final LinearLayout llSummarizations = view.findViewById(R.id.ll_summarizations);
         final LinearLayout llCertificates = view.findViewById(R.id.ll_certificates);
 
-        // Default: show summarizations, hide certificates.
-        tvToggleSummarizations.setBackgroundResource(R.drawable.toggle_segment_selected);
+        // Retrieve dark mode preference
+        SharedPreferences prefs = getActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
+        boolean isLightMode = prefs.getBoolean("dark_mode", false);
+        int selectedToggleDrawable = isLightMode ? R.drawable.toggle_segment_selected_light : R.drawable.toggle_segment_selected;
+
+        // By default, show summarizations and hide certificates.
+        tvToggleSummarizations.setBackgroundResource(selectedToggleDrawable);
         tvToggleCertificates.setBackgroundResource(android.R.color.transparent);
         llSummarizations.setVisibility(View.VISIBLE);
         llCertificates.setVisibility(View.GONE);
 
         tvToggleSummarizations.setOnClickListener(v -> {
-            tvToggleSummarizations.setBackgroundResource(R.drawable.toggle_segment_selected);
+            tvToggleSummarizations.setBackgroundResource(selectedToggleDrawable);
             tvToggleCertificates.setBackgroundResource(android.R.color.transparent);
             llSummarizations.setVisibility(View.VISIBLE);
             llCertificates.setVisibility(View.GONE);
         });
         tvToggleCertificates.setOnClickListener(v -> {
-            tvToggleCertificates.setBackgroundResource(R.drawable.toggle_segment_selected);
+            tvToggleCertificates.setBackgroundResource(selectedToggleDrawable);
             tvToggleSummarizations.setBackgroundResource(android.R.color.transparent);
             llSummarizations.setVisibility(View.GONE);
             llCertificates.setVisibility(View.VISIBLE);
@@ -163,7 +168,7 @@ public class ProfileFragment extends Fragment {
     }
 
     /**
-     * Call this method after setting the ListView adapter to calculate its height based on children.
+     * Call this method after setting the ListView adapter to calculate its height.
      */
     private void setListViewHeightBasedOnChildren(ListView listView) {
         if (listView.getAdapter() == null) {
@@ -182,14 +187,12 @@ public class ProfileFragment extends Fragment {
         listView.requestLayout();
     }
 
-    // Inflate the menu resource (profile_menu.xml)
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.profile_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    // Handle options menu item clicks (if using action bar menu)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
@@ -207,7 +210,11 @@ public class ProfileFragment extends Fragment {
      */
     public void loadCertificatesFromDatabase() {
         Executors.newSingleThreadExecutor().execute(() -> {
-            List<Certificate> certificates = database.certificateDao().getAllCertificates();
+            SharedPreferences prefs = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+            int userId = prefs.getInt("userId", 0);
+            Log.d(TAG, "loadCertificatesFromDatabase() - userId: " + userId);
+            List<Certificate> certificates = database.certificateDao().getCertificatesByUserId(userId);
+            Log.d(TAG, "Certificates fetched from DB: " + certificates.size());
             List<ListItem> tempItems = new ArrayList<>();
             List<String> knownPlatforms = Arrays.asList("Velká éra", "Vrtuľníky", "Ultralighty", "Vetrone");
 
@@ -223,7 +230,7 @@ public class ProfileFragment extends Fragment {
                 groupedByPlatform.get(platform).add(cert);
             }
 
-            // Add certificates grouped by known platforms
+            // Group certificates by known platforms
             for (String platform : knownPlatforms) {
                 List<Certificate> list = groupedByPlatform.get(platform);
                 if (list != null && !list.isEmpty()) {
@@ -241,12 +248,13 @@ public class ProfileFragment extends Fragment {
                             }
                         }
                         String detailPart = cert.getCertificateType() + "\n(" + cert.getSection() + ")";
-                        tempItems.add(new ListItem(ListItem.TYPE_ITEM, formattedExpiry, detailPart));
+                        String certificateDisplay = formattedExpiry;
+                        tempItems.add(new ListItem(ListItem.TYPE_ITEM, certificateDisplay, detailPart));
                     }
                 }
             }
 
-            // Add certificates from unknown platforms under "Ostatné certifikáty"
+            // Group certificates with unknown platform under "Ostatné certifikáty"
             if (groupedByPlatform.containsKey("Ostatné certifikáty")) {
                 List<Certificate> others = groupedByPlatform.get("Ostatné certifikáty");
                 if (others != null && !others.isEmpty()) {
@@ -264,7 +272,8 @@ public class ProfileFragment extends Fragment {
                             }
                         }
                         String detailPart = cert.getCertificateType() + "\n(" + cert.getSection() + ", " + cert.getPlatform() + ")";
-                        tempItems.add(new ListItem(ListItem.TYPE_ITEM, formattedExpiry, detailPart));
+                        String certificateDisplay = cert.getCertificateType() + " - Expires: " + formattedExpiry;
+                        tempItems.add(new ListItem(ListItem.TYPE_ITEM, certificateDisplay, detailPart));
                     }
                 }
             }
@@ -275,8 +284,8 @@ public class ProfileFragment extends Fragment {
                     items.addAll(tempItems);
                     adapter = new SectionedCertificateAdapter(getActivity(), items);
                     listViewCertificates.setAdapter(adapter);
-                    // Adjust the ListView's height to display all items
                     setListViewHeightBasedOnChildren(listViewCertificates);
+                    Log.d(TAG, "Certificates ListView updated. Total items: " + items.size());
                 });
             }
         });
@@ -287,18 +296,19 @@ public class ProfileFragment extends Fragment {
      * and removes local certificates not present on the server.
      */
     private void loadCertificatesFromServer() {
+        SharedPreferences prefs = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        int userId = prefs.getInt("userId", 0);
+        Log.d(TAG, "loadCertificatesFromServer() - userId: " + userId);
+
         CertificateApi api = RetrofitClient.getApi();
-        Call<List<Certificate>> call = api.getAllCertificates();
+        Call<List<Certificate>> call = api.getAllCertificates(userId);
         call.enqueue(new Callback<List<Certificate>>() {
             @Override
             public void onResponse(Call<List<Certificate>> call, Response<List<Certificate>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Certificate> serverCertificates = response.body();
+                    Log.d(TAG, "Certificates fetched from server: " + serverCertificates.size());
 
-                    // Remove junk local certificate data (not present on the server)
-                    removeLocalJunkCertificates(serverCertificates);
-
-                    // Update local database with certificates from the server
                     Executors.newSingleThreadExecutor().execute(() -> {
                         for (Certificate cert : serverCertificates) {
                             Certificate existingCert = database.certificateDao().getCertificateById(cert.getId());
@@ -324,26 +334,7 @@ public class ProfileFragment extends Fragment {
     }
 
     /**
-     * Removes local certificate records that are not present in the server data.
-     */
-    private void removeLocalJunkCertificates(List<Certificate> serverCertificates) {
-        Set<Integer> serverIds = new HashSet<>();
-        for (Certificate cert : serverCertificates) {
-            serverIds.add(cert.getId());
-        }
-        Executors.newSingleThreadExecutor().execute(() -> {
-            List<Certificate> localCertificates = database.certificateDao().getAllCertificates();
-            for (Certificate localCert : localCertificates) {
-                if (!serverIds.contains(localCert.getId())) {
-                    database.certificateDao().deleteCertificate(localCert);
-                    Log.d(TAG, "Deleted junk local certificate with id: " + localCert.getId());
-                }
-            }
-        });
-    }
-
-    /**
-     * Deletes a certificate by its name. First deletes from server, then from local database.
+     * Deletes a certificate by its name. First deletes from server, then from local DB.
      */
     private void deleteCertificate(String certificateString) {
         String[] parts = certificateString.split(" - Expires:");
@@ -405,11 +396,14 @@ public class ProfileFragment extends Fragment {
     }
 
     /**
-     * Aggregates flight data from the local database and updates the UI.
+     * Aggregates flight data from the local database for the current user and updates the UI.
      */
     private void calculateFlightAggregatesFromLocal() {
         Executors.newSingleThreadExecutor().execute(() -> {
-            List<Flight> flights = FlightDatabase.getInstance(getActivity()).flightDao().getAllFlights();
+            // Retrieve the current user's id and fetch only their flights.
+            SharedPreferences prefs = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+            int userId = prefs.getInt("userId", 0);
+            List<Flight> flights = FlightDatabase.getInstance(getActivity()).flightDao().getFlightsByUserId(userId);
             int totalFlightTime = 0;
             int totalMultiPilotTime = 0;
             int totalLandingsDay = 0;
@@ -476,19 +470,6 @@ public class ProfileFragment extends Fragment {
         return hours + " h " + minutes + " m";
     }
 
-
-    /**
-     * Helper method to format minutes into a string with hours and minutes.
-     */
-    private String formatMinutes(int totalMinutes, String label) {
-        int hours = totalMinutes / 60;
-        int minutes = totalMinutes % 60;
-        return label + ": " + hours + " h " + minutes + " m";
-    }
-
-    /**
-     * Helper method to build a summary string for FSTD sessions.
-     */
     private String getFstdSummaryString(Map<String, Integer> fstdSummary) {
         StringBuilder summary = new StringBuilder();
         for (Map.Entry<String, Integer> entry : fstdSummary.entrySet()) {
@@ -506,19 +487,14 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // Recalculate flight aggregates when the fragment resumes
         calculateFlightAggregatesFromLocal();
-
-        // If network is available, sync offline certificates to the server
         if (isNetworkAvailable()) {
             syncOfflineCertificates();
         }
     }
 
-    // Method to sync all offline certificates to the server
     private void syncOfflineCertificates() {
         Executors.newSingleThreadExecutor().execute(() -> {
-            // Fetch certificates that were added offline and are not yet synced
             List<Certificate> unsyncedCertificates = database.certificateDao().getUnsyncedCertificates();
             for (Certificate cert : unsyncedCertificates) {
                 sendCertificateToServer(cert);
@@ -526,13 +502,11 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    // Sends a certificate to the server using Retrofit and marks it as synced on success.
     private void sendCertificateToServer(Certificate certificate) {
         RetrofitClient.getApi().addCertificate(certificate).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    // Mark certificate as synced in the local database.
                     Executors.newSingleThreadExecutor().execute(() -> {
                         database.certificateDao().markAsSynced(certificate.getId());
                     });
@@ -540,7 +514,6 @@ public class ProfileFragment extends Fragment {
                     Log.d("ProfileFragment", "Failed to sync certificate: " + response.message());
                 }
             }
-
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Log.d("ProfileFragment", "Failed to sync certificate: " + t.getMessage());

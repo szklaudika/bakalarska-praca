@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,9 +16,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +38,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.Locale;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RemindersFragment extends Fragment {
 
@@ -129,11 +134,15 @@ public class RemindersFragment extends Fragment {
 
     private void checkAndDisplayExpiringCertificates() {
         Executors.newSingleThreadExecutor().execute(() -> {
-            List<Certificate> soonExpiring = getExpiringCertificates();
-            List<Certificate> expired = getExpiredCertificates();
+            // Retrieve current user id
+            SharedPreferences prefs = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+            int userId = prefs.getInt("userId", 0);
+
+            List<Certificate> soonExpiring = getExpiringCertificates(userId);
+            List<Certificate> expired = getExpiredCertificates(userId);
 
             List<String> newList = new ArrayList<>();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             Date today = new Date();
 
             if (!soonExpiring.isEmpty()) {
@@ -192,13 +201,15 @@ public class RemindersFragment extends Fragment {
      * and shows a small popup window above the calendar.
      */
     private void showPopupForSelectedDay(final CalendarDay selectedDay) {
-        // Run database query on a background thread
         Executors.newSingleThreadExecutor().execute(() -> {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             String selectedStr = sdf.format(selectedDay.getDate());
+            // Retrieve current user id
+            SharedPreferences prefs = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+            int userId = prefs.getInt("userId", 0);
 
-            // Query all certificates on background thread
-            List<Certificate> allCertificates = database.certificateDao().getAllCertificates();
+            // Query certificates only for this user.
+            List<Certificate> allCertificates = database.certificateDao().getCertificatesByUserId(userId);
             List<Certificate> matchingCertificates = new ArrayList<>();
             for (Certificate cert : allCertificates) {
                 if (cert.getExpiryDate().equals(selectedStr)) {
@@ -206,16 +217,13 @@ public class RemindersFragment extends Fragment {
                 }
             }
 
-            // If no certificates found, optionally show a Toast or do nothing
             if (matchingCertificates.isEmpty()) {
                 requireActivity().runOnUiThread(() -> {
-                    // Example Toast message (uncomment if desired)
-                    // Toast.makeText(getContext(), "No certificates expiring on " + selectedStr, Toast.LENGTH_SHORT).show();
+                    // Optionally show a Toast.
                 });
                 return;
             }
 
-            // Build a string containing certificate info
             StringBuilder sb = new StringBuilder();
             for (Certificate cert : matchingCertificates) {
                 sb.append(cert.getCertificateType())
@@ -224,17 +232,12 @@ public class RemindersFragment extends Fragment {
                         .append("\n\n");
             }
 
-            // Switch to UI thread to show the PopupWindow
             requireActivity().runOnUiThread(() -> {
                 LayoutInflater inflater = (LayoutInflater)
                         requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View popupView = inflater.inflate(R.layout.popup_certificates, null);
-
-                // Set the text in the popup
                 TextView tvPopup = popupView.findViewById(R.id.tv_popup);
                 tvPopup.setText(sb.toString());
-
-                // Create the PopupWindow
                 final PopupWindow popupWindow = new PopupWindow(
                         popupView,
                         ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -242,29 +245,21 @@ public class RemindersFragment extends Fragment {
                 );
                 popupWindow.setFocusable(true);
                 popupWindow.setOutsideTouchable(true);
-
-                // Show the popup in the center of the screen
                 View rootView = requireActivity().getWindow().getDecorView().getRootView();
                 popupWindow.showAtLocation(rootView, Gravity.CENTER, 0, 0);
-
-                // Dismiss popup after 3 seconds
                 new Handler(Looper.getMainLooper()).postDelayed(popupWindow::dismiss, 3000);
             });
         });
     }
 
-
-
     private void highlightExpiryDatesOnCalendar(List<Certificate> soonExpiring, List<Certificate> expired) {
-        // Retrieve the current mode (true = light mode) from SharedPreferences.
         SharedPreferences prefs = requireActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
         boolean isLightMode = prefs.getBoolean("dark_mode", true);
 
         List<Date> soonDates = new ArrayList<>();
         List<Date> expiredDates = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
-        // Convert soon-expiring certificate dates.
         for (Certificate cert : soonExpiring) {
             try {
                 soonDates.add(sdf.parse(cert.getExpiryDate()));
@@ -272,7 +267,6 @@ public class RemindersFragment extends Fragment {
                 e.printStackTrace();
             }
         }
-        // Convert expired certificate dates.
         for (Certificate cert : expired) {
             try {
                 expiredDates.add(sdf.parse(cert.getExpiryDate()));
@@ -281,7 +275,6 @@ public class RemindersFragment extends Fragment {
             }
         }
 
-        // Select the appropriate drawable for expired and soon-expiring certificates.
         int expiredDrawable = isLightMode
                 ? R.drawable.custom_expired_highlight_light
                 : R.drawable.custom_expired_highlight;
@@ -289,20 +282,18 @@ public class RemindersFragment extends Fragment {
                 ? R.drawable.custom_highlight_light
                 : R.drawable.custom_highlight;
 
-        // Create decorators using the selected drawable resources.
         ExpiryDayDecorator soonDecorator = new ExpiryDayDecorator(
                 requireContext(),
                 soonDates,
-                soonDrawable  // Use custom_highlight_ligh in light mode.
+                soonDrawable
         );
 
         ExpiryDayDecorator expiredDecorator = new ExpiryDayDecorator(
                 requireContext(),
                 expiredDates,
-                expiredDrawable  // Use custom_expired_highlist_ligh in light mode.
+                expiredDrawable
         );
 
-        // Apply both decorators on the main thread.
         requireActivity().runOnUiThread(() -> {
             materialCalendarView.removeDecorators();
             materialCalendarView.addDecorator(soonDecorator);
@@ -310,13 +301,10 @@ public class RemindersFragment extends Fragment {
         });
     }
 
-
-
-
-    private List<Certificate> getExpiringCertificates() {
-        List<Certificate> allCertificates = database.certificateDao().getAllCertificates();
+    private List<Certificate> getExpiringCertificates(int userId) {
+        List<Certificate> allCertificates = database.certificateDao().getCertificatesByUserId(userId);
         List<Certificate> soonExpiring = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         Date today = new Date();
 
         for (Certificate cert : allCertificates) {
@@ -334,10 +322,10 @@ public class RemindersFragment extends Fragment {
         return soonExpiring;
     }
 
-    private List<Certificate> getExpiredCertificates() {
-        List<Certificate> allCertificates = database.certificateDao().getAllCertificates();
+    private List<Certificate> getExpiredCertificates(int userId) {
+        List<Certificate> allCertificates = database.certificateDao().getCertificatesByUserId(userId);
         List<Certificate> expired = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         Date today = new Date();
 
         for (Certificate cert : allCertificates) {
@@ -379,7 +367,7 @@ public class RemindersFragment extends Fragment {
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(requireContext(), CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_notification) // your notification icon
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle("Certification Reminder")
                 .setContentText(contentText)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)

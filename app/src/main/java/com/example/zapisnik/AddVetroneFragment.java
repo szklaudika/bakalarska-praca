@@ -407,4 +407,5 @@ public class AddVetroneFragment extends Fragment {
             }
         });
     }
+
 }

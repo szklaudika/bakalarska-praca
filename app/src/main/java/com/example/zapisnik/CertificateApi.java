@@ -15,11 +15,8 @@ public interface CertificateApi {
 
     // Endpoint to get all certificates from the server
     @GET("get_certificates.php")
-    Call<List<Certificate>> getAllCertificates();
+    Call<List<Certificate>> getAllCertificates(@Query("user_id") int userId);
 
-    // Endpoint to get a certificate by ID
-    @GET("get_certificates_by_id.php")
-    Call<Certificate> getCertificateById(@Query("id") int id);
 
     // Endpoint to check if certificate exists (by name and expiry date)
     @GET("check_certificate.php")

@@ -291,4 +291,5 @@ public class FlightDetailFragment extends Fragment {
         // Recalculate aggregates when the fragment resumes.
         calculateFlightAggregates();
     }
+
 }

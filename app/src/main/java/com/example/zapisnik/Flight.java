@@ -118,11 +118,12 @@ public class Flight {
     @ColumnInfo(name = "is_synced")
     private boolean isSynced;
 
+    // Updated constructor including userId.
     public Flight(String date, String departurePlace, String departureTime, String arrivalPlace, String arrivalTime,
                   String aircraftModel, String registration, int singlePilotTime, Integer multiPilotTime, int totalFlightTime,
                   String pilotName, boolean singlePilot, Integer landingsDay, Integer landingsNight, Integer nightTime, Integer ifrTime,
                   Integer picTime, Integer copilotTime, Integer dualTime, Integer instructorTime, String fstdDate, String fstdType,
-                  Integer fstdTotalTime, String remarks) {
+                  Integer fstdTotalTime, String remarks, int userId) {
         this.date = date;
         this.departurePlace = departurePlace;
         this.departureTime = departureTime;
@@ -147,7 +148,10 @@ public class Flight {
         this.fstdType = fstdType;
         this.fstdTotalTime = fstdTotalTime;
         this.remarks = remarks;
-        this.isSynced = false; // Default value when a flight is first created
+        this.userId = userId;
+        // Default values for offline and sync flags.
+        this.addedOffline = false;
+        this.isSynced = false;
     }
 
     // Getters and setters

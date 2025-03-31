@@ -265,8 +265,10 @@ public class AddFlightFragment extends Fragment {
                     formattedFstdDate,
                     fstdType,
                     fstdTotalTime,
-                    remarks
+                    remarks,
+                    userId   // include the user id as the 25th parameter
             );
+
             // Set the user ID for the flight
             flight.setUserId(userId);
 
@@ -376,4 +378,5 @@ public class AddFlightFragment extends Fragment {
     private boolean isLeapYear(int year) {
         return (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
     }
+
 }

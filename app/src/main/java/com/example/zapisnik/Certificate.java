@@ -8,7 +8,8 @@ import com.google.gson.annotations.SerializedName;
 @Entity(tableName = "certificates")
 public class Certificate {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey // Removed autoGenerate so that server's id is used.
+    @SerializedName("id")
     private int id;
 
     @ColumnInfo(name = "section")
@@ -34,15 +35,14 @@ public class Certificate {
     @SerializedName("error")
     private String error;
 
-    // Add userId field with appropriate column info if needed.
+    @SerializedName("user_id")  // Ensure that the JSON user_id is mapped to this field.
     @ColumnInfo(name = "user_id")
     private int userId;
 
-    // Add the addedOffline field.
     @ColumnInfo(name = "added_offline")
     private boolean addedOffline;
 
-    // Constructor with required fields
+    // Constructor with required fields (you may add userId here if needed)
     public Certificate(String section, String platform, String certificateType, String expiryDate, String note) {
         this.section = section;
         this.platform = platform;
@@ -51,7 +51,6 @@ public class Certificate {
         this.note = note;
         this.isSynced = false;
         this.error = null;
-        // Optionally, you can set defaults for userId and addedOffline here if needed.
     }
 
     // Getters and setters

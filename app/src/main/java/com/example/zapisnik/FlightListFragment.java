@@ -111,10 +111,12 @@ public class FlightListFragment extends Fragment {
         int userId = prefs.getInt("userId", 0);
         List<Flight> flightsFromDb = FlightDatabase.getInstance(getActivity())
                 .flightDao().getFlightsByUserId(userId);
+        Log.d(TAG, "Number of flights loaded: " + flightsFromDb.size());
         flights.clear();
         flights.addAll(flightsFromDb);
         updateListView();
     }
+
 
 
     private void fetchFlightsFromServer() {
@@ -125,14 +127,16 @@ public class FlightListFragment extends Fragment {
         // Append the user_id parameter to the URL
         String url = "http://10.0.2.2/zapisnik_db/get_flights.php?user_id=" + userId;
 
-        assert getActivity() != null;
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     Log.d(TAG, "Response from server: " + response.toString());
-                    // Instead of clearing the in-memory flights list, update the local DB with new server data.
-                    for (int i = 0; i < response.length(); i++) {
+                    // Use a CountDownLatch to wait for all insertions.
+                    int flightCount = response.length();
+                    java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(flightCount);
+
+                    for (int i = 0; i < flightCount; i++) {
                         try {
                             JSONObject flightJson = response.getJSONObject(i);
                             Log.d(TAG, "Flight data: " + flightJson.toString());
@@ -145,6 +149,7 @@ public class FlightListFragment extends Fragment {
                             String aircraftModel = flightJson.optString("aircraft_model", "Unknown Aircraft Model");
                             String registration = flightJson.optString("registration", "Unknown Registration");
                             int singlePilotTime = flightJson.optInt("single_pilot_time", 0);
+                            // Use optInt for multiPilotTime (null returns 0 – adjust if needed)
                             int multiPilotTime = flightJson.optInt("multiPilotTime", 0);
                             int totalFlightTime = flightJson.optInt("total_flight_time", 0);
                             String pilotName = flightJson.optString("pilot_name", "Unknown Pilot");
@@ -162,6 +167,7 @@ public class FlightListFragment extends Fragment {
                             int fstdTotalTime = flightJson.optInt("fstd_total_time", 0);
                             String remarks = flightJson.optString("remarks", "No Remarks");
 
+                            // Create Flight object including the userId.
                             Flight flight = new Flight(
                                     date,
                                     departurePlace,
@@ -186,28 +192,43 @@ public class FlightListFragment extends Fragment {
                                     fstdDate,
                                     fstdType,
                                     fstdTotalTime,
-                                    remarks
+                                    remarks,
+                                    userId
                             );
-                            // Update the local DB only if this flight doesn't already exist.
+
+                            // Insert flight into local DB only if it doesn't already exist.
                             Executors.newSingleThreadExecutor().execute(() -> {
                                 FlightDatabase db = FlightDatabase.getInstance(getActivity());
                                 List<Flight> existing = db.flightDao().getFlightByUnique(date, departurePlace, arrivalPlace, pilotName);
                                 if (existing == null || existing.isEmpty()) {
                                     db.flightDao().insert(flight);
+                                    Log.d(TAG, "Inserted flight for date: " + date);
                                 }
+                                latch.countDown(); // Signal that this flight has been processed.
                             });
                         } catch (JSONException e) {
                             Log.e(TAG, "JSON Parsing error: " + e.getMessage());
+                            latch.countDown(); // Ensure latch is decremented even if there's an error.
                         }
                     }
-                    // Refresh the UI by re-loading all flights from the local database.
-                    loadFlightsFromDatabase();
+                    // Wait for all insertions to finish and then update the UI.
+                    Executors.newSingleThreadExecutor().execute(() -> {
+                        try {
+                            latch.await();
+                            if(getActivity() != null) {
+                                getActivity().runOnUiThread(() -> loadFlightsFromDatabase());
+                            }
+                        } catch (InterruptedException e) {
+                            Log.e(TAG, "Latch interrupted: " + e.getMessage());
+                        }
+                    });
                 },
                 error -> Log.e(TAG, "Error fetching flights: " + error.getMessage())
         );
 
         requestQueue.add(jsonArrayRequest);
     }
+
 
 
 
@@ -254,6 +275,7 @@ public class FlightListFragment extends Fragment {
                 syncPrefs.edit().remove("justSynced").apply();
             }
         }
+
     }
 
 
@@ -294,4 +316,6 @@ public class FlightListFragment extends Fragment {
             }
         });
     }
+
+
 }

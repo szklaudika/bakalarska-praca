@@ -30,8 +30,7 @@ public interface FlightDao {
     @Query("SELECT * FROM flights WHERE id = :flightId LIMIT 1")
     Flight getFlightById(int flightId);
 
-
-    // New method to check for an existing flight by unique fields.
+    // Check for an existing flight using unique fields.
     @Query("SELECT * FROM flights WHERE date = :date AND departure_place = :departurePlace AND arrival_place = :arrivalPlace AND pilot_name = :pilotName")
     List<Flight> getFlightByUnique(String date, String departurePlace, String arrivalPlace, String pilotName);
 }
