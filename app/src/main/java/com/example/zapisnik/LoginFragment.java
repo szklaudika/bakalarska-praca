@@ -93,10 +93,9 @@ public class LoginFragment extends Fragment {
                 Toast.makeText(getActivity(), "Offline login successful", Toast.LENGTH_SHORT).show();
 
                 // Redirect to ProfileFragment after successful offline login
-                ProfileFragment profileFragment = new ProfileFragment();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content_frame, profileFragment)
-                        .commit();
+                if (getActivity() instanceof MainActivity) {
+                    ((MainActivity) getActivity()).navigateToFragment(new ProfileFragment(), R.id.nav_profile);
+                }
             } else {
                 Toast.makeText(getActivity(), "Offline login failed. Please connect to the internet for first-time login.", Toast.LENGTH_SHORT).show();
             }
@@ -119,16 +118,15 @@ public class LoginFragment extends Fragment {
                         editor.putInt("userId", loginResponse.getUser().getId());
                         editor.putString("username", loginResponse.getUser().getUsername());
                         editor.putString("email", loginResponse.getUser().getEmail());
-                        editor.putString("password", password); // Storing password (note: consider using secure storage)
+                        editor.putString("password", password);
                         editor.apply();
 
                         Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
 
-                        // Redirect to ProfileFragment after successful login
-                        ProfileFragment profileFragment = new ProfileFragment();
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.content_frame, profileFragment)
-                                .commit();
+                        // Corrected navigation logic
+                        if (getActivity() instanceof MainActivity) {
+                            ((MainActivity) getActivity()).navigateToFragment(new ProfileFragment(), R.id.nav_profile);
+                        }
 
                     } else {
                         Toast.makeText(getActivity(), "Login failed: " + loginResponse.getMessage(), Toast.LENGTH_SHORT).show();

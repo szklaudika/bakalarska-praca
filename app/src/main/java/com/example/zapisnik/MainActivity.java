@@ -4,9 +4,11 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
@@ -17,9 +19,11 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity {
 
     private NetworkChangeReceiver networkChangeReceiver;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Theme is set in MyApplication or before super.onCreate() if needed.
         SharedPreferences prefs = getSharedPreferences("app_prefs", MODE_PRIVATE);
         boolean isLightMode = prefs.getBoolean("dark_mode", false);
         if (isLightMode) {
@@ -31,14 +35,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
 
         if (savedInstanceState == null) {
+            // When starting, show the login fragment.
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, new LoginFragment())
                     .commit();
         }
+
+        // Listen for fragment changes so we can update the bottom nav's visibility.
+        getSupportFragmentManager().addOnBackStackChangedListener(() -> updateBottomNavVisibility());
+        updateBottomNavVisibility();
 
         networkChangeReceiver = new NetworkChangeReceiver();
         IntentFilter filter = new IntentFilter();
@@ -49,34 +58,26 @@ public class MainActivity extends AppCompatActivity {
         scheduleReminderWork();
     }
 
-    private void scheduleImmediateReminderWork() {
-        OneTimeWorkRequest immediateWorkRequest = new OneTimeWorkRequest.Builder(CertificationReminderWorker.class)
-                .setInitialDelay(0, TimeUnit.SECONDS)
-                .build();
-        WorkManager.getInstance(this).enqueue(immediateWorkRequest);
+    private void updateBottomNavVisibility() {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        if (currentFragment == null || currentFragment instanceof LoginFragment || currentFragment instanceof RegistrationFragment) {
+            bottomNavigationView.setVisibility(View.GONE);
+        } else {
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        }
     }
 
-    private void scheduleReminderWork() {
-        PeriodicWorkRequest reminderWorkRequest = new PeriodicWorkRequest.Builder(
-                CertificationReminderWorker.class, 1, TimeUnit.DAYS)
-                .build();
-
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-                "certReminder",
-                ExistingPeriodicWorkPolicy.KEEP,
-                reminderWorkRequest);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(networkChangeReceiver);
-    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    // Prevent clicks if the current fragment is login or registration.
+                    Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+                    if (currentFragment instanceof LoginFragment || currentFragment instanceof RegistrationFragment) {
+                        // Do nothing
+                        return false;
+                    }
                     Fragment selectedFragment = null;
                     switch (item.getItemId()) {
                         case R.id.nav_flight_list:
@@ -99,8 +100,46 @@ public class MainActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.content_frame, selectedFragment)
                                 .commitAllowingStateLoss();
+                        updateBottomNavVisibility();
+                        return true;
                     }
-                    return true;
+                    return false;
                 }
             };
+
+    private void scheduleImmediateReminderWork() {
+        OneTimeWorkRequest immediateWorkRequest = new OneTimeWorkRequest.Builder(CertificationReminderWorker.class)
+                .setInitialDelay(0, TimeUnit.SECONDS)
+                .build();
+        WorkManager.getInstance(this).enqueue(immediateWorkRequest);
+    }
+
+    private void scheduleReminderWork() {
+        PeriodicWorkRequest reminderWorkRequest = new PeriodicWorkRequest.Builder(
+                CertificationReminderWorker.class, 1, TimeUnit.DAYS)
+                .build();
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                "certReminder",
+                ExistingPeriodicWorkPolicy.KEEP,
+                reminderWorkRequest);
+    }
+
+    public void navigateToFragment(Fragment fragment, int navItemId) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .commitAllowingStateLoss();
+
+        // Update the bottom nav visibility after the fragment transaction is committed
+        getSupportFragmentManager().executePendingTransactions();
+        updateBottomNavVisibility();
+
+        // Postpone selection update slightly to ensure correct UI synchronization
+        bottomNavigationView.post(() -> bottomNavigationView.setSelectedItemId(navItemId));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(networkChangeReceiver);
+    }
 }

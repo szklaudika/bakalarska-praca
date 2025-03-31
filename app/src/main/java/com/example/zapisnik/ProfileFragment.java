@@ -210,11 +210,18 @@ public class ProfileFragment extends Fragment {
      */
     public void loadCertificatesFromDatabase() {
         Executors.newSingleThreadExecutor().execute(() -> {
-            SharedPreferences prefs = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+            // Ensure fragment is still attached before using getActivity()
+            Context context = getContext();
+            if (context == null) return;  // safely exit if context is unavailable
+
+            SharedPreferences prefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
             int userId = prefs.getInt("userId", 0);
+
             Log.d(TAG, "loadCertificatesFromDatabase() - userId: " + userId);
+
             List<Certificate> certificates = database.certificateDao().getCertificatesByUserId(userId);
             Log.d(TAG, "Certificates fetched from DB: " + certificates.size());
+
             List<ListItem> tempItems = new ArrayList<>();
             List<String> knownPlatforms = Arrays.asList("Velká éra", "Vrtuľníky", "Ultralighty", "Vetrone");
 
@@ -224,13 +231,9 @@ public class ProfileFragment extends Fragment {
                 if (platform == null || platform.isEmpty() || !knownPlatforms.contains(platform)) {
                     platform = "Ostatné certifikáty";
                 }
-                if (!groupedByPlatform.containsKey(platform)) {
-                    groupedByPlatform.put(platform, new ArrayList<>());
-                }
-                groupedByPlatform.get(platform).add(cert);
+                groupedByPlatform.computeIfAbsent(platform, k -> new ArrayList<>()).add(cert);
             }
 
-            // Group certificates by known platforms
             for (String platform : knownPlatforms) {
                 List<Certificate> list = groupedByPlatform.get(platform);
                 if (list != null && !list.isEmpty()) {
@@ -248,13 +251,11 @@ public class ProfileFragment extends Fragment {
                             }
                         }
                         String detailPart = cert.getCertificateType() + "\n(" + cert.getSection() + ")";
-                        String certificateDisplay = formattedExpiry;
-                        tempItems.add(new ListItem(ListItem.TYPE_ITEM, certificateDisplay, detailPart));
+                        tempItems.add(new ListItem(ListItem.TYPE_ITEM, formattedExpiry, detailPart));
                     }
                 }
             }
 
-            // Group certificates with unknown platform under "Ostatné certifikáty"
             if (groupedByPlatform.containsKey("Ostatné certifikáty")) {
                 List<Certificate> others = groupedByPlatform.get("Ostatné certifikáty");
                 if (others != null && !others.isEmpty()) {
@@ -278,18 +279,22 @@ public class ProfileFragment extends Fragment {
                 }
             }
 
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(() -> {
+            // Check again before updating UI on the main thread
+            if (isAdded()) {
+                requireActivity().runOnUiThread(() -> {
                     items.clear();
                     items.addAll(tempItems);
-                    adapter = new SectionedCertificateAdapter(getActivity(), items);
-                    listViewCertificates.setAdapter(adapter);
-                    setListViewHeightBasedOnChildren(listViewCertificates);
-                    Log.d(TAG, "Certificates ListView updated. Total items: " + items.size());
+                    if (getContext() != null) {
+                        adapter = new SectionedCertificateAdapter(getContext(), items);
+                        listViewCertificates.setAdapter(adapter);
+                        setListViewHeightBasedOnChildren(listViewCertificates);
+                        Log.d(TAG, "Certificates ListView updated. Total items: " + items.size());
+                    }
                 });
             }
         });
     }
+
 
     /**
      * Fetches certificate data from the server, updates the local database,
