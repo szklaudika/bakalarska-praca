@@ -10,6 +10,9 @@
     <color name="bottom_nav_light">#d4dce3</color>
     <color name="bottom_nav_dark">#1a1a1a</color>
     <color name="colorPrimaryLight">#FF03A9F4</color>
+    <color name="icSettingsTint_dark">#FFFFFF</color>  <!-- For dark mode, tint white -->
+    <color name="icSettingsTint_light">#000000</color> <!-- For light mode, tint black -->
+
 
 
 </resources>

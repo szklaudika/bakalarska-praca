@@ -6,5 +6,5 @@
     <corners android:radius="24dp" />
 
     <!-- Lighter (or highlighted) color for the active segment -->
-    <solid android:color="@android:color/holo_blue_dark" />
+    <solid android:color="#71C9F1" />
 </shape>

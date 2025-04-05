@@ -55,7 +55,7 @@ public class Certificate {
 
     // Getters and setters
     public int getId() {
-        return id;
+        return this.id;
     }
     public void setId(int id) {
         this.id = id;

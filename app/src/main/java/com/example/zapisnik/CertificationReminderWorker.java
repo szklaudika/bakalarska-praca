@@ -3,6 +3,7 @@ package com.example.zapisnik;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.work.Worker;
@@ -12,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class CertificationReminderWorker extends Worker {
 
@@ -22,14 +24,21 @@ public class CertificationReminderWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        // Get the logged-in user's id from SharedPreferences.
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        int loggedInUserId = prefs.getInt("userId", 0);
+
         CertificateDatabase database = CertificateDatabase.getInstance(getApplicationContext());
         List<Certificate> certifications = database.certificateDao().getAllCertificates();
         List<Certificate> expiringCertifications = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         Date today = new Date();
 
-        // Vyber certifikáty, ktoré expirujú do 7 dní
+        // Filter only certificates that belong to the logged in user and expire within 7 days.
         for (Certificate cert : certifications) {
+            if (cert.getUserId() != loggedInUserId) {
+                continue;  // Skip certificates that do not belong to the logged-in user.
+            }
             try {
                 Date expiryDate = sdf.parse(cert.getExpiryDate());
                 long diffInMillis = expiryDate.getTime() - today.getTime();
@@ -42,7 +51,7 @@ public class CertificationReminderWorker extends Worker {
             }
         }
 
-        // Zobraz notifikácie pre každý vyhovujúci certifikát
+        // Show notifications for each expiring certificate.
         for (Certificate cert : expiringCertifications) {
             showNotification(cert);
         }
@@ -53,7 +62,6 @@ public class CertificationReminderWorker extends Worker {
         NotificationManager notificationManager = (NotificationManager)
                 getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         String CHANNEL_ID = "certification_reminder_channel";
-
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
@@ -62,15 +70,14 @@ public class CertificationReminderWorker extends Worker {
             channel.setDescription("Reminders for certification expirations");
             notificationManager.createNotificationChannel(channel);
         }
-
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_notification)  // Použi svoju notifikačnú ikonu
+                .setSmallIcon(R.drawable.ic_notification)  // Use your notification icon.
                 .setContentTitle("Certification Expiring Soon")
                 .setContentText(certificate.getCertificateType() + " expires on " + certificate.getExpiryDate())
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
 
-        // Použi unikátne ID certifikátu, aby si pre každú notifikáciu mal jedinečné oznámenie
+        // Use the certificate's id as the notification id for uniqueness.
         notificationManager.notify(certificate.getId(), builder.build());
     }
 }

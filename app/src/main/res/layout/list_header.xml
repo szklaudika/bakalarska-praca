@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:paddingBottom="8dp"
-        android:text="Vaše lety"
+        android:text="Your Flights"
         android:textAllCaps="true"
         android:fontFamily="sans-serif-medium"
         android:textSize="20sp"

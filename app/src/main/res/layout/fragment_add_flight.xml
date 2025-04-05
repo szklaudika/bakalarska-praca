@@ -19,7 +19,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif-medium"
-            android:text="Pridajte let"
+            android:text="Add Flight"
             android:textAllCaps="true"
             android:textSize="20sp"
             android:textStyle="normal" />
@@ -186,12 +186,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="SE"
+                    android:buttonTint="?android:textColorPrimary"
+                    android:textColor="?android:textColorPrimary"
                     tools:ignore="TouchTargetSizeCheck" />
                 <RadioButton
                     android:id="@+id/rb_me"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ME"
+                    android:buttonTint="?android:textColorPrimary"
+                    android:textColor="?android:textColorPrimary"
                     tools:ignore="TouchTargetSizeCheck" />
             </RadioGroup>
         </LinearLayout>
@@ -414,7 +418,7 @@
         <!-- Add Flight Button -->
         <Button
             android:id="@+id/btn_add_flight"
-            android:layout_width="375dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"

@@ -16,16 +16,41 @@
         android:padding="0dp">
 
     <!-- Full-width ImageView with no padding -->
-    <ImageView
-        android:id="@+id/headerImage"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
-        android:src="?attr/bgDetail" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <!-- A separate container with padding for the CardView and its contents -->
-    <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="0dp">
+
+                <!-- Full-width ImageView -->
+                <ImageView
+                    android:id="@+id/headerImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="?attr/bgDetail" />
+
+                <!-- Container with padding for CardView -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Your existing CardView -->
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -40,10 +65,11 @@
             card_view:cardBackgroundColor="@android:color/transparent"
             android:layout_marginBottom="14dp">
 
+
             <LinearLayout
                 android:id="@+id/linearLayoutFlightDetail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:padding="14dp">
 
@@ -53,19 +79,22 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Date: "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="03/07/14"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- Departure -->
@@ -74,31 +103,35 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="From: "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_departure"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="LKLT"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="  "
                         android:textSize="14sp" />
+
                     <TextView
                         android:id="@+id/tv_flight_departure_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="09:00"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- Arrival -->
@@ -107,31 +140,35 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="To: "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_arrival"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="LKMT"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="  "
                         android:textSize="14sp" />
+
                     <TextView
                         android:id="@+id/tv_flight_arrival_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="10:40"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- Aircraft (Model / Registration) -->
@@ -140,29 +177,33 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Aircraft: "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_aircraft_model"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" / "
                         android:textSize="14sp" />
+
                     <TextView
                         android:id="@+id/tv_flight_registration"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- Single Pilot Time -->
@@ -171,29 +212,33 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Single Pilot Time: "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_single_pilot_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" / "
                         android:textSize="14sp" />
+
                     <TextView
                         android:id="@+id/tv_flight_single_pilot"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- Multi Pilot Time -->
@@ -202,18 +247,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Multi Pilot Time: "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_multi_pilot_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- Total Flight Time -->
@@ -222,18 +269,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Total Flight Time: "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_total_flight_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- Pilot Name -->
@@ -242,18 +291,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Pilot Name: "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_pilot_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- Landings Day -->
@@ -262,18 +313,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Landings (Day): "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_landings_day"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- Landings Night -->
@@ -282,18 +335,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Landings (Night): "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_landings_night"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- Night Time -->
@@ -302,18 +357,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Night Time: "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_night_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- IFR Time -->
@@ -322,18 +379,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="IFR Time: "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_ifr_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- PIC Time -->
@@ -342,18 +401,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="PIC Time: "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_pic_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- Copilot Time -->
@@ -362,18 +423,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Copilot Time: "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_copilot_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- Dual Time -->
@@ -382,18 +445,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Dual Time: "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_dual_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- Instructor Time -->
@@ -402,18 +467,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Instructor Time: "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_instructor_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- FSTD Date -->
@@ -422,18 +489,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="FSTD Date: "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_fstd_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- FSTD Type -->
@@ -442,18 +511,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="FSTD Type: "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_fstd_type"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- FSTD Total Time -->
@@ -462,18 +533,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingBottom="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="FSTD Total Time: "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_fstd_total_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <!-- Remarks -->
@@ -481,19 +554,32 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Remarks: "
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_flight_remarks"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="?attr/flightDateTextColor" />
+                        android:textColor="?attr/flightDateTextColor"
+                        android:textSize="14sp" />
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_delete_flight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:background="?attr/buttonBackground"
+                    android:text="Delete Flight"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@android:color/white"/>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

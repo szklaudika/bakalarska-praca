@@ -10,14 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Switch;
-import android.widget.TextView;
-import java.util.Locale;
+import androidx.appcompat.widget.AppCompatTextView;
 
 public class SettingsFragment extends Fragment {
 
     private Switch darkModeSwitch;
-    private LinearLayout layoutLanguage, layoutLogout;
-    private TextView textSelectedLanguage;
+    private LinearLayout layoutLogout;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -28,12 +26,9 @@ public class SettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         darkModeSwitch = view.findViewById(R.id.switch_dark_mode);
-        layoutLanguage = view.findViewById(R.id.layout_language);
-        textSelectedLanguage = view.findViewById(R.id.text_selected_language);
         layoutLogout = view.findViewById(R.id.layout_logout);
 
         SharedPreferences prefs = getActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
-
         boolean isLightMode = prefs.getBoolean("dark_mode", false);
         darkModeSwitch.setChecked(isLightMode);
 
@@ -43,14 +38,6 @@ public class SettingsFragment extends Fragment {
             editor.apply();
             getActivity().recreate();
             getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        });
-
-        String language = prefs.getString("app_language", "en");
-        textSelectedLanguage.setText(language.equals("en") ? "English" : "Slovak");
-
-        layoutLanguage.setOnClickListener(v -> {
-            String newLang = language.equals("en") ? "sk" : "en";
-            setLocale(newLang);
         });
 
         layoutLogout.setOnClickListener(v -> {
@@ -65,22 +52,5 @@ public class SettingsFragment extends Fragment {
         });
 
         return view;
-    }
-
-    private void setLocale(String languageCode) {
-        Locale locale = new Locale(languageCode);
-        Locale.setDefault(locale);
-
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getActivity().getResources().updateConfiguration(config, getActivity().getResources().getDisplayMetrics());
-
-        SharedPreferences prefs = getActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("app_language", languageCode);
-        editor.apply();
-
-        getActivity().recreate();
-        getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 }

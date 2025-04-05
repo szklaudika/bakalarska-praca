@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -35,6 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_settings"
+                android:tint="?attr/icSettingsTint"
                 android:layout_gravity="end|top"
                 android:layout_margin="16dp"
                 android:contentDescription="Settings" />
@@ -111,7 +113,46 @@
                 android:orientation="vertical"
                 android:padding="8dp">
 
+                <EditText
+                    android:id="@+id/et_from_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="From date (yyyy-MM-dd)"
+                    android:inputType="date"
+                    android:gravity="center"
+                    android:background="?attr/editTextBackground"
+                    tools:ignore="Suspicious0dp"
+                    android:minHeight="48dp"
+                    android:layout_marginBottom="8dp"/>
+
+
+                <EditText
+                    android:id="@+id/et_to_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="To date (yyyy-MM-dd)"
+                    android:inputType="date"
+                    android:gravity="center"
+                    android:background="?attr/editTextBackground"
+                    tools:ignore="Suspicious0dp"
+                    android:minHeight="48dp"
+                    android:layout_marginBottom="8dp"/>
+
+
                 <!-- Row 1: Celkový letový čas & Celkový multi pilot čas -->
+                <Button
+                    android:id="@+id/btn_apply_filter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="?attr/buttonBackground"
+                    android:text="Apply"
+                    android:textColor="?android:textColorPrimary"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -142,7 +183,7 @@
                             android:id="@+id/tv_total_flight_time_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Celkový letový čas"
+                            android:text="Total Flight Time"
                             android:textSize="14sp"
                             android:textColor="?android:textColorPrimary"
                             android:layout_marginTop="4dp"
@@ -172,7 +213,7 @@
                             android:id="@+id/tv_multi_pilot_time_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Celkový multi pilot čas"
+                            android:text="Multi Pilot Time"
                             android:textSize="14sp"
                             android:textColor="?android:textColorPrimary"
                             android:layout_marginTop="4dp"
@@ -202,7 +243,7 @@
                             android:id="@+id/tv_landings_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0 (deň), 0 (noc)"
+                            android:text="0 (day), 0 (night)"
                             android:textSize="20sp"
                             android:textColor="?android:textColorPrimary"
                             android:textStyle="bold"
@@ -211,7 +252,7 @@
                             android:id="@+id/tv_landings_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Súčet pristátí"
+                            android:text="Landings"
                             android:textSize="14sp"
                             android:textColor="?android:textColorPrimary"
                             android:layout_marginTop="4dp"
@@ -241,7 +282,7 @@
                             android:id="@+id/tv_nocny_let_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="NOCNÝ LET"
+                                android:text="Night time"
                             android:textSize="14sp"
                             android:textColor="?android:textColorPrimary"
                             android:layout_marginTop="4dp"
@@ -349,7 +390,7 @@
                             android:id="@+id/tv_kopilot_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="KOPILOT"
+                            android:text="CO-PILOT"
                             android:textSize="14sp"
                             android:textColor="?android:textColorPrimary"
                             android:layout_marginTop="4dp"
@@ -379,7 +420,7 @@
                             android:id="@+id/tv_dvojpilot_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="DVOJPILOT"
+                            android:text="Dual"
                             android:textSize="14sp"
                             android:textColor="?android:textColorPrimary"
                             android:layout_marginTop="4dp"
@@ -417,7 +458,7 @@
                             android:id="@+id/tv_instructor_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="INSTRUKTOR"
+                            android:text="Instructor"
                             android:textSize="14sp"
                             android:textColor="?android:textColorPrimary"
                             android:layout_marginTop="4dp"
@@ -447,7 +488,7 @@
                             android:id="@+id/tv_fstd_summary_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="FSTD Sumarizácia"
+                            android:text="FSTD Summarization"
                             android:textSize="14sp"
                             android:textColor="?android:textColorPrimary"
                             android:layout_marginTop="4dp"

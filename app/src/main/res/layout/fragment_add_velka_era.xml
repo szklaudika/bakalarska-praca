@@ -25,7 +25,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Letecké kvalifikácie - Velká éra"
+                android:text="Aviation Qualifications - Airplanes"
                 android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true"/>
@@ -507,7 +507,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
-                android:text="Medical - Velká éra"
+                android:text="Medical - Airplanes"
                 android:textAllCaps="true"
                 android:textStyle="normal" />
 
@@ -586,7 +586,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
-                android:text="Rádio - Velká éra"
+                android:text="Radio - Airplanes"
                 android:textAllCaps="true"
                 android:textStyle="normal" />
 
@@ -600,10 +600,10 @@
 
                 <CheckBox
                     android:id="@+id/chk_vseobecny_preukaz"
-                    android:layout_width="wrap_content"
+                    android:layout_width="264dp"
                     android:layout_height="wrap_content"
                     android:buttonTint="?attr/checkboxTint"
-                    android:text="Všeobecný preukaz radiofonisty  -"
+                    android:text="General Radiotelephone Operator License  -"
                     android:textColor="?android:textColorPrimary" />
 
                 <EditText
@@ -627,10 +627,10 @@
 
                 <CheckBox
                     android:id="@+id/chk_obmedzeny_preukaz"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="215dp"
+                    android:layout_height="48dp"
                     android:buttonTint="?attr/checkboxTint"
-                    android:text="Obmedzený preukaz radionofisty  -"
+                    android:text="Restricted Radiotelephone Operator License  -"
                     android:textColor="?android:textColorPrimary" />
 
                 <EditText
@@ -665,7 +665,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
-                android:text="Angličtina - Velká éra"
+                android:text="English - Airplanes"
                 android:textAllCaps="true"
                 android:textStyle="normal" />
 
@@ -763,7 +763,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:buttonTint="?attr/checkboxTint"
-                    android:text="IFR angličtina   -"
+                    android:text="IFR English   -"
                     android:textColor="?android:textColorPrimary" />
 
                 <EditText
@@ -798,7 +798,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
-                android:text="Poistka - Velká éra"
+                android:text="Insurance - Airplanes"
                 android:textAllCaps="true"
                 android:textStyle="normal" />
 
@@ -812,10 +812,10 @@
 
                 <CheckBox
                     android:id="@+id/chk_poistenie_zodpovednost_cr_sk"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="212dp"
+                    android:layout_height="52dp"
                     android:buttonTint="?attr/checkboxTint"
-                    android:text="Poistenie zodpovednosti ČR + SK  -"
+                    android:text="Liability insurance (Czech Republic + Slovakia)  -"
                     android:textColor="?android:textColorPrimary" />
 
                 <EditText
@@ -842,7 +842,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:buttonTint="?attr/checkboxTint"
-                    android:text="Poistenie zodpovednosti SVET  -"
+                    android:text="Worldwide liability insurance  -"
                     android:textColor="?android:textColorPrimary" />
 
                 <EditText
@@ -870,13 +870,13 @@
         <!-- Add Certificate Button -->
         <Button
             android:id="@+id/btn_add_certificate"
-            android:layout_width="375dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="10dp"
             android:background="?attr/buttonBackground"
-            android:text="Pridať kvalifikáciu" />
+            android:text="Add Certificate" />
 
     </LinearLayout>
 

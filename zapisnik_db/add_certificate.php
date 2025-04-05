@@ -1,48 +1,69 @@
 <?php
-// Database connection parameters
-$servername = "localhost";  // Change if needed
-$username = "root";         // Your database username
-$password = "";             // Your database password
-$dbname = "zapisnik_db";    // Your database name
+header("Content-Type: application/json");
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+// Načítanie pripojovacích údajov: ak je nastavená premenná JAWSDB_URL (Heroku), použijeme ju, inak lokálne údaje.
+$dbUrl = getenv('JAWSDB_URL');
+if ($dbUrl) {
+    $dbparts = parse_url($dbUrl);
+    $servername = $dbparts['host'];
+    $username = $dbparts['user'];
+    $password = $dbparts['pass'];
+    $dbname = ltrim($dbparts['path'], '/');
+} else {
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "zapisnik_db";
 }
 
-// Retrieve JSON input from POST request
-$data = json_decode(file_get_contents("php://input"), true);
+// Vytvorenie pripojenia k databáze
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    http_response_code(500);
+    error_log("Connection failed: " . $conn->connect_error);
+    echo json_encode(["status" => "error", "message" => "Connection failed: " . $conn->connect_error]);
+    exit();
+}
 
-// Extract values from the JSON object
+// Načítanie JSON dát zo vstupu
+$data = json_decode(file_get_contents("php://input"), true);
+if (empty($data)) {
+    http_response_code(400);
+    echo json_encode(["status" => "error", "message" => "No data received"]);
+    exit();
+}
+
+// Extrahovanie hodnôt z JSON objektu
 $section = isset($data['section']) ? $data['section'] : '';
 $platform = isset($data['platform']) ? $data['platform'] : '';
 $certificate_type = isset($data['certificate_type']) ? $data['certificate_type'] : '';
 $expiry_date = isset($data['expiry_date']) ? $data['expiry_date'] : '';
 $note = isset($data['note']) ? $data['note'] : '';
+$user_id = isset($data['user_id']) ? (int)$data['user_id'] : 0;
 
-// Use the same JSON key as in the flights code ("userId")
-$user_id = isset($data['userId']) ? (int)$data['userId'] : 0;
-
-// Prepare the SQL query for insertion, now including user_id
-$stmt = $conn->prepare("INSERT INTO certificates (section, platform, certificate_type, expiry_date, note, user_id) VALUES (?, ?, ?, ?, ?, ?)");
+// Pripravte SQL dotaz na vloženie certifikátu
+$sql = "INSERT INTO certificates (section, platform, certificate_type, expiry_date, note, user_id)
+        VALUES (?, ?, ?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
 if ($stmt === false) {
-    die('Error preparing the SQL query: ' . $conn->error);
+    http_response_code(500);
+    error_log("Failed to prepare SQL query: " . $conn->error);
+    echo json_encode(["status" => "error", "message" => "Failed to prepare SQL query: " . $conn->error]);
+    exit();
 }
 
-// Bind parameters: "sssss" for five strings and "i" for the user_id integer.
+// Viazanie parametrov: 5 reťazcov a 1 celé číslo ("sssssi")
 $stmt->bind_param("sssssi", $section, $platform, $certificate_type, $expiry_date, $note, $user_id);
 
-// Execute the query
+// Vykonanie dotazu
 if ($stmt->execute()) {
     echo json_encode(["status" => "success", "message" => "Certificate added successfully"]);
 } else {
-    echo json_encode(["status" => "error", "message" => "Error: " . $stmt->error]);
+    http_response_code(500);
+    error_log("Failed to add certificate: " . $stmt->error);
+    echo json_encode(["status" => "error", "message" => "Failed to add certificate: " . $stmt->error]);
 }
 
-// Close the statement and connection
 $stmt->close();
 $conn->close();
 ?>

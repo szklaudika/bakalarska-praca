@@ -5,18 +5,20 @@ public class ListItem {
     public static final int TYPE_ITEM = 1;
 
     private int type;
-    private String text;  // Sem zvyknete dávať zobrazený text (napr. "PPL (Angličtina)...")
-    private String date;  // Nové pole na uloženie dátumu
+    private String text;  // Displayed text (e.g., "PPL (Angličtina)...")
+    private String date;  // For example, formatted expiry date
+    private int certificateId; // New field for the certificate's unique ID
 
-    // Konštruktor pre header
+    // Constructor for header items
     public ListItem(int type, String text) {
         this.type = type;
         this.text = text;
     }
 
-    // Konštruktor pre item (detail + dátum)
-    public ListItem(int type, String date, String text) {
+    // Constructor for certificate items with certificateId, date, and text.
+    public ListItem(int type, int certificateId, String date, String text) {
         this.type = type;
+        this.certificateId = certificateId;
         this.date = date;
         this.text = text;
     }
@@ -31,5 +33,9 @@ public class ListItem {
 
     public String getDate() {
         return date;
+    }
+
+    public int getId() {
+        return certificateId;
     }
 }

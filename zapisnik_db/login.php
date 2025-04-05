@@ -1,23 +1,33 @@
 <?php
-$servername = "localhost";
-$username = "root"; // Change this if needed
-$password = ""; // Default is empty for XAMPP
-$dbname = "zapisnik_db";
+header('Content-Type: application/json');
 
-// Use the correct variables here
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+// Načítajte pripojovací URL z JAWSDB_URL (pre Heroku addon JAWSDB)
+$dbUrl = getenv('JAWSDB_URL');
+if (!$dbUrl) {
+    die(json_encode(['success' => false, 'message' => 'JAWSDB environment variable not set.']));
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+// Rozparsujte URL na jednotlivé časti
+$dbparts = parse_url($dbUrl);
+$servername = $dbparts['host'];
+$username = $dbparts['user'];
+$password = $dbparts['pass'];
+$dbname = ltrim($dbparts['path'], '/');
+
+// Vytvorte pripojenie
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die(json_encode(['success' => false, 'message' => "Connection failed: " . $conn->connect_error]));
+}
+
+// Spracovanie POST požiadavky pre prihlásenie
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usernameOrEmail = trim($_POST['usernameOrEmail']);
     $passwordInput = $_POST['password'];
 
-    // Find user by username or email
+    // Pripravte dotaz pre vyhľadanie používateľa podľa username alebo emailu
     $stmt = $conn->prepare("SELECT id, username, email, password FROM users WHERE username = ? OR email = ?");
-    if(!$stmt){
+    if (!$stmt) {
         echo json_encode(['success' => false, 'message' => 'Database error.']);
         exit;
     }
@@ -27,9 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
-        // Verify the password
+        // Overenie hesla
         if (password_verify($passwordInput, $user['password'])) {
-            // Here you can start a session or generate an authentication token
+            unset($user['password']); // Odstrániť citlivé údaje
             echo json_encode(['success' => true, 'message' => 'Login successful', 'user' => $user]);
         } else {
             echo json_encode(['success' => false, 'message' => 'Invalid password']);

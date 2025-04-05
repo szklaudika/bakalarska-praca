@@ -255,47 +255,47 @@ public class AddVrtulníkyFragment extends Fragment {
         if (chkPpl.isChecked()) {
             String expiry = requireExpiry(chkPpl, etExpiryPpl, "PPL");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Vrtuľníky", "PPL", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Vrtuľníky", "PPL", expiry, note));
         }
         if (chkCpl.isChecked()) {
             String expiry = requireExpiry(chkCpl, etExpiryCpl, "CPL");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Vrtuľníky", "CPL", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Vrtuľníky", "CPL", expiry, note));
         }
         if (chkAtpl.isChecked()) {
             String expiry = requireExpiry(chkAtpl, etExpiryAtpl, "ATPL");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Vrtuľníky", "ATPL", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Vrtuľníky", "ATPL", expiry, note));
         }
         if (chkIr.isChecked()) {
             String expiry = requireExpiry(chkIr, etExpiryIr, "IR");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Vrtuľníky", "IR", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Vrtuľníky", "IR", expiry, note));
         }
         if (chkNight.isChecked()) {
             String expiry = requireExpiry(chkNight, etExpiryNight, "NIGHT");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Vrtuľníky", "NIGHT", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Vrtuľníky", "NIGHT", expiry, note));
         }
         if (chkFi.isChecked()) {
             String expiry = requireExpiry(chkFi, etExpiryFi, "FI");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Vrtuľníky", "FI", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Vrtuľníky", "FI", expiry, note));
         }
         if (chkIri.isChecked()) {
             String expiry = requireExpiry(chkIri, etExpiryIri, "IRI");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Vrtuľníky", "IRI", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Vrtuľníky", "IRI", expiry, note));
         }
         if (chkTst.isChecked()) {
             String expiry = requireExpiry(chkTst, etExpiryTst, "TST");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Vrtuľníky", "TST", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Vrtuľníky", "TST", expiry, note));
         }
         if (chkPar.isChecked()) {
             String expiry = requireExpiry(chkPar, etExpiryPar, "PAR");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Vrtuľníky", "PAR", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Vrtuľníky", "PAR", expiry, note));
         }
 
         // Medical - Vrtuľníky
@@ -314,41 +314,41 @@ public class AddVrtulníkyFragment extends Fragment {
         if (chkVseobecnyPreukaz.isChecked()) {
             String expiry = requireExpiry(chkVseobecnyPreukaz, etExpiryVseobecnyPreukaz, "Všeobecný preukaz radiofonisty");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Rádio", "Vrtuľníky", "Všeobecný preukaz radiofonisty", expiry, note));
+                certificatesToAdd.add(new Certificate("Radio", "Vrtuľníky", "General Radiotelephone Operator License", expiry, note));
         }
         if (chkObmedzenyPreukaz.isChecked()) {
             String expiry = requireExpiry(chkObmedzenyPreukaz, etExpiryObmedzenyPreukaz, "Obmedzený preukaz radionofisty");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Rádio", "Vrtuľníky", "Obmedzený preukaz radionofisty", expiry, note));
+                certificatesToAdd.add(new Certificate("Radio", "Vrtuľníky", "Restricted Radiotelephone Operator License", expiry, note));
         }
 
         // Angličtina - Vrtuľníky
         if (chkEnglishLevel4.isChecked()) {
             String expiry = requireExpiry(chkEnglishLevel4, etExpiryEnglishLevel4, "ICAO English LEVEL 4");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Angličtina", "Vrtuľníky", "ICAO English LEVEL 4", expiry, note));
+                certificatesToAdd.add(new Certificate("English", "Vrtuľníky", "ICAO English LEVEL 4", expiry, note));
         }
         if (chkEnglishLevel5.isChecked()) {
             String expiry = requireExpiry(chkEnglishLevel5, etExpiryEnglishLevel5, "ICAO English LEVEL 5");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Angličtina", "Vrtuľníky", "ICAO English LEVEL 5", expiry, note));
+                certificatesToAdd.add(new Certificate("English", "Vrtuľníky", "ICAO English LEVEL 5", expiry, note));
         }
         if (chkEnglishLevel6.isChecked()) {
             String expiry = requireExpiry(chkEnglishLevel6, etExpiryEnglishLevel6, "ICAO English LEVEL 6");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Angličtina", "Vrtuľníky", "ICAO English LEVEL 6", expiry, note));
+                certificatesToAdd.add(new Certificate("English", "Vrtuľníky", "ICAO English LEVEL 6", expiry, note));
         }
 
         // Poistka - Vrtuľníky
         if (chkPoistenieZodpovednostCRSK.isChecked()) {
             String expiry = requireExpiry(chkPoistenieZodpovednostCRSK, etExpiryPoistenieZodpovednostCRSK, "Poistenie ČR+SK");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Poistka", "Vrtuľníky", "Poistenie zodpovednosti ČR + SK", expiry, note));
+                certificatesToAdd.add(new Certificate("Insurance", "Vrtuľníky", "Liability insurance (Czech Republic + Slovakia)", expiry, note));
         }
         if (chkZodpovednostiSvet.isChecked()) {
             String expiry = requireExpiry(chkZodpovednostiSvet, etExpiryZodpovednostiSvet, "Poistenie SVET");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Poistka", "Vrtuľníky", "Poistenie zodpovednosti SVET", expiry, note));
+                certificatesToAdd.add(new Certificate("Insurance", "Vrtuľníky", "Worldwide liability insurance", expiry, note));
         }
 
         if (certificatesToAdd.isEmpty()) {

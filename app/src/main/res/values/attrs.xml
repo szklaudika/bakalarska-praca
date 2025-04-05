@@ -16,4 +16,5 @@
     <attr name="arrowIcon" format="reference"/>
     <attr name="bgDetail" format="reference" />
     <attr name="flightDateTextColor" format="color"/>
+    <attr name="icSettingsTint" format="color" />
 </resources>

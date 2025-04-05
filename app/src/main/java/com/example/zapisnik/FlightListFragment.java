@@ -68,6 +68,7 @@ public class FlightListFragment extends Fragment {
                 FlightDetailFragment detailFragment = new FlightDetailFragment();
 
                 Bundle args = new Bundle();
+                args.putInt("id", selectedFlight.getId());
                 args.putString("date", selectedFlight.getDate());
                 args.putString("departure", selectedFlight.getDeparturePlace());
                 args.putString("departureTime", selectedFlight.getDepartureTime());
@@ -125,7 +126,7 @@ public class FlightListFragment extends Fragment {
         int userId = prefs.getInt("userId", 0);
 
         // Append the user_id parameter to the URL
-        String url = "http://10.0.2.2/zapisnik_db/get_flights.php?user_id=" + userId;
+        String url = "https://zapisnik-2b2a59a43d05.herokuapp.com/get_flights.php?user_id=" + userId;
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
@@ -230,16 +231,6 @@ public class FlightListFragment extends Fragment {
     }
 
 
-
-
-
-    /**
-     * Aktualizácia ListView.
-     *
-     * Možnosti:
-     * 1) Použitie vlastného FlightListAdapter-a s CardView, ktorý zobrazí informácie o lete s prispôsobeným dizajnom a šípkou.
-     * 2) Alternatívne, jednoduchý ArrayAdapter, ktorý zobrazuje text (zakomentované nižšie).
-     */
     private void updateListView() {
         // Použitie vlastného adaptera s vlastným layoutom:
         FlightListAdapter adapter = new FlightListAdapter(

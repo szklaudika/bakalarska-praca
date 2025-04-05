@@ -22,7 +22,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Letecké kvalifikácie - Vrtuľníky"
+                android:text="Aviation Qualifications - Helicopters"
                 android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true" />
@@ -271,7 +271,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Medical - Vrtuľníky"
+                android:text="Medical - Helicopters"
                 android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true" />
@@ -345,7 +345,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rádio - Vrtuľníky"
+                android:text="Radio - Helicopters"
                 android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true" />
@@ -357,13 +357,14 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:paddingVertical="4dp">
+
                 <CheckBox
                     android:id="@+id/chk_vseobecny_preukaz_vrtulniky"
-                    android:layout_width="wrap_content"
+                    android:layout_width="222dp"
                     android:layout_height="wrap_content"
-                    android:text="Všeobecný preukaz radiofonisty   -"
-                    android:textColor="?android:textColorPrimary"
-                    android:buttonTint="?attr/checkboxTint"/>
+                    android:buttonTint="?attr/checkboxTint"
+                    android:text="General Radiotelephone Operator License   -"
+                    android:textColor="?android:textColorPrimary" />
                 <EditText
                     android:id="@+id/et_expiry_vseobecny_preukaz_vrtulniky"
                     android:layout_width="0dp"
@@ -382,13 +383,14 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:paddingVertical="4dp">
+
                 <CheckBox
                     android:id="@+id/chk_obmedzeny_preukaz_vrtulniky"
-                    android:layout_width="wrap_content"
+                    android:layout_width="224dp"
                     android:layout_height="wrap_content"
-                    android:text="Obmedzený preukaz radionofisty   -"
-                    android:textColor="?android:textColorPrimary"
-                    android:buttonTint="?attr/checkboxTint"/>
+                    android:buttonTint="?attr/checkboxTint"
+                    android:text="Restricted Radiotelephone Operator License   -"
+                    android:textColor="?android:textColorPrimary" />
                 <EditText
                     android:id="@+id/et_expiry_obmedzeny_preukaz_vrtulniky"
                     android:layout_width="0dp"
@@ -419,7 +421,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Angličtina - Vrtuľníky"
+                android:text="English - Helicopters"
                 android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true" />
@@ -518,7 +520,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Poistka - Vrtuľníky"
+                android:text="Insurance - Helicopters"
                 android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true" />
@@ -532,9 +534,9 @@
                 android:paddingVertical="4dp">
                 <CheckBox
                     android:id="@+id/chk_poistenie_zodpovednost_cr_sk_vrtulniky"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Poistenie zodpovednosti ČR + SK   -"
+                    android:layout_width="212dp"
+                    android:layout_height="52dp"
+                    android:text="Liability insurance (Czech Republic + Slovakia)   -"
                     android:textColor="?android:textColorPrimary"
                     android:buttonTint="?attr/checkboxTint"/>
                 <EditText
@@ -559,7 +561,7 @@
                     android:id="@+id/chk_zodpovednosti_svet_vrtulniky"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Poistenie zodpovednosti SVET   -"
+                    android:text="Worldwide liability insurance   -"
                     android:textColor="?android:textColorPrimary"
                     android:buttonTint="?attr/checkboxTint"/>
                 <EditText
@@ -587,13 +589,13 @@
         <!-- Add Certificate Button -->
         <Button
             android:id="@+id/btn_add_certificate"
-            android:layout_width="375dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="10dp"
             android:background="?attr/buttonBackground"
-            android:text="Pridať kvalifikáciu" />
+            android:text="Add Certificate" />
 
     </LinearLayout>
 </ScrollView>

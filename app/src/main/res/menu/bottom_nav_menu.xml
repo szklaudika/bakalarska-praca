@@ -3,22 +3,22 @@
     <item
         android:id="@+id/nav_flight_list"
         android:icon="@drawable/ic_flight_list"
-        android:title="Zoznam letov" />
+        android:title="Flights" />
 
     <item
         android:id="@+id/nav_add_flight"
         android:icon="@drawable/ic_add_flight"
-        android:title="Pridať let" />
+        android:title="Add Flight" />
 
     <item
         android:id="@+id/nav_certificates"
         android:icon="@drawable/ic_certificates"
-        android:title="Certifikáty" />
+        android:title="Add Certificate" />
 
     <item
         android:id="@+id/nav_reminders"
         android:icon="@drawable/ic_reminders"
-        android:title="Pripomienky" />
+        android:title="Reminders" />
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/ic_profile"

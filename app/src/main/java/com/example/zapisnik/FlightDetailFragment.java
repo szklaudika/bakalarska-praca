@@ -1,10 +1,12 @@
 package com.example.zapisnik;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FlightDetailFragment extends Fragment {
 
@@ -87,6 +93,22 @@ public class FlightDetailFragment extends Fragment {
 
         // Calculate and display aggregated flight data from the local database
         calculateFlightAggregates();
+
+        Button btnDelete = view.findViewById(R.id.btn_delete_flight);
+        btnDelete.setOnClickListener(v -> {
+            if (args != null && args.containsKey("id")) {
+                int flightId = args.getInt("id");
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Delete Flight")
+                        .setMessage("Are you sure you want to delete this flight?")
+                        .setPositiveButton("Yes", (dialog, which) -> deleteFlight(flightId))
+                        .setNegativeButton("No", null)
+                        .show();
+            } else {
+                Toast.makeText(getActivity(), "Cannot delete: Missing flight ID", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         return view;
     }
@@ -284,6 +306,50 @@ public class FlightDetailFragment extends Fragment {
         }
         return summary.toString();
     }
+
+    private void deleteFlight(int flightId) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            Flight flight = database.flightDao().getFlightById(flightId);
+            if (flight != null) {
+                String url = "https://zapisnik-2b2a59a43d05.herokuapp.com/delete_flight.php?id=" + flightId;
+                retrofit2.Call<Void> call = RetrofitClient.getFlightApi().deleteFlight(flightId);
+                call.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            database.flightDao().delete(flight);
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(() -> {
+                                    Toast.makeText(getActivity(), "Flight deleted successfully", Toast.LENGTH_SHORT).show();
+                                    getParentFragmentManager().popBackStack(); // Go back to list
+                                });
+                            }
+                        } else {
+                            showToast("Server error while deleting flight");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        showToast("Error: " + t.getMessage());
+                    }
+
+                    private void showToast(String message) {
+                        if (getActivity() != null) {
+                            getActivity().runOnUiThread(() ->
+                                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show());
+                        }
+                    }
+                });
+            } else {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() ->
+                            Toast.makeText(getActivity(), "Flight not found locally", Toast.LENGTH_SHORT).show());
+                }
+            }
+        });
+    }
+
 
     @Override
     public void onResume() {

@@ -24,6 +24,7 @@
         <item name="arrowIcon">@drawable/ic_arrow_right</item>
         <item name="bgDetail">@drawable/bg_detail</item>
         <item name="flightDateTextColor">#E57373</item>
+        <item name="icSettingsTint">@color/icSettingsTint_dark</item>
 
     </style>
 
@@ -97,6 +98,7 @@
         <item name="arrowIcon">@drawable/ic_arrow_right_light</item>
         <item name="bgDetail">@drawable/bg_detail_light</item>
         <item name="flightDateTextColor">#FF03A9F4</item>
+        <item name="icSettingsTint">@color/icSettingsTint_light</item>
     </style>
 
 

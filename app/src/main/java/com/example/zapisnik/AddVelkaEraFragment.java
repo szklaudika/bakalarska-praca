@@ -295,146 +295,146 @@ public class AddVelkaEraFragment extends Fragment {
         if (chkPpl.isChecked()) {
             String expiry = requireExpiry(chkPpl, etExpiryPpl, "PPL");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Velká éra", "PPL", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Velka era", "PPL", expiry, note));
         }
         if (chkCpl.isChecked()) {
             String expiry = requireExpiry(chkCpl, etExpiryCpl, "CPL");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Velká éra", "CPL", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Velka era", "CPL", expiry, note));
         }
         if (chkAtpl.isChecked()) {
             String expiry = requireExpiry(chkAtpl, etExpiryAtpl, "ATPL");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Velká éra", "ATPL", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Velka era", "ATPL", expiry, note));
         }
         if (chkSepLand.isChecked()) {
             String expiry = requireExpiry(chkSepLand, etExpirySepLand, "SEP Land");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Velká éra", "SEP land", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Velka era", "SEP land", expiry, note));
         }
         if (chkSepSea.isChecked()) {
             String expiry = requireExpiry(chkSepSea, etExpirySepSea, "SEP Sea");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Velká éra", "SEP sea", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Velka era", "SEP sea", expiry, note));
         }
         if (chkMepLand.isChecked()) {
             String expiry = requireExpiry(chkMepLand, etExpiryMepLand, "MEP Land");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Velká éra", "MEP land", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Velka era", "MEP land", expiry, note));
         }
         if (chkMepSea.isChecked()) {
             String expiry = requireExpiry(chkMepSea, etExpiryMepSea, "MEP Sea");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Velká éra", "MEP sea", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Velka era", "MEP sea", expiry, note));
         }
         if (chkIrSep.isChecked()) {
             String expiry = requireExpiry(chkIrSep, etExpiryIrSep, "IR SEP");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Velká éra", "IR SEP", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Velka era", "IR SEP", expiry, note));
         }
         if (chkIr.isChecked()) {
             String expiry = requireExpiry(chkIr, etExpiryIr, "IR");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Velká éra", "IR", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Velka era", "IR", expiry, note));
         }
         if (chkMep.isChecked()) {
             String expiry = requireExpiry(chkMep, etExpiryMep, "MEP");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Velká éra", "MEP", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Velka era", "MEP", expiry, note));
         }
         if (chkNight.isChecked()) {
             String expiry = requireExpiry(chkNight, etExpiryNight, "Night");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Velká éra", "NIGHT", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Velka era", "NIGHT", expiry, note));
         }
         if (chkFi.isChecked()) {
             String expiry = requireExpiry(chkFi, etExpiryFi, "FI");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Velká éra", "FI", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Velka era", "FI", expiry, note));
         }
         if (chkIri.isChecked()) {
             String expiry = requireExpiry(chkIri, etExpiryIri, "IRI");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Velká éra", "IRI", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Velka era", "IRI", expiry, note));
         }
         if (chkTow.isChecked()) {
             String expiry = requireExpiry(chkTow, etExpiryTow, "TOW");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Velká éra", "TOW", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Velka era", "TOW", expiry, note));
         }
         if (chkTst.isChecked()) {
             String expiry = requireExpiry(chkTst, etExpiryTst, "TST");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Velká éra", "TST", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Velka era", "TST", expiry, note));
         }
         if (chkPar.isChecked()) {
             String expiry = requireExpiry(chkPar, etExpiryPar, "PAR");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Velká éra", "PAR", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Velka era", "PAR", expiry, note));
         }
         if (chkAcr.isChecked()) {
             String expiry = requireExpiry(chkAcr, etExpiryAcr, "ACR");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Velká éra", "ACR", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Velka era", "ACR", expiry, note));
         }
         if (chkMcc.isChecked()) {
             String expiry = requireExpiry(chkMcc, etExpiryMcc, "MCC");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Velká éra", "MCC", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Velka era", "MCC", expiry, note));
         }
         // Medical section
         if (chkMedClass1.isChecked()) {
             String expiry = requireExpiry(chkMedClass1, etExpiryMedClass1, "Medical Certificate Class 1");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Medical", "Velká éra", "Medical Certificate Class 1", expiry, note));
+                certificatesToAdd.add(new Certificate("Medical", "Velka era", "Medical Certificate Class 1", expiry, note));
         }
         if (chkMedClass2.isChecked()) {
             String expiry = requireExpiry(chkMedClass2, etExpiryMedClass2, "Medical Certificate Class 2");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Medical", "Velká éra", "Medical Certificate Class 2", expiry, note));
+                certificatesToAdd.add(new Certificate("Medical", "Velka era", "Medical Certificate Class 2", expiry, note));
         }
         // Rádio section
         if (chkVseobecnyPreukaz.isChecked()) {
             String expiry = requireExpiry(chkVseobecnyPreukaz, etExpiryVseobecnyPreukaz, "Všeobecný preukaz");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Rádio", "Velká éra", "Všeobecný preukaz radiofonisty", expiry, note));
+                certificatesToAdd.add(new Certificate("Radio", "Velka era", "General Radiotelephone Operator License", expiry, note));
         }
         if (chkObmedzenyPreukaz.isChecked()) {
             String expiry = requireExpiry(chkObmedzenyPreukaz, etExpiryObmedzenyPreukaz, "Obmedzený preukaz");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Rádio", "Velká éra", "Obmedzený preukaz radionofisty", expiry, note));
+                certificatesToAdd.add(new Certificate("Radio", "Velka era", "Restricted Radiotelephone Operator License", expiry, note));
         }
         // Angličtina section
         if (chkEnglishLevel4.isChecked()) {
             String expiry = requireExpiry(chkEnglishLevel4, etExpiryEnglishLevel4, "English Level 4");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Angličtina", "Velká éra", "ICAO English LEVEL 4", expiry, note));
+                certificatesToAdd.add(new Certificate("English", "Velka era", "ICAO English LEVEL 4", expiry, note));
         }
         if (chkEnglishLevel5.isChecked()) {
             String expiry = requireExpiry(chkEnglishLevel5, etExpiryEnglishLevel5, "English Level 5");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Angličtina", "Velká éra", "ICAO English LEVEL 5", expiry, note));
+                certificatesToAdd.add(new Certificate("English", "Velka era", "ICAO English LEVEL 5", expiry, note));
         }
         if (chkEnglishLevel6.isChecked()) {
             String expiry = requireExpiry(chkEnglishLevel6, etExpiryEnglishLevel6, "English Level 6");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Angličtina", "Velká éra", "ICAO English LEVEL 6", expiry, note));
+                certificatesToAdd.add(new Certificate("English", "Velka era", "ICAO English LEVEL 6", expiry, note));
         }
         if (chkEnglishIfr.isChecked()) {
             String expiry = requireExpiry(chkEnglishIfr, etExpiryEnglishIfr, "English IFR");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Angličtina", "Velká éra", "IFR angličtina", expiry, note));
+                certificatesToAdd.add(new Certificate("English", "Velka era", "IFR English", expiry, note));
         }
         // Poistka section
         if (chkPoistenieZodpovednostCRSK.isChecked()) {
             String expiry = requireExpiry(chkPoistenieZodpovednostCRSK, etExpiryPoistkaCRSK, "Poistenie ČR+SK");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Poistka", "Velká éra", "Poistenie zodpovednosti ČR + SK", expiry, note));
+                certificatesToAdd.add(new Certificate("Insurance", "Velka era", "Liability insurance (Czech Republic + Slovakia)", expiry, note));
         }
         if (chkZodpovednostiSvet.isChecked()) {
             String expiry = requireExpiry(chkZodpovednostiSvet, etExpiryPoistkaSvet, "Poistenie SVET");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Poistka", "Velká éra", "Poistenie zodpovednosti SVET", expiry, note));
+                certificatesToAdd.add(new Certificate("Insurance", "Velka era", "Worldwide liability insurance", expiry, note));
         }
 
         if (certificatesToAdd.isEmpty()) {

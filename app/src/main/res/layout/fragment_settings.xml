@@ -9,54 +9,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:showDividers="middle">
 
-    <!-- Row: Language -->
-    <LinearLayout
-        android:id="@+id/layout_language"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical">
 
-        <!-- Left icon (Globe) -->
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_language"
-            app:tint="?android:textColorPrimary" />
-
-        <!-- Label -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="Language"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="16sp"/>
-
-        <!-- Flexible space to push the selected language text and arrow to the right -->
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <!-- Currently selected language -->
-        <TextView
-            android:id="@+id/text_selected_language"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="English"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="16sp"/>
-
-        <!-- Right arrow icon -->
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="8dp"
-            android:src="@drawable/ic_arrow"
-            app:tint="?android:textColorPrimary" />
-    </LinearLayout>
 
     <!-- Row: Dark Mode -->
     <LinearLayout

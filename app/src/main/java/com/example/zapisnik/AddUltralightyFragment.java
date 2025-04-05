@@ -242,84 +242,84 @@ public class AddUltralightyFragment extends Fragment {
         if (chkUllUltralighty.isChecked()) {
             String expiry = requireExpiry(chkUllUltralighty, etExpiryUllUltralighty, "ULL(a)");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Ultralighty", "ULL(a)", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Ultralighty", "ULL(a)", expiry, note));
         }
         if (chkVfrUltralighty.isChecked()) {
             String expiry = requireExpiry(chkVfrUltralighty, etExpiryVfrUltralighty, "Riadené lety VFR");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Ultralighty", "Riadené lety VFR", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Ultralighty", "Controlled VFR flights", expiry, note));
         }
         if (chkInstruktor.isChecked()) {
             String expiry = requireExpiry(chkInstruktor, etExpiryInstruktor, "Inštruktor");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Ultralighty", "Inštruktor", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Ultralighty", "Instructor", expiry, note));
         }
         if (chkVlekar.isChecked()) {
             String expiry = requireExpiry(chkVlekar, etExpiryVlekar, "Vlekár");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Ultralighty", "Vlekár", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Ultralighty", "Towing pilot", expiry, note));
         }
         if (chkSkusobnyPilot.isChecked()) {
             String expiry = requireExpiry(chkSkusobnyPilot, etExpirySkusobnyPilot, "Skúšobný pilot");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Ultralighty", "Skúšobný pilot", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Ultralighty", "Test pilot", expiry, note));
         }
         if (chkVysadzovac.isChecked()) {
             String expiry = requireExpiry(chkVysadzovac, etExpiryVysadzovac, "Vysadzovač");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Ultralighty", "Vysadzovač", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Ultralighty", "Skydiving pilot", expiry, note));
         }
 
         // Medical - Ultralighty
         if (chkOsvedcenieUltralighty.isChecked()) {
             String expiry = requireExpiry(chkOsvedcenieUltralighty, etExpiryOsvedcenieUltralighty, "Osvedčenie zdravotnej spôsobilosti 2. triedy");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Medical", "Ultralighty", "Osvedčenie zdravotnej spôsobilosti 2. triedy", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Ultralighty", "2nd Class Medical Certificate", expiry, note));
         }
 
         // Rádio - Ultralighty
         if (chkVseobecnyPreukazUltralighty.isChecked()) {
             String expiry = requireExpiry(chkVseobecnyPreukazUltralighty, etExpiryVseobecnyPreukazUltralighty, "Všeobecný preukaz radiofonisty");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Rádio", "Ultralighty", "Všeobecný preukaz radiofonisty", expiry, note));
+                certificatesToAdd.add(new Certificate("Radio", "Ultralighty", "General Radiotelephone Operator License", expiry, note));
         }
         if (chkObmedzenyPreukazUltralighty.isChecked()) {
             String expiry = requireExpiry(chkObmedzenyPreukazUltralighty, etExpiryObmedzenyPreukazUltralighty, "Obmedzený preukaz radiofonisty");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Rádio", "Ultralighty", "Obmedzený preukaz radiofonisty", expiry, note));
+                certificatesToAdd.add(new Certificate("Radio", "Ultralighty", "Restricted Radiotelephone Operator License", expiry, note));
         }
 
         // Angličtina - Ultralighty
         if (chkEnglishLevel4Ultralighty.isChecked()) {
             String expiry = requireExpiry(chkEnglishLevel4Ultralighty, etExpiryEnglishLevel4Ultralighty, "ICAO English LEVEL 4");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Angličtina", "Ultralighty", "ICAO English LEVEL 4", expiry, note));
+                certificatesToAdd.add(new Certificate("English", "Ultralighty", "ICAO English LEVEL 4", expiry, note));
         }
         if (chkEnglishLevel5Ultralighty.isChecked()) {
             String expiry = requireExpiry(chkEnglishLevel5Ultralighty, etExpiryEnglishLevel5Ultralighty, "ICAO English LEVEL 5");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Angličtina", "Ultralighty", "ICAO English LEVEL 5", expiry, note));
+                certificatesToAdd.add(new Certificate("English", "Ultralighty", "ICAO English LEVEL 5", expiry, note));
         }
         if (chkEnglishLevel6Ultralighty.isChecked()) {
             String expiry = requireExpiry(chkEnglishLevel6Ultralighty, etExpiryEnglishLevel6Ultralighty, "ICAO English LEVEL 6");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Angličtina", "Ultralighty", "ICAO English LEVEL 6", expiry, note));
+                certificatesToAdd.add(new Certificate("English", "Ultralighty", "ICAO English LEVEL 6", expiry, note));
         }
 
         // Poistka - Ultralighty
         if (chkPoistenieZodpovednostCRSKUltralighty.isChecked()) {
             String expiry = requireExpiry(chkPoistenieZodpovednostCRSKUltralighty, etExpiryPoistenieZodpovednostCRSKUltralighty, "Poistenie zodpovednosti ČR + SK");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Poistka", "Ultralighty", "Poistenie zodpovednosti ČR + SK", expiry, note));
+                certificatesToAdd.add(new Certificate("Insurance", "Ultralighty", "Liability insurance (Czech Republic + Slovakia)", expiry, note));
         }
         if (chkZodpovednostiSvetUltralighty.isChecked()) {
             String expiry = requireExpiry(chkZodpovednostiSvetUltralighty, etExpiryZodpovednostiSvetUltralighty, "Poistenie zodpovednosti SVET");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Poistka", "Ultralighty", "Poistenie zodpovednosti SVET", expiry, note));
+                certificatesToAdd.add(new Certificate("Insurance", "Ultralighty", "Worldwide liability insurance", expiry, note));
         }
 
         if (certificatesToAdd.isEmpty()) {
-            Toast.makeText(getActivity(), "Prosím, vyberte aspoň jeden typ kvalifikácie a zadajte dátum expirácie", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Please, select at least one type of qualification and enter the expiration date", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -339,7 +339,7 @@ public class AddUltralightyFragment extends Fragment {
             }
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
-                    Toast.makeText(getActivity(), "Kvalifikácia/y pridaná/e!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Certificate/s added!", Toast.LENGTH_SHORT).show();
                     clearFields();
                 });
             }
@@ -348,7 +348,7 @@ public class AddUltralightyFragment extends Fragment {
                     sendCertificateToServer(cert);
                 }
             } else {
-                Log.d("AddUltralightyFragment", "Nedostupná sieť, certifikáty uložené len lokálne");
+                Log.d("AddUltralightyFragment", "Turn on wifi, certificate saved only locally");
             }
         });
     }
@@ -412,14 +412,14 @@ public class AddUltralightyFragment extends Fragment {
                     Executors.newSingleThreadExecutor().execute(() -> {
                         database.certificateDao().markAsSynced(certificate.getId());
                     });
-                    Toast.makeText(getActivity(), "Certifikát zosynchronizovaný", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "certificate synched", Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.d("Retrofit", "Chybná odpoveď: " + response.message());
+                    Log.d("Retrofit", "Error: " + response.message());
                 }
             }
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.d("Retrofit", "Chyba pri odosielaní certifikátu: " + t.getMessage());
+                Log.d("Retrofit", "Error sending certificate: " + t.getMessage());
             }
         });
     }

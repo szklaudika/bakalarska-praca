@@ -235,22 +235,22 @@ public class AddVetroneFragment extends Fragment {
         if (chkGldVetrone.isChecked()) {
             String expiry = requireExpiry(chkGldVetrone, etExpiryGldVetrone, "GLD");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Vetrone", "GLD", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Vetrone", "GLD", expiry, note));
         }
         if (chkTmgVetrone.isChecked()) {
             String expiry = requireExpiry(chkTmgVetrone, etExpiryTmgVetrone, "TMG");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Vetrone", "TMG", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Vetrone", "TMG", expiry, note));
         }
         if (chkFiVetrone.isChecked()) {
             String expiry = requireExpiry(chkFiVetrone, etExpiryFiVetrone, "FI");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Vetrone", "FI", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Vetrone", "FI", expiry, note));
         }
         if (chkTstVetrone.isChecked()) {
             String expiry = requireExpiry(chkTstVetrone, etExpiryTstVetrone, "TST");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Letecké kvalifikácie", "Vetrone", "TST", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Vetrone", "TST", expiry, note));
         }
         // Medical - Vetrone
         if (chkMedClass1Vetrone.isChecked()) {
@@ -267,39 +267,39 @@ public class AddVetroneFragment extends Fragment {
         if (chkVseobecnyPreukazVetrone.isChecked()) {
             String expiry = requireExpiry(chkVseobecnyPreukazVetrone, etExpiryVseobecnyPreukazVetrone, "Všeobecný preukaz radiofonisty");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Rádio", "Vetrone", "Všeobecný preukaz radiofonisty", expiry, note));
+                certificatesToAdd.add(new Certificate("Radio", "Vetrone", "General Radiotelephone Operator License", expiry, note));
         }
         if (chkObmedzenyPreukazVetrone.isChecked()) {
             String expiry = requireExpiry(chkObmedzenyPreukazVetrone, etExpiryObmedzenyPreukazVetrone, "Obmedzený preukaz radionofisty");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Rádio", "Vetrone", "Obmedzený preukaz radionofisty", expiry, note));
+                certificatesToAdd.add(new Certificate("Radio", "Vetrone", "Restricted Radiotelephone Operator License", expiry, note));
         }
         // Angličtina - Vetrone
         if (chkEnglishLevel4Vetrone.isChecked()) {
             String expiry = requireExpiry(chkEnglishLevel4Vetrone, etExpiryEnglishLevel4Vetrone, "ICAO English LEVEL 4");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Angličtina", "Vetrone", "ICAO English LEVEL 4", expiry, note));
+                certificatesToAdd.add(new Certificate("English", "Vetrone", "ICAO English LEVEL 4", expiry, note));
         }
         if (chkEnglishLevel5Vetrone.isChecked()) {
             String expiry = requireExpiry(chkEnglishLevel5Vetrone, etExpiryEnglishLevel5Vetrone, "ICAO English LEVEL 5");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Angličtina", "Vetrone", "ICAO English LEVEL 5", expiry, note));
+                certificatesToAdd.add(new Certificate("English", "Vetrone", "ICAO English LEVEL 5", expiry, note));
         }
         if (chkEnglishLevel6Vetrone.isChecked()) {
             String expiry = requireExpiry(chkEnglishLevel6Vetrone, etExpiryEnglishLevel6Vetrone, "ICAO English LEVEL 6");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Angličtina", "Vetrone", "ICAO English LEVEL 6", expiry, note));
+                certificatesToAdd.add(new Certificate("English", "Vetrone", "ICAO English LEVEL 6", expiry, note));
         }
         // Poistka - Vetrone
         if (chkPoistenieZodpovednostCrSkVetrone.isChecked()) {
             String expiry = requireExpiry(chkPoistenieZodpovednostCrSkVetrone, etExpiryPoistenieZodpovednostCrSkVetrone, "Poistenie ČR+SK");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Poistka", "Vetrone", "Poistenie zodpovednosti ČR + SK", expiry, note));
+                certificatesToAdd.add(new Certificate("English", "Vetrone", "Liability insurance (Czech Republic + Slovakia)", expiry, note));
         }
         if (chkZodpovednostiSvetVetrone.isChecked()) {
             String expiry = requireExpiry(chkZodpovednostiSvetVetrone, etExpiryZodpovednostiSvetVetrone, "Poistenie SVET");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Poistka", "Vetrone", "Poistenie zodpovednosti SVET", expiry, note));
+                certificatesToAdd.add(new Certificate("English", "Vetrone", "Worldwide liability insurance", expiry, note));
         }
 
         if (certificatesToAdd.isEmpty()) {

@@ -24,7 +24,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Letecké kvalifikácie - Ultralighty"
+                android:text="Aviation Qualifications - Ultralights"
                 android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true" />
@@ -68,7 +68,7 @@
                     android:id="@+id/chk_vfr_ultralighty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Riadené lety VFR   -"
+                    android:text="Controlled VFR flights   -"
                     android:textColor="?android:textColorPrimary"
                     android:buttonTint="?attr/checkboxTint" />
 
@@ -95,7 +95,7 @@
                     android:id="@+id/chk_instruktor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Inštruktor   -"
+                    android:text="Instructor   -"
                     android:textColor="?android:textColorPrimary"
                     android:buttonTint="?attr/checkboxTint" />
 
@@ -122,7 +122,7 @@
                     android:id="@+id/chk_vlekar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Vlekár   -"
+                    android:text="Towing pilot   -"
                     android:textColor="?android:textColorPrimary"
                     android:buttonTint="?attr/checkboxTint" />
 
@@ -149,7 +149,7 @@
                     android:id="@+id/chk_skusobny_pilot"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Skúšobný pilot   -"
+                    android:text="Test pilot   -"
                     android:textColor="?android:textColorPrimary"
                     android:buttonTint="?attr/checkboxTint" />
 
@@ -176,7 +176,7 @@
                     android:id="@+id/chk_vysadzovac"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Vysadzovač   -"
+                    android:text="Skydiving pilot   -"
                     android:textColor="?android:textColorPrimary"
                     android:buttonTint="?attr/checkboxTint" />
 
@@ -212,7 +212,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Medical - Ultralighty"
+                android:text="Medical - Ultralights"
                 android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true" />
@@ -227,10 +227,10 @@
 
                 <CheckBox
                     android:id="@+id/chk_osvedcenie_ultralighty"
-                    android:layout_width="189dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:buttonTint="?attr/checkboxTint"
-                    android:text="Osvedčenie zdravotnej spôsobilosti 2. triedy   -"
+                    android:text="2nd Class Medical Certificate   -"
                     android:textColor="?android:textColorPrimary" />
 
                 <EditText
@@ -264,7 +264,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rádio - Ultralighty"
+                android:text="Radio - Ultralights"
                 android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true" />
@@ -279,11 +279,11 @@
 
                 <CheckBox
                     android:id="@+id/chk_vseobecny_preukaz_ultralighty"
-                    android:layout_width="wrap_content"
+                    android:layout_width="244dp"
                     android:layout_height="wrap_content"
-                    android:text="Všeobecný preukaz radiofonisty   -"
-                    android:textColor="?android:textColorPrimary"
-                    android:buttonTint="?attr/checkboxTint" />
+                    android:buttonTint="?attr/checkboxTint"
+                    android:text="General Radiotelephone Operator License   -"
+                    android:textColor="?android:textColorPrimary" />
 
                 <EditText
                     android:id="@+id/et_expiry_vseobecny_preukaz_ultralighty"
@@ -306,11 +306,11 @@
 
                 <CheckBox
                     android:id="@+id/chk_obmedzeny_preukaz_ultralighty"
-                    android:layout_width="wrap_content"
+                    android:layout_width="260dp"
                     android:layout_height="wrap_content"
-                    android:text="Obmedzený preukaz radiofonisty   -"
-                    android:textColor="?android:textColorPrimary"
-                    android:buttonTint="?attr/checkboxTint" />
+                    android:buttonTint="?attr/checkboxTint"
+                    android:text="Restricted Radiotelephone Operator License   -"
+                    android:textColor="?android:textColorPrimary" />
 
                 <EditText
                     android:id="@+id/et_expiry_obmedzeny_preukaz_ultralighty"
@@ -343,7 +343,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Angličtina - Ultralighty"
+                android:text="English - Ultralights"
                 android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true" />
@@ -449,7 +449,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Poistka - Ultralighty"
+                android:text="Insurance - Ultralights"
                 android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true" />
@@ -464,11 +464,11 @@
 
                 <CheckBox
                     android:id="@+id/chk_poistenie_zodpovednost_cr_sk_ultralighty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Poistenie zodpovednosti ČR + SK   -"
-                    android:textColor="?android:textColorPrimary"
-                    android:buttonTint="?attr/checkboxTint" />
+                    android:layout_width="212dp"
+                    android:layout_height="52dp"
+                    android:buttonTint="?attr/checkboxTint"
+                    android:text="Liability insurance (Czech Republic + Slovakia)   -"
+                    android:textColor="?android:textColorPrimary" />
 
                 <EditText
                     android:id="@+id/et_expiry_poistenie_zodpovednost_cr_sk_ultralighty"
@@ -493,7 +493,7 @@
                     android:id="@+id/chk_zodpovednosti_svet_ultralighty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Poistenie zodpovednosti SVET   -"
+                    android:text="Worldwide liability insurance   -"
                     android:textColor="?android:textColorPrimary"
                     android:buttonTint="?attr/checkboxTint" />
 
@@ -522,13 +522,13 @@
         <!-- Add Certificate Button -->
         <Button
             android:id="@+id/btn_add_certificate"
-            android:layout_width="375dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="10dp"
             android:background="?attr/buttonBackground"
-            android:text="Pridať kvalifikáciu" />
+            android:text="Add Certificate" />
 
 
     </LinearLayout>

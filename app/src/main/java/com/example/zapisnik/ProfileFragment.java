@@ -7,6 +7,8 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +16,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -30,11 +34,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Executors;
 
 import retrofit2.Call;
@@ -61,6 +63,12 @@ public class ProfileFragment extends Fragment {
     private TextView tvInstructor;
     private TextView tvFstdSummary;
 
+    // Date filter views and current filter dates
+    private EditText etFromDate, etToDate;
+    private Button btnApplyFilter;
+    private Date currentFromDate = null;
+    private Date currentToDate = null;
+
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -73,7 +81,8 @@ public class ProfileFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         // Inflate the layout with the redesigned summarizations container
         View view = inflater.inflate(R.layout.activity_profile_coordinator, container, false);
@@ -106,7 +115,6 @@ public class ProfileFragment extends Fragment {
         final LinearLayout llSummarizations = view.findViewById(R.id.ll_summarizations);
         final LinearLayout llCertificates = view.findViewById(R.id.ll_certificates);
 
-        // Retrieve dark mode preference
         SharedPreferences prefs = getActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
         boolean isLightMode = prefs.getBoolean("dark_mode", false);
         int selectedToggleDrawable = isLightMode ? R.drawable.toggle_segment_selected_light : R.drawable.toggle_segment_selected;
@@ -130,11 +138,40 @@ public class ProfileFragment extends Fragment {
             llCertificates.setVisibility(View.VISIBLE);
         });
 
+        // --- Initialize Date Filter Views ---
+        etFromDate = view.findViewById(R.id.et_from_date);
+        etToDate = view.findViewById(R.id.et_to_date);
+        btnApplyFilter = view.findViewById(R.id.btn_apply_filter);
+        // Apply dynamic date formatting to the filter EditTexts.
+        setExpiryTextWatcher(etFromDate);
+        setExpiryTextWatcher(etToDate);
+
+        btnApplyFilter.setOnClickListener(v -> {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            try {
+                String fromText = etFromDate.getText().toString().trim();
+                String toText = etToDate.getText().toString().trim();
+                // If either field is empty, clear the filter.
+                if (fromText.isEmpty() || toText.isEmpty()) {
+                    currentFromDate = null;
+                    currentToDate = null;
+                    Toast.makeText(getActivity(), "Filter cleared.", Toast.LENGTH_SHORT).show();
+                } else {
+                    currentFromDate = sdf.parse(fromText);
+                    currentToDate = sdf.parse(toText);
+                    Toast.makeText(getActivity(), "Filter applied.", Toast.LENGTH_SHORT).show();
+                }
+                calculateFlightAggregatesFromLocal(currentFromDate, currentToDate);
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Please enter dates in yyyy-MM-dd format", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         // --- Initialize certificate database and load data ---
         database = CertificateDatabase.getInstance(getActivity());
         loadCertificatesFromDatabase();
         loadCertificatesFromServer();
-        calculateFlightAggregatesFromLocal();
+        calculateFlightAggregatesFromLocal(null, null);
 
         // --- Setup Certificates ListView ---
         listViewCertificates = view.findViewById(R.id.list_view_certificates);
@@ -143,17 +180,11 @@ public class ProfileFragment extends Fragment {
                 if (position >= 0 && position < items.size()) {
                     ListItem selectedItem = items.get(position);
                     if (selectedItem.getType() == ListItem.TYPE_ITEM) {
-                        String selectedCertificate = selectedItem.getText();
-                        String[] parts = selectedCertificate.split(" - Expires:");
-                        if (parts.length < 1) {
-                            Toast.makeText(getActivity(), "Certificate format error", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        String certificateName = parts[0].trim();
+                        int certificateId = selectedItem.getId();
                         new AlertDialog.Builder(getActivity())
                                 .setTitle("Delete Certificate")
-                                .setMessage("Are you sure you want to delete " + certificateName + "?")
-                                .setPositiveButton("Yes", (dialog, which) -> deleteCertificate(certificateName))
+                                .setMessage("Are you sure you want to delete this certificate?")
+                                .setPositiveButton("Yes", (dialog, which) -> deleteCertificate(certificateId))
                                 .setNegativeButton("No", null)
                                 .show();
                     }
@@ -210,31 +241,40 @@ public class ProfileFragment extends Fragment {
      */
     public void loadCertificatesFromDatabase() {
         Executors.newSingleThreadExecutor().execute(() -> {
-            // Ensure fragment is still attached before using getActivity()
             Context context = getContext();
-            if (context == null) return;  // safely exit if context is unavailable
+            if (context == null) return;
 
             SharedPreferences prefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
             int userId = prefs.getInt("userId", 0);
-
             Log.d(TAG, "loadCertificatesFromDatabase() - userId: " + userId);
 
             List<Certificate> certificates = database.certificateDao().getCertificatesByUserId(userId);
             Log.d(TAG, "Certificates fetched from DB: " + certificates.size());
 
-            List<ListItem> tempItems = new ArrayList<>();
-            List<String> knownPlatforms = Arrays.asList("Velká éra", "Vrtuľníky", "Ultralighty", "Vetrone");
+            // Create a translation mapping from Slovak to English.
+            Map<String, String> platformTranslation = new HashMap<>();
+            platformTranslation.put("Velka era", "Airplanes");
+            platformTranslation.put("Vrtuľníky", "Helicopters");
+            platformTranslation.put("Ultralighty", "Ultralights");
+            platformTranslation.put("Vetrone", "Gliders");
 
+            List<ListItem> tempItems = new ArrayList<>();
+            // Group certificates using the translated platform name.
             Map<String, List<Certificate>> groupedByPlatform = new HashMap<>();
             for (Certificate cert : certificates) {
-                String platform = cert.getPlatform();
-                if (platform == null || platform.isEmpty() || !knownPlatforms.contains(platform)) {
-                    platform = "Ostatné certifikáty";
+                String dbPlatform = cert.getPlatform();
+                String displayPlatform = platformTranslation.get(dbPlatform);
+                if (displayPlatform == null) {
+                    displayPlatform = "Other certificates";
                 }
-                groupedByPlatform.computeIfAbsent(platform, k -> new ArrayList<>()).add(cert);
+                groupedByPlatform.computeIfAbsent(displayPlatform, k -> new ArrayList<>()).add(cert);
             }
 
-            for (String platform : knownPlatforms) {
+            // For a consistent order, use the translated names.
+            List<String> displayPlatforms = new ArrayList<>(platformTranslation.values());
+            displayPlatforms.add("Other certificates");
+
+            for (String platform : displayPlatforms) {
                 List<Certificate> list = groupedByPlatform.get(platform);
                 if (list != null && !list.isEmpty()) {
                     tempItems.add(new ListItem(ListItem.TYPE_HEADER, platform));
@@ -251,35 +291,15 @@ public class ProfileFragment extends Fragment {
                             }
                         }
                         String detailPart = cert.getCertificateType() + "\n(" + cert.getSection() + ")";
-                        tempItems.add(new ListItem(ListItem.TYPE_ITEM, formattedExpiry, detailPart));
-                    }
-                }
-            }
-
-            if (groupedByPlatform.containsKey("Ostatné certifikáty")) {
-                List<Certificate> others = groupedByPlatform.get("Ostatné certifikáty");
-                if (others != null && !others.isEmpty()) {
-                    tempItems.add(new ListItem(ListItem.TYPE_HEADER, "Ostatné certifikáty"));
-                    for (Certificate cert : others) {
-                        String formattedExpiry = "N/A";
-                        if (cert.getExpiryDate() != null && !cert.getExpiryDate().isEmpty()) {
-                            try {
-                                SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                                Date date = originalFormat.parse(cert.getExpiryDate());
-                                SimpleDateFormat newFormat = new SimpleDateFormat("yyyy\nMMM dd", Locale.US);
-                                formattedExpiry = newFormat.format(date);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
+                        if (cert.getNote() != null && !cert.getNote().trim().isEmpty()) {
+                            detailPart += "\nNote: " + cert.getNote();
                         }
-                        String detailPart = cert.getCertificateType() + "\n(" + cert.getSection() + ", " + cert.getPlatform() + ")";
-                        String certificateDisplay = cert.getCertificateType() + " - Expires: " + formattedExpiry;
-                        tempItems.add(new ListItem(ListItem.TYPE_ITEM, certificateDisplay, detailPart));
+                        tempItems.add(new ListItem(ListItem.TYPE_ITEM, cert.getId(), formattedExpiry, detailPart));
                     }
                 }
             }
 
-            // Check again before updating UI on the main thread
+            // Update UI on main thread.
             if (isAdded()) {
                 requireActivity().runOnUiThread(() -> {
                     items.clear();
@@ -294,7 +314,6 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
-
 
     /**
      * Fetches certificate data from the server, updates the local database,
@@ -315,13 +334,11 @@ public class ProfileFragment extends Fragment {
                     Log.d(TAG, "Certificates fetched from server: " + serverCertificates.size());
 
                     Executors.newSingleThreadExecutor().execute(() -> {
+                        // First, delete all certificates for this user from the local database.
+                        database.certificateDao().deleteAllCertificatesForUser(userId);
+                        // Then, insert the server certificates.
                         for (Certificate cert : serverCertificates) {
-                            Certificate existingCert = database.certificateDao().getCertificateById(cert.getId());
-                            if (existingCert == null) {
-                                database.certificateDao().insertCertificate(cert);
-                            } else {
-                                database.certificateDao().updateCertificate(cert);
-                            }
+                            database.certificateDao().insertCertificate(cert);
                         }
                         if (getActivity() != null) {
                             getActivity().runOnUiThread(() -> loadCertificatesFromDatabase());
@@ -331,6 +348,7 @@ public class ProfileFragment extends Fragment {
                     Log.e(TAG, "Server returned failure: " + response.message());
                 }
             }
+
             @Override
             public void onFailure(Call<List<Certificate>> call, Throwable t) {
                 Log.e(TAG, "Failed to fetch certificates from server: " + t.getMessage());
@@ -339,14 +357,11 @@ public class ProfileFragment extends Fragment {
     }
 
     /**
-     * Deletes a certificate by its name. First deletes from server, then from local DB.
+     * Deletes a certificate by its ID. First deletes from server, then from local DB.
      */
-    private void deleteCertificate(String certificateString) {
-        String[] parts = certificateString.split(" - Expires:");
-        String certificateName = parts[0].trim();
-
+    private void deleteCertificate(final int certificateId) {
         Executors.newSingleThreadExecutor().execute(() -> {
-            Certificate certificateToDelete = database.certificateDao().getCertificateByName(certificateName);
+            Certificate certificateToDelete = database.certificateDao().getCertificateById(certificateId);
             if (certificateToDelete != null) {
                 CertificateApi api = RetrofitClient.getApi();
                 api.deleteCertificate(certificateToDelete.getId()).enqueue(new Callback<Void>() {
@@ -358,26 +373,30 @@ public class ProfileFragment extends Fragment {
                                 if (getActivity() != null) {
                                     getActivity().runOnUiThread(() -> {
                                         loadCertificatesFromDatabase();
-                                        Toast.makeText(getActivity(), "Certificate deleted: " + certificateName, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), "Certificate deleted successfully", Toast.LENGTH_SHORT).show();
                                     });
                                 }
                             });
                         } else {
                             if (getActivity() != null) {
-                                getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Server deletion failed for certificate: " + certificateName, Toast.LENGTH_SHORT).show());
+                                getActivity().runOnUiThread(() ->
+                                        Toast.makeText(getActivity(), "Server deletion failed for certificate ID: " + certificateId, Toast.LENGTH_SHORT).show());
                             }
                         }
                     }
+
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
                         if (getActivity() != null) {
-                            getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Error deleting certificate from server: " + t.getMessage(), Toast.LENGTH_SHORT).show());
+                            getActivity().runOnUiThread(() ->
+                                    Toast.makeText(getActivity(), "Error deleting certificate from server: " + t.getMessage(), Toast.LENGTH_SHORT).show());
                         }
                     }
                 });
             } else {
                 if (getActivity() != null) {
-                    getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Certificate not found: " + certificateName, Toast.LENGTH_SHORT).show());
+                    getActivity().runOnUiThread(() ->
+                            Toast.makeText(getActivity(), "Certificate not found with ID: " + certificateId, Toast.LENGTH_SHORT).show());
                 }
             }
         });
@@ -402,10 +421,10 @@ public class ProfileFragment extends Fragment {
 
     /**
      * Aggregates flight data from the local database for the current user and updates the UI.
+     * Only flights within the given date range (if provided) are included.
      */
-    private void calculateFlightAggregatesFromLocal() {
+    private void calculateFlightAggregatesFromLocal(Date fromDate, Date toDate) {
         Executors.newSingleThreadExecutor().execute(() -> {
-            // Retrieve the current user's id and fetch only their flights.
             SharedPreferences prefs = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
             int userId = prefs.getInt("userId", 0);
             List<Flight> flights = FlightDatabase.getInstance(getActivity()).flightDao().getFlightsByUserId(userId);
@@ -421,7 +440,18 @@ public class ProfileFragment extends Fragment {
             int totalInstructorTime = 0;
             Map<String, Integer> fstdSummary = new HashMap<>();
 
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             for (Flight flight : flights) {
+                if (fromDate != null && toDate != null) {
+                    try {
+                        Date flightDate = sdf.parse(flight.getDate());
+                        if (flightDate == null || flightDate.before(fromDate) || flightDate.after(toDate)) {
+                            continue; // Skip flights outside the filter range.
+                        }
+                    } catch (ParseException e) {
+                        continue;
+                    }
+                }
                 totalFlightTime += flight.getTotalFlightTime();
                 totalMultiPilotTime += (flight.getMultiPilotTime() == null ? 0 : flight.getMultiPilotTime());
                 totalLandingsDay += (flight.getLandingsDay() == null ? 0 : flight.getLandingsDay());
@@ -443,7 +473,7 @@ public class ProfileFragment extends Fragment {
 
             final String totalFlightTimeStr = formatMinutes(totalFlightTime);
             final String totalMultiPilotTimeStr = formatMinutes(totalMultiPilotTime);
-            final String landingsStr = totalLandingsDay + " (deň), " + totalLandingsNight + " (noc)";
+            final String landingsStr = totalLandingsDay + " (day), " + totalLandingsNight + " (night)";
             final String nocnyLetStr = formatMinutes(totalNightTime);
             final String ifrStr = formatMinutes(totalIfrTime);
             final String picStr = formatMinutes(totalPicTime);
@@ -492,7 +522,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        calculateFlightAggregatesFromLocal();
+        calculateFlightAggregatesFromLocal(currentFromDate, currentToDate);
         if (isNetworkAvailable()) {
             syncOfflineCertificates();
         }
@@ -514,15 +544,61 @@ public class ProfileFragment extends Fragment {
                 if (response.isSuccessful()) {
                     Executors.newSingleThreadExecutor().execute(() -> {
                         database.certificateDao().markAsSynced(certificate.getId());
+                        Log.d("ProfileFragment", "Certificate synced: " + certificate.getId());
                     });
                 } else {
-                    Log.d("ProfileFragment", "Failed to sync certificate: " + response.message());
+                    Log.e("ProfileFragment", "Server responded with error: " + response.code() + " - " + response.message());
                 }
             }
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.d("ProfileFragment", "Failed to sync certificate: " + t.getMessage());
+                Log.e("ProfileFragment", "Failed to sync certificate: " + t.getMessage());
             }
         });
+    }
+
+    /**
+     * Dynamically formats input text into the "yyyy-MM-dd" date format.
+     */
+    private void setExpiryTextWatcher(final EditText etExpiry) {
+        etExpiry.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                String formatted = formatDateInput(s.toString());
+                if (!formatted.equals(s.toString())) {
+                    etExpiry.setText(formatted);
+                    etExpiry.setSelection(formatted.length());
+                }
+            }
+        });
+    }
+
+    /**
+     * Formats a string of digits as "yyyy-MM-dd".
+     */
+    private String formatDateInput(String input) {
+        input = input.replaceAll("[^0-9]", "");
+        StringBuilder sb = new StringBuilder();
+        if (input.length() >= 1)
+            sb.append(input.substring(0, Math.min(4, input.length())));
+        if (input.length() >= 5)
+            sb.append("-").append(input.substring(4, Math.min(6, input.length())));
+        if (input.length() >= 7)
+            sb.append("-").append(input.substring(6, Math.min(8, input.length())));
+        if (sb.length() >= 7) {
+            String month = sb.substring(5, 7);
+            if (!month.isEmpty() && Integer.parseInt(month) > 12) {
+                sb.replace(5, 7, "12");
+            }
+        }
+        if (sb.length() >= 10) {
+            String day = sb.substring(8, 10);
+            if (!day.isEmpty() && Integer.parseInt(day) > 31) {
+                sb.replace(8, 10, "31");
+            }
+        }
+        return sb.toString();
     }
 }

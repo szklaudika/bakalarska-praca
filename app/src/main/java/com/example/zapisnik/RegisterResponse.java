@@ -1,14 +1,18 @@
 package com.example.zapisnik;
 
 public class RegisterResponse {
-    private boolean success;
+    private String status;
     private String message;
 
-    public boolean isSuccess() {
-        return success;
+    public String getStatus() {
+        return status;
     }
 
     public String getMessage() {
         return message;
+    }
+
+    public boolean isSuccess() {
+        return "success".equalsIgnoreCase(status);
     }
 }

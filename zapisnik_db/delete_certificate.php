@@ -1,45 +1,56 @@
 <?php
 header("Content-Type: application/json");
 
-// Konfigurácia pripojenia k databáze
-$servername = "localhost";  // Change if needed
-$username = "root";         // Your database username
-$password = "";             // Your database password
-$dbname = "zapisnik_db";  
+// Načítajte pripojovacie údaje z JAWSDB_URL, ak je nastavená; inak použite lokálne nastavenia.
+$dbUrl = getenv('JAWSDB_URL');
+if ($dbUrl) {
+    $dbparts = parse_url($dbUrl);
+    $servername = $dbparts['host'];
+    $username = $dbparts['user'];
+    $password = $dbparts['pass'];
+    $dbname = ltrim($dbparts['path'], '/');
+} else {
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "zapisnik_db";
+}
 
-// Vytvorenie spojenia
+// Vytvorenie pripojenia k databáze
 $conn = new mysqli($servername, $username, $password, $dbname);
-
-// Kontrola spojenia
 if ($conn->connect_error) {
     http_response_code(500);
-    echo json_encode(array("error" => "Connection failed: " . $conn->connect_error));
+    echo json_encode(["error" => "Connection failed: " . $conn->connect_error]);
     exit();
 }
 
-// Získanie id certifikátu z query stringu
+// Skontrolujte, či je parameter 'id' poskytnutý v URL
 if (!isset($_GET['id'])) {
     http_response_code(400);
-    echo json_encode(array("error" => "Missing certificate id"));
+    echo json_encode(["error" => "Missing certificate id"]);
     exit();
 }
 
-$id = intval($_GET['id']);
+$id = intval($_GET['id']);  // Konverzia na celé číslo pre bezpečnosť
 
-// Príprava a vykonanie SQL dotazu na vymazanie certifikátu
+// Pripravte a vykonajte SQL dotaz na vymazanie certifikátu podľa ID
 $stmt = $conn->prepare("DELETE FROM certificates WHERE id = ?");
+if (!$stmt) {
+    http_response_code(500);
+    echo json_encode(["error" => "Failed to prepare SQL statement: " . $conn->error]);
+    exit();
+}
 $stmt->bind_param("i", $id);
 
 if ($stmt->execute()) {
     if ($stmt->affected_rows > 0) {
-        echo json_encode(array("success" => true, "message" => "Certificate deleted successfully"));
+        echo json_encode(["success" => true, "message" => "Certificate deleted successfully"]);
     } else {
-        // Ak sa neovplyvnili žiadne riadky, certifikát pravdepodobne neexistoval
-        echo json_encode(array("success" => true, "message" => "Certificate not found, nothing to delete"));
+        echo json_encode(["success" => true, "message" => "Certificate not found, nothing to delete"]);
     }
 } else {
     http_response_code(500);
-    echo json_encode(array("error" => "Failed to delete certificate"));
+    echo json_encode(["error" => "Failed to delete certificate: " . $stmt->error]);
 }
 
 $stmt->close();

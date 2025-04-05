@@ -1,13 +1,27 @@
 <?php
-$servername = "localhost";
-$username = "root"; // Change this if needed
-$password = ""; // Default is empty for XAMPP
-$dbname = "zapisnik_db";
+header("Content-Type: application/json");
 
-// Connect to the database
+// Načítajte pripojovacie údaje z environmentálnej premennej JAWSDB_URL (Heroku)
+// Ak nie je nastavená, použijeme lokálne údaje.
+$dbUrl = getenv('JAWSDB_URL');
+if ($dbUrl) {
+    $dbparts = parse_url($dbUrl);
+    $servername = $dbparts['host'];
+    $username = $dbparts['user'];
+    $password = $dbparts['pass'];
+    $dbname = ltrim($dbparts['path'], '/');
+} else {
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "zapisnik_db";
+}
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
-    die(json_encode(["status" => "error", "message" => "Connection failed: " . $conn->connect_error]));
+    http_response_code(500);
+    echo json_encode(["status" => "error", "message" => "Connection failed: " . $conn->connect_error]);
+    exit();
 }
 
 // Get JSON data from the request
@@ -60,8 +74,6 @@ if (!empty($data)) {
          night_time, ifr_time, pic_time, copilot_time, dual_time, instructor_time, fstd_date, fstd_type, fstd_total_time, remarks, user_id) 
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     
-    // Bind parameters using the correct format string:
-    // Format: "sssssssiiisiiiiiiiiissisi"
     $stmt->bind_param(
         "sssssssiiisiiiiiiiiissisi",
         $date,
@@ -94,11 +106,13 @@ if (!empty($data)) {
     if ($stmt->execute()) {
         echo json_encode(["status" => "success", "message" => "Flight added successfully"]);
     } else {
-        echo json_encode(["status" => "error", "message" => "Failed to add flight"]);
+        http_response_code(500);
+        echo json_encode(["status" => "error", "message" => "Failed to add flight: " . $stmt->error]);
     }
-
+    
     $stmt->close();
 } else {
+    http_response_code(400);
     echo json_encode(["status" => "error", "message" => "No data received"]);
 }
 

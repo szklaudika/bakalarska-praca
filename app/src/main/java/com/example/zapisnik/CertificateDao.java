@@ -40,4 +40,8 @@ public interface CertificateDao {
 
     @Query("UPDATE certificates SET is_synced = 1 WHERE id = :certificateId")
     void markAsSynced(int certificateId);
+
+    @Query("DELETE FROM certificates WHERE user_id = :userId")
+    void deleteAllCertificatesForUser(int userId);
+
 }

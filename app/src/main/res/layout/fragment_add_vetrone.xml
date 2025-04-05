@@ -24,7 +24,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Letecké kvalifikácie - Vetrone"
+                android:text="Aviation Qualifications - Gliders"
                 android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true"/>
@@ -148,7 +148,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Medical - Vetrone"
+                android:text="Medical - Gliders"
                 android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true"/>
@@ -222,7 +222,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rádio - Vetrone"
+                android:text="Radio - Gliders"
                 android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true"/>
@@ -234,13 +234,14 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:paddingVertical="4dp">
+
                 <CheckBox
                     android:id="@+id/chk_vseobecny_preukaz_vetrone"
-                    android:layout_width="wrap_content"
+                    android:layout_width="245dp"
                     android:layout_height="wrap_content"
-                    android:text="Všeobecný preukaz radiofonisty   -"
-                    android:textColor="?android:textColorPrimary"
-                    android:buttonTint="?attr/checkboxTint"/>
+                    android:buttonTint="?attr/checkboxTint"
+                    android:text="General Radiotelephone Operator License   -"
+                    android:textColor="?android:textColorPrimary" />
                 <EditText
                     android:id="@+id/et_expiry_vseobecny_preukaz_vetrone"
                     android:layout_width="0dp"
@@ -259,13 +260,14 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:paddingVertical="4dp">
+
                 <CheckBox
                     android:id="@+id/chk_obmedzeny_preukaz_vetrone"
-                    android:layout_width="wrap_content"
+                    android:layout_width="260dp"
                     android:layout_height="wrap_content"
-                    android:text="Obmedzený preukaz radionofisty   -"
-                    android:textColor="?android:textColorPrimary"
-                    android:buttonTint="?attr/checkboxTint"/>
+                    android:buttonTint="?attr/checkboxTint"
+                    android:text="Restricted Radiotelephone Operator License   -"
+                    android:textColor="?android:textColorPrimary" />
                 <EditText
                     android:id="@+id/et_expiry_obmedzeny_preukaz_vetrone"
                     android:layout_width="0dp"
@@ -296,7 +298,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Angličtina - Vetrone"
+                android:text="English - Gliders"
                 android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true"/>
@@ -395,7 +397,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Poistka - Vetrone"
+                android:text="Insurance - Gliders"
                 android:textStyle="normal"
                 android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true"/>
@@ -409,9 +411,9 @@
                 android:paddingVertical="4dp">
                 <CheckBox
                     android:id="@+id/chk_poistenie_zodpovednost_cr_sk_vetrone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Poistenie zodpovednosti ČR + SK   -"
+                    android:layout_width="212dp"
+                    android:layout_height="52dp"
+                    android:text="Liability insurance (Czech Republic + Slovakia)   -"
                     android:textColor="?android:textColorPrimary"
                     android:buttonTint="?attr/checkboxTint"/>
                 <EditText
@@ -436,7 +438,7 @@
                     android:id="@+id/chk_zodpovednosti_svet_vetrone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Poistenie zodpovednosti SVET   -"
+                    android:text="Worldwide liability insurance   -"
                     android:textColor="?android:textColorPrimary"
                     android:buttonTint="?attr/checkboxTint"/>
                 <EditText
@@ -464,12 +466,12 @@
         <!-- Add Certificate Button -->
         <Button
             android:id="@+id/btn_add_certificate"
-            android:layout_width="375dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="10dp"
             android:background="?attr/buttonBackground"
-            android:text="Pridať kvalifikáciu"/>
+            android:text="Add Certificate"/>
     </LinearLayout>
 </ScrollView>

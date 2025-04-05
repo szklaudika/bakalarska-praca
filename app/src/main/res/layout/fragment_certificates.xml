@@ -28,10 +28,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:paddingBottom="10dp"
-                android:text="PRIDAJ CERTIFIKÁT/LICENCIU"
+                android:text="ADD CERTIFICATE"
                 android:textAllCaps="true"
                 android:fontFamily="sans-serif-medium"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:textStyle="normal"
                 android:layout_marginTop="20dp"/>
 
@@ -52,7 +52,7 @@
                 android:layout_marginBottom="12dp"
                 android:padding="16dp"
                 android:layout_marginTop="40dp"
-                android:text="Velká éra"
+                android:text="Airplanes"
                 android:textSize="16sp"
                 android:contentDescription="Select Velká éra"
                 android:background="?attr/editTextBackground"/>
@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:padding="16dp"
-                android:text="Ultralighty"
+                android:text="Ultralights"
                 android:textSize="16sp"
                 android:contentDescription="Select Ultralighty"
                 android:background="?attr/editTextBackground"/>
@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:padding="16dp"
-                android:text="Vetrone"
+                android:text="Gliders"
                 android:textSize="16sp"
                 android:contentDescription="Select Vetrone"
                 android:background="?attr/editTextBackground"/>
@@ -85,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:padding="16dp"
-                android:text="Vrtuľníky"
+                android:text="Helicopters"
                 android:textSize="16sp"
                 android:contentDescription="Select Vrtuľníky"
                 android:background="?attr/editTextBackground"/>
