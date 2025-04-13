@@ -10,3 +10,6 @@ ALTER TABLE certificates
 ALTER TABLE flights 
   ADD CONSTRAINT fk_flights_user_id FOREIGN KEY (user_id) REFERENCES users(id);
 
+ALTER TABLE users 
+ADD reset_token VARCHAR(255) NULL,
+ADD reset_token_expiry DATETIME NULL;

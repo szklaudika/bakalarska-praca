@@ -74,12 +74,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateBottomNavVisibility() {
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
-        if (currentFragment == null || currentFragment instanceof LoginFragment || currentFragment instanceof RegistrationFragment) {
+        if (currentFragment == null
+                || currentFragment instanceof LoginFragment
+                || currentFragment instanceof RegistrationFragment
+                || currentFragment instanceof ResetPasswordFragment) {
             bottomNavigationView.setVisibility(View.GONE);
         } else {
             bottomNavigationView.setVisibility(View.VISIBLE);
         }
     }
+
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
@@ -89,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                     // Prevent clicks if the current fragment is login or registration.
                     Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
                     if (currentFragment instanceof LoginFragment || currentFragment instanceof RegistrationFragment) {
-                        // Do nothing
+
                         return false;
                     }
                     Fragment selectedFragment = null;
@@ -167,4 +171,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }

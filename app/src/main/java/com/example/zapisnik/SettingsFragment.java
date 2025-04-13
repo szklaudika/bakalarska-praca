@@ -50,6 +50,14 @@ public class SettingsFragment extends Fragment {
                     .replace(R.id.content_frame, new LoginFragment())
                     .commit();
         });
+        LinearLayout layoutResetPassword = view.findViewById(R.id.layout_reset_password);
+        layoutResetPassword.setOnClickListener(v -> {
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, new ResetPasswordFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
+
 
         return view;
     }

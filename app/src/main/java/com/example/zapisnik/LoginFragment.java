@@ -44,6 +44,38 @@ public class LoginFragment extends Fragment {
         btnLogin = view.findViewById(R.id.btnLogin);
         tvSignup = view.findViewById(R.id.tvSignup);
 
+        TextView tvForgotPassword = view.findViewById(R.id.tvForgotPassword);
+        tvForgotPassword.setOnClickListener(v -> {
+            ResetPasswordFragment resetFragment = new ResetPasswordFragment();
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, resetFragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
+        SpannableString forgotSpannable = new SpannableString(tvForgotPassword.getText());
+
+        ClickableSpan forgotClickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+                ResetPasswordFragment resetFragment = new ResetPasswordFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, resetFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        };
+
+        forgotSpannable.setSpan(
+                forgotClickableSpan,
+                0,
+                forgotSpannable.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        );
+
+        tvForgotPassword.setText(forgotSpannable);
+        tvForgotPassword.setMovementMethod(LinkMovementMethod.getInstance());
+        tvForgotPassword.setHighlightColor(0); // removes tap highlight color
+
         btnLogin.setOnClickListener(v -> {
             String usernameOrEmail = etUsernameOrEmail.getText().toString().trim();
             String password = etPassword.getText().toString();

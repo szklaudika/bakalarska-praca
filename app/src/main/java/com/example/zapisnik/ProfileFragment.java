@@ -253,7 +253,7 @@ public class ProfileFragment extends Fragment {
 
             // Create a translation mapping from Slovak to English.
             Map<String, String> platformTranslation = new HashMap<>();
-            platformTranslation.put("Velka era", "Airplanes");
+            platformTranslation.put("Velka era", "Big Airplanes");
             platformTranslation.put("Vrtuľníky", "Helicopters");
             platformTranslation.put("Ultralighty", "Ultralights");
             platformTranslation.put("Vetrone", "Gliders");

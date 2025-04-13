@@ -6,6 +6,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 public interface UserApi {
+
     @FormUrlEncoded
     @POST("login.php")
     Call<LoginResponse> loginUser(
@@ -19,5 +20,11 @@ public interface UserApi {
             @Field("username") String username,
             @Field("email") String email,
             @Field("password") String password
+    );
+
+    @FormUrlEncoded
+    @POST("send_password_reset.php")
+    Call<GenericResponse> sendResetLink(
+            @Field("email") String email
     );
 }

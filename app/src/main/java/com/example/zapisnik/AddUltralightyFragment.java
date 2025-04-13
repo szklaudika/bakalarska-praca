@@ -257,7 +257,7 @@ public class AddUltralightyFragment extends Fragment {
         if (chkVlekar.isChecked()) {
             String expiry = requireExpiry(chkVlekar, etExpiryVlekar, "Vlekár");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Ultralighty", "Towing pilot", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Ultralighty", "Tugboat", expiry, note));
         }
         if (chkSkusobnyPilot.isChecked()) {
             String expiry = requireExpiry(chkSkusobnyPilot, etExpirySkusobnyPilot, "Skúšobný pilot");
@@ -267,7 +267,7 @@ public class AddUltralightyFragment extends Fragment {
         if (chkVysadzovac.isChecked()) {
             String expiry = requireExpiry(chkVysadzovac, etExpiryVysadzovac, "Vysadzovač");
             if (expiry != null)
-                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Ultralighty", "Skydiving pilot", expiry, note));
+                certificatesToAdd.add(new Certificate("Aviation Qualifications", "Ultralighty", "Parachute ejector", expiry, note));
         }
 
         // Medical - Ultralighty

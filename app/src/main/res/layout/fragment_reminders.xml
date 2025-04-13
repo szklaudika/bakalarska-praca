@@ -6,6 +6,38 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:id="@+id/layout_notification_days"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tv_notify_days_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notify me "
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/et_days_before"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="3"
+            android:maxLines="1"
+            android:textSize="16sp"
+            android:layout_marginHorizontal="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="days before expiry"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
     <!-- The ListView that will have a header and items -->
     <ListView
         android:id="@+id/list_view_expiring"

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,6 +45,9 @@ import java.util.Map;
 
 public class RemindersFragment extends Fragment {
 
+    private EditText etDaysBefore;
+    private static final String PREF_NOTIFY_DAYS = "notify_days_before";
+
     private CertificateDatabase database;
 
     // Views from the header
@@ -67,6 +71,26 @@ public class RemindersFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_reminders, container, false);
 
         listViewExpiring = view.findViewById(R.id.list_view_expiring);
+
+        // Handle the editable notification days input
+        EditText etDaysBefore = view.findViewById(R.id.et_days_before);
+        SharedPreferences prefs = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        int savedDays = prefs.getInt("notify_days_before", 3);  // default to 3
+        etDaysBefore.setText(String.valueOf(savedDays));
+
+        // Save new value whenever changed
+        etDaysBefore.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                try {
+                    int days = Integer.parseInt(etDaysBefore.getText().toString().trim());
+                    prefs.edit().putInt("notify_days_before", days).apply();
+                    Toast.makeText(getActivity(), "Reminder preference updated", Toast.LENGTH_SHORT).show();
+                } catch (NumberFormatException e) {
+                    etDaysBefore.setText("3");
+                    prefs.edit().putInt("notify_days_before", 3).apply();
+                }
+            }
+        });
 
         // Inflate header_calendar.xml which contains the calendar and status TextView.
         View headerView = inflater.inflate(R.layout.header_calendar, listViewExpiring, false);
@@ -124,6 +148,7 @@ public class RemindersFragment extends Fragment {
 
         return view;
     }
+
 
     private void schedulePeriodicWork() {
         PeriodicWorkRequest reminderWorkRequest = new PeriodicWorkRequest.Builder(
@@ -307,12 +332,17 @@ public class RemindersFragment extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         Date today = new Date();
 
+        // 💡 Fix: define prefs here
+        SharedPreferences prefs = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        int notifyDays = prefs.getInt(PREF_NOTIFY_DAYS, 3);
+
         for (Certificate cert : allCertificates) {
             try {
                 Date expiryDate = sdf.parse(cert.getExpiryDate());
                 long diffInMillis = expiryDate.getTime() - today.getTime();
                 long diffInDays = diffInMillis / (24 * 60 * 60 * 1000);
-                if (diffInDays <= 7 && diffInDays >= 0) {
+
+                if (diffInDays <= notifyDays && diffInDays >= 0) {
                     soonExpiring.add(cert);
                 }
             } catch (ParseException e) {
@@ -321,6 +351,7 @@ public class RemindersFragment extends Fragment {
         }
         return soonExpiring;
     }
+
 
     private List<Certificate> getExpiredCertificates(int userId) {
         List<Certificate> allCertificates = database.certificateDao().getCertificatesByUserId(userId);

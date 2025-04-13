@@ -43,7 +43,9 @@ public class CertificationReminderWorker extends Worker {
                 Date expiryDate = sdf.parse(cert.getExpiryDate());
                 long diffInMillis = expiryDate.getTime() - today.getTime();
                 long diffInDays = diffInMillis / (24 * 60 * 60 * 1000);
-                if (diffInDays <= 7 && diffInDays >= 0) {
+                int notifyDays = prefs.getInt("notify_days_before", 3);
+                if (diffInDays <= notifyDays && diffInDays >= 0)
+                {
                     expiringCertifications.add(cert);
                 }
             } catch (ParseException e) {
