@@ -43,6 +43,10 @@ import java.util.Locale;
 import java.util.HashMap;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class RemindersFragment extends Fragment {
 
     private EditText etDaysBefore;
@@ -406,10 +410,40 @@ public class RemindersFragment extends Fragment {
 
         notificationManager.notify(certificate.getId(), builder.build());
     }
+    private void syncOfflineCertificates() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            List<Certificate> unsyncedCertificates = database.certificateDao().getUnsyncedCertificates();
+            for (Certificate cert : unsyncedCertificates) {
+                sendCertificateToServer(cert);
+            }
+        });
+    }
+
+    private void sendCertificateToServer(Certificate certificate) {
+        RetrofitClient.getApi().addCertificate(certificate).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Executors.newSingleThreadExecutor().execute(() -> {
+                        database.certificateDao().markAsSynced(certificate.getId());
+                        Log.d("RemindersFragment", "Certificate synced: " + certificate.getId());
+                    });
+                } else {
+                    Log.e("RemindersFragment", "Server responded with error: " + response.code() + " - " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("RemindersFragment", "Failed to sync certificate: " + t.getMessage());
+            }
+        });
+    }
 
     @Override
     public void onResume() {
         super.onResume();
+        syncOfflineCertificates();
         checkAndDisplayExpiringCertificates();
         scheduleDailyCheck();
     }

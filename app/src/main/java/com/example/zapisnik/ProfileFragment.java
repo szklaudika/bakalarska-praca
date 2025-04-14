@@ -536,7 +536,6 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
-
     private void sendCertificateToServer(Certificate certificate) {
         RetrofitClient.getApi().addCertificate(certificate).enqueue(new Callback<Void>() {
             @Override
